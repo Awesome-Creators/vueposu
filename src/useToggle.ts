@@ -5,6 +5,7 @@ export default function useToggle(leftValue?: any, rightValue?: any) {
   rightValue = rightValue === void 0 ? !Boolean(leftValue) : rightValue;
 
   const status = ref(leftValue);
+
   const toggle = (value?: any) =>
     (status.value =
       value !== void 0
@@ -12,7 +13,9 @@ export default function useToggle(leftValue?: any, rightValue?: any) {
         : status.value !== leftValue
         ? leftValue
         : rightValue);
+
   const setLeft = () => (status.value = leftValue);
+
   const setRight = () => (status.value = rightValue);
 
   return [

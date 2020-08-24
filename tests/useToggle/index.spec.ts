@@ -1,15 +1,7 @@
 import { mount } from '@vue/test-utils';
-import Test from '../src/Test.vue';
+import Test from './test.comp.vue';
 
-describe('Test.vue', () => {
-  it('simple test', () => {
-    const wrapper = mount(Test);
-
-    expect(wrapper.text()).toMatch('hello test');
-
-    wrapper.unmount();
-  });
-
+describe('useToggle', () => {
   it('test toggle', async () => {
     const wrapper = mount(Test);
 

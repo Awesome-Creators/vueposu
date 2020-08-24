@@ -11,7 +11,7 @@
 
 <script>
 import { reactive, toRefs } from 'vue';
-import useToggle from './useToggle';
+import useToggle from '../../src/useToggle';
 
 export default {
   setup() {
