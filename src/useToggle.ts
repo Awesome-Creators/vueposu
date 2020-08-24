@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref } from 'vue';
 
 export default function useToggle(leftValue?: any, rightValue?: any) {
   leftValue = leftValue === void 0 ? true : leftValue;

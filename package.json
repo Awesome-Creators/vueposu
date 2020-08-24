@@ -6,7 +6,7 @@
   "author": "yuxino <nbsawz@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "format": "prettier --config --write src/**/*.{ts,tsx,vue}",
+    "format": "prettier --write \"src/**/*.{ts,vue,tsx}\" \"tests/**/*.{ts,vue,tsx}\"",
     "test": "jest"
   },
   "dependencies": {},
@@ -30,6 +30,7 @@
   },
   "husky": {
     "hooks": {
+      "precommit": "lint-staged",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
