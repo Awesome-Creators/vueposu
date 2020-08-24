@@ -1,0 +1,11 @@
+{
+  "name": "euv",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Awesome-Creators/euv.git",
+  "author": "yuxino <nbsawz@gmail.com>",
+  "license": "MIT",
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {}
+}
