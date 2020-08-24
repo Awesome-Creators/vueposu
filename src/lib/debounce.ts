@@ -1,15 +1,16 @@
+// Options type of debounce function
 interface DebounceOptions {
   wait?: number;
   immediate?: boolean;
 }
 
 /**
- * debounce function
+ * Debounce function
  * @param func The function to debounce.
  * @param wait The number of milliseconds to delay.
  * @param immediate Immediately execute the function, default is false
+ * @returns debounce function
  */
-
 export default function debounce(
   callback = () => {},
   options: DebounceOptions = {},
