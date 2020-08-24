@@ -2,6 +2,17 @@
   "include": ["**/*.ts", "**/*.vue"],
   "exclude": ["node_modules"],
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "module": "esnext",
+    "target": "esnext",
+    "lib": ["esnext", "dom", "ES2019"],
+    "sourceMap": true,
+    "baseUrl": ".",
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": true,
+    "allowJs": true,
   }
 }
