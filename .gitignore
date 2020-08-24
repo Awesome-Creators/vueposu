@@ -1,3 +1,11 @@
+# dependencies
 node_modules/
 storybook-static/
 coverage/
+
+# misc
+.DS_Store
+npm-debug.log*
+yarn-error.log
+
+*.zip
