@@ -2,12 +2,12 @@
 
 A new coding style for vue .
 
-``` js
-euv = ['v','u','e'].sort().join('')
+```js
+euv = ["v", "u", "e"].sort().join("");
 ```
 
 ## Installation
 
-``` bash
+```bash
 yarn add euv
 ```
