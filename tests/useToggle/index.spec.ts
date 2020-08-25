@@ -4,7 +4,6 @@ import Test from './test.comp.vue';
 describe('useToggle', () => {
   it('test toggle', async () => {
     const wrapper = mount(Test);
-
     expect(wrapper.find('span').text()).toMatch('false');
 
     await wrapper.find('#toggle').trigger('click');

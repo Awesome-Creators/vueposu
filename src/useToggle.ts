@@ -38,26 +38,19 @@ function useToggle<D extends IState = IState, R extends IState = IState>(
 
   const status = ref<D | R>(defaultValue);
 
-  const toggle = (value?: any) =>
-    (status.value =
-      value !== void 0
-        ? value
-        : status.value !== reverseValue
-        ? reverseValue
-        : defaultValue);
+  const actions: IActions = {
+    toggle: (value?: any) =>
+      (status.value =
+        value !== void 0
+          ? value
+          : status.value !== defaultValue
+          ? defaultValue
+          : reverseValue),
+    setLeft: () => (status.value = defaultValue as UnwrapRef<D>),
+    setRight: () => (status.value = reverseValue as UnwrapRef<R>),
+  };
 
-  const setLeft = () => (status.value = defaultValue as UnwrapRef<D>);
-
-  const setRight = () => (status.value = reverseValue as UnwrapRef<R>);
-
-  return [
-    status,
-    {
-      toggle,
-      setLeft,
-      setRight,
-    },
-  ];
+  return [status, actions];
 }
 
 export default useToggle;
