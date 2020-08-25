@@ -8,7 +8,7 @@
   "scripts": {
     "format": "prettier --write \"src/**/*.{ts,vue,tsx}\" \"tests/**/*.{ts,vue,tsx}\"",
     "test": "jest",
-    "test:ci": "jest --coverage --collectCoverage=true --verbose"
+    "test:ci": "jest --coverage --collectCoverage=true --verbose --collectCoverageFrom='<rootDir>/src/**/*.{js,vue,ts}'"
   },
   "dependencies": {},
   "devDependencies": {
