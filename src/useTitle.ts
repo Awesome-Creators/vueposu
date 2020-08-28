@@ -9,6 +9,7 @@ interface ITitleState {
 }
 
 const defaultTitle = document.title;
+
 const titleState = shallowRef<ITitleState>({});
 const currentInstance = shallowRef<{ uid?: number }>({});
 
@@ -59,6 +60,11 @@ function setTitle(title: string) {
   }
 }
 
+/**
+ * useTitle function
+ *
+ * @param title The string to set to the page title.
+ */
 async function useTitle(title: string) {
   title = String(title);
   const instance = getCurrentInstance();
@@ -66,27 +72,29 @@ async function useTitle(title: string) {
   currentInstance.value.uid = instance?.uid;
 
   watchEffect(() => {
-    if (
-      queue.length > 0 &&
-      currentInstance.value.uid !== queue[queue.length - 1]?.instance_uid
-    ) {
-      handler();
-    }
+    try {
+      if (
+        queue.length > 0 &&
+        currentInstance.value.uid !== queue[queue.length - 1]?.instance_uid
+      ) {
+        handler();
+      }
 
-    queue.push({
-      before: document.title,
-      current: title,
-      instance_uid: currentInstance.value.uid,
-    });
+      queue.push({
+        before: document.title,
+        current: title,
+        instance_uid: currentInstance.value.uid,
+      });
 
-    if (!handling) {
-      handleQueue();
-    }
+      if (!handling) {
+        handleQueue();
+      }
+    } catch (err) {}
   });
 
   if (instance) {
     onUnmounted(() => {
-      if (title === titleState.value.current.title) {
+      if (title === titleState.value?.current?.title) {
         titleState.value = titleState.value.before;
         setTitle(titleState.value.current.title);
       }

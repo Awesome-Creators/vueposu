@@ -3,7 +3,7 @@
     <p>test useTitle</p>
     <sub v-if="show" />
     <button id="show" @click="() => (show = !show)">show</button><br />
-    <button id="error" @click="useTitle('error')">error</button>
+    <!-- <button id="error" @click="useTitle('error')">error</button> -->
 </div>
 </template>
 
@@ -16,7 +16,7 @@ import useTitle from '../../src/useTitle';
 
 export default {
     components: {
-        sub: {
+        Sub: {
             setup() {
                 useTitle('d');
             },
