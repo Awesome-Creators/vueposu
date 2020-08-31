@@ -45,7 +45,7 @@ describe('queryString.parse', () => {
     expect(parse(q4)).toEqual({ a: 'true', b: 'https://www.test.com' });
   });
 
-  test('return empty object if no qss can be found', () => {
+  it('return empty object if no qss can be found', () => {
     expect(parse('?')).toEqual({});
     expect(parse('&')).toEqual({});
     expect(parse('#')).toEqual({});
