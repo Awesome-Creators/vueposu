@@ -1,21 +1,85 @@
-// TODO: ...
-
 import { reactive } from 'vue';
+import { stringify } from './lib/queryString';
 
-interface IResponse {
-  data: any;
+export type Method =
+  | 'get'
+  | 'GET'
+  | 'delete'
+  | 'DELETE'
+  | 'head'
+  | 'HEAD'
+  | 'options'
+  | 'OPTIONS'
+  | 'post'
+  | 'POST'
+  | 'put'
+  | 'PUT'
+  | 'patch'
+  | 'PATCH'
+  | 'purge'
+  | 'PURGE'
+  | 'link'
+  | 'LINK'
+  | 'unlink'
+  | 'UNLINK';
+
+interface IRequestInstance {
+  url?: string;
+  method?: Method;
+  params?: any;
+  data?: any;
+  headers?: any;
+}
+
+interface IResponse<T = any> {
+  data: T;
   error: boolean;
   loading: boolean;
 }
 
-function useRequest(instance): IResponse {
+function useRequest<T = any>(service: any = {}): IResponse<T> {
   const response = reactive<IResponse>({
     data: undefined,
     error: false,
     loading: true,
   });
-  if (Object.prototype.toString.call(instance) === '[object Promise]') {
-  } else {
+
+  if (typeof service === 'function') {
+    service;
+  } else if (Object.prototype.toString.call(service) === '[object Object]') {
+    let {
+      url = '',
+      method = 'GET',
+      params = {},
+      data = {},
+      headers = {},
+    } = service as IRequestInstance;
+
+    const options = {
+      method,
+      headers: new Headers(headers),
+    } as any;
+
+    if (method.toUpperCase() === 'GET') {
+      url = url.replace('?', '') + '?' + stringify(params);
+    } else {
+      options.body = JSON.stringify(data);
+    }
+
+    console.log(window.fetch)
+    window.fetch(url, options)
+      .then(res => {
+        console.log(res);
+        return res.json();
+      })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        response.loading = false;
+        response.error = true;
+        throw Error(err);
+      });
   }
 
   return response;
