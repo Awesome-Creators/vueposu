@@ -1,4 +1,4 @@
-import queryString from '../../src/lib/queryString';
+import queryString from '@lib/queryString';
 
 const { parse, stringify } = queryString;
 

@@ -4,7 +4,7 @@
 
 <script>
 import { reactive, toRefs } from 'vue';
-import useFavicon from '../../src/useFavicon';
+import useFavicon from '@hooks/useFavicon';
 
 export default {
   setup() {
