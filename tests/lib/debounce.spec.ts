@@ -1,7 +1,7 @@
 import debounce from '../../src/lib/debounce';
 
 describe('debounce', () => {
-  it('shold be call once', () => {
+  it('should be call once', () => {
     jest.useFakeTimers();
     const callback = jest.fn();
 
