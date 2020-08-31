@@ -7,7 +7,7 @@
 </div>
 </template>
 
-<script>
+<script lang="ts">
 import {
     h,
     ref
