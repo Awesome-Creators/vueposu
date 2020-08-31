@@ -36,6 +36,7 @@ describe('debounce', () => {
 
   it('shold be call immediate', () => {
     jest.useFakeTimers();
+
     const callback = jest.fn();
     const fn = debounce(callback, { wait: 200, immediate: true });
 

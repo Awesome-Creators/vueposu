@@ -3,6 +3,11 @@ import queryString from '@lib/queryString';
 const { parse, stringify } = queryString;
 
 describe('queryString.parse', () => {
+  it('test empty', () => {
+    expect(parse('')).toEqual({});
+    expect(parse(null)).toEqual({});
+  });
+
   it('query strings starting with a `?`', () => {
     const q = '?a=1&b=2';
     expect(parse(q)).toEqual({ a: '1', b: '2' });
@@ -54,6 +59,11 @@ describe('queryString.parse', () => {
 });
 
 describe('queryString.stringify', () => {
+  it('test another type', () => {
+    expect(stringify(null)).toEqual('');
+    expect(stringify(undefined)).toEqual('');
+  });
+
   it('should be parsed the object to a query string', () => {
     const q = { a: 1, b: 2 };
     expect(stringify(q)).toEqual('a=1&b=2');

@@ -2,7 +2,7 @@ type AnyObject = { [key: string]: any };
 
 export function parse(s: string): AnyObject {
   const query = {};
-  if (!!s) {
+  if (s) {
     s.replace(/[?|#]/, '')
       .split('&')
       .forEach(e => {
