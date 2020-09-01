@@ -12,14 +12,14 @@ interface DebounceOptions {
  * @returns debounce function
  */
 export default function debounce(
-  callback = () => {},
+  callback: Function,
   options: DebounceOptions = {},
 ) {
   const { wait, immediate = false } = options;
   let timeout: any = null;
   return function () {
     const callImmediate = immediate && !timeout;
-    const fn = () => callback.apply(this, arguments);
+    const fn = () => callback?.apply(this, arguments);
     clearTimeout(timeout);
     timeout = setTimeout(fn, wait);
     callImmediate && fn();
