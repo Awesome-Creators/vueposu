@@ -1,6 +1,5 @@
 <template>
   <div>
-    hello {{ text }}
     <span>{{ String(status) }}</span>
     <button id="toggle" @click="toggle()">toggle</button>
     <button id="boy" @click="toggle('boy next door')">set boy next door</button>
@@ -10,20 +9,15 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs } from 'vue';
 import useToggle from '@hooks/useToggle';
 
 export default {
   setup() {
-    const state = reactive({
-      text: 'test',
-    });
-    const [status, toggles] = useToggle(false);
+    const [status, toggles] = useToggle();
 
     return {
       status,
       ...toggles,
-      ...toRefs(state),
     };
   },
 };

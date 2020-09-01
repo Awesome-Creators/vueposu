@@ -33,8 +33,7 @@ function useToggle<D extends IState = IState, R extends IState = IState>(
   defaultValue: D = true as D,
   reverseValue?: R,
 ) {
-  defaultValue = (defaultValue === void 0 ? true : defaultValue) as D;
-  reverseValue = (reverseValue === void 0 ? !defaultValue : reverseValue) as R;
+  reverseValue = (reverseValue ?? !defaultValue) as R;
 
   const status = ref<D | R>(defaultValue);
 

@@ -1,25 +1,48 @@
 import { mount } from '@vue/test-utils';
-import Test from './test.comp.vue';
+import WithoutParams from './test.withoutParams.comp.vue';
+import DefaultValue from './test.defaultValue.comp.vue';
 
 describe('useToggle', () => {
-  it('test toggle', async () => {
-    const wrapper = mount(Test);
-    expect(wrapper.find('span').text()).toMatch('false');
+  it('simple toggle test', async () => {
+    const wrapper = mount(WithoutParams);
+    expect(wrapper.find('span').text()).toMatch('true');
 
     await wrapper.find('#toggle').trigger('click');
-    expect(wrapper.find('span').text()).toMatch('true');
+    expect(wrapper.find('span').text()).toMatch('false');
 
     await wrapper.find('#boy').trigger('click');
     expect(wrapper.find('span').text()).toMatch('boy next door');
 
     await wrapper.find('#toggle').trigger('click');
-    expect(wrapper.find('span').text()).toMatch('false');
-
-    await wrapper.find('#right').trigger('click');
     expect(wrapper.find('span').text()).toMatch('true');
 
-    await wrapper.find('#left').trigger('click');
+    await wrapper.find('#right').trigger('click');
     expect(wrapper.find('span').text()).toMatch('false');
+
+    await wrapper.find('#left').trigger('click');
+    expect(wrapper.find('span').text()).toMatch('true');
+
+    wrapper.unmount();
+  });
+
+  it('defaultValue toggle test', async () => {
+    const wrapper = mount(DefaultValue);
+    expect(wrapper.find('span').text()).toMatch('open');
+
+    await wrapper.find('#toggle').trigger('click');
+    expect(wrapper.find('span').text()).toMatch('close');
+
+    await wrapper.find('#boy').trigger('click');
+    expect(wrapper.find('span').text()).toMatch('boy next door');
+
+    await wrapper.find('#toggle').trigger('click');
+    expect(wrapper.find('span').text()).toMatch('open');
+
+    await wrapper.find('#right').trigger('click');
+    expect(wrapper.find('span').text()).toMatch('close');
+
+    await wrapper.find('#left').trigger('click');
+    expect(wrapper.find('span').text()).toMatch('open');
 
     wrapper.unmount();
   });
