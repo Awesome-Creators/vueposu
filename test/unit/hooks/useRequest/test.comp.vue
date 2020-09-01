@@ -10,7 +10,7 @@ import {} from 'vue';
 
 export default {
   setup() {
-    // const { data, error, loading } = useRequest({});
+    // const { data } = useRequest({});
     // console.log(data);
   },
 };

@@ -66,21 +66,15 @@ function useRequest<T = any>(service: any = {}): IResponse<T> {
       options.body = JSON.stringify(data);
     }
 
-    console.log(window.fetch);
-
     window
       .fetch(url, options)
       .then(res => {
-        console.log(res);
         return res.json();
-      })
-      .then(res => {
-        console.log(res);
       })
       .catch(err => {
         response.loading = false;
         response.error = true;
-        throw Error(err);
+        // throw Error(`[useRequest]: ${err}`);
       });
   }
 
