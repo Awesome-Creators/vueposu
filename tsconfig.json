@@ -16,7 +16,7 @@
     "allowJs": true,
     "paths": {
       "@hooks/*": ["src/hooks/*"],
-      "@lib/*": ["src/lib/*"]
+      "@libs/*": ["src/libs/*"]
     }
   }
 }

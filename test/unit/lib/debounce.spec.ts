@@ -1,4 +1,4 @@
-import debounce from '@lib/debounce';
+import debounce from '@libs/debounce';
 
 describe('debounce', () => {
   it('should be call once', () => {

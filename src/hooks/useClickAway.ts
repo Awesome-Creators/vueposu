@@ -1,5 +1,5 @@
 import { watchEffect } from 'vue';
-import { getTargetElement, Target } from '@lib/dom';
+import { getTargetElement, Target } from '@libs/dom';
 
 const defaultEvent = 'click';
 
