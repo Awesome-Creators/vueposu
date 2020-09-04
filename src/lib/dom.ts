@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { Ref } from 'vue';
 
 export type Target<T = HTMLElement> =

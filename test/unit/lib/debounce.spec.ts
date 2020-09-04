@@ -5,7 +5,7 @@ describe('debounce', () => {
     jest.useFakeTimers();
     const callback = jest.fn();
 
-    const fn = debounce(callback, { wait: 200 });
+    const fn = debounce(callback, 200);
 
     fn();
     fn();
@@ -38,7 +38,7 @@ describe('debounce', () => {
     jest.useFakeTimers();
 
     const callback = jest.fn();
-    const fn = debounce(callback, { wait: 200, immediate: true });
+    const fn = debounce(callback, 200, true);
 
     fn();
     fn();
