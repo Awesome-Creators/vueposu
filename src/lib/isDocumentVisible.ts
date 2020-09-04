@@ -5,7 +5,7 @@ function isDocumentVisible(): boolean {
   ) {
     return document.visibilityState !== 'hidden';
   }
-  // always assume it's visible
+  // always assume it's visible.
   return true;
 }
 
