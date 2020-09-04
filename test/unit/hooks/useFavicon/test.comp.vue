@@ -4,7 +4,7 @@
   <div id="emptyII" @click="changeIcon()">testing</div>
 </template>
 
-<script>
+<script lang="ts">
 import { reactive, toRefs } from 'vue';
 import useFavicon from '@hooks/useFavicon';
 

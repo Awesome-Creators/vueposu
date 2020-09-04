@@ -10,7 +10,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, onMounted } from 'vue';
 import useClickAway from '@hooks/useClickAway';
 
