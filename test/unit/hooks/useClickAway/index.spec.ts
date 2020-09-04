@@ -1,8 +1,8 @@
 import { mount } from '@vue/test-utils';
 import Single from './test.single.comp.vue';
 import Multiple from './test.multiple.comp.vue';
-import OtherEvt from './test.OtherEvt.comp.vue';
-import OtherEvtMultiple from './test.OtherEvtMultiple.comp.vue';
+import OtherEvt from './test.otherEvt.comp.vue';
+import OtherEvtMultiple from './test.otherEvtMultiple.comp.vue';
 
 describe('useClickAway', () => {
   it('test single', async () => {
