@@ -1,4 +1,4 @@
-function isDocumentVisible(): boolean {
+export default function isDocumentVisible(): boolean {
   if (
     typeof document !== 'undefined' &&
     typeof document.visibilityState !== 'undefined'
@@ -8,5 +8,3 @@ function isDocumentVisible(): boolean {
   // always assume it's visible.
   return true;
 }
-
-export default isDocumentVisible;
