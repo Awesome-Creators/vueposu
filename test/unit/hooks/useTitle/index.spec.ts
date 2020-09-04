@@ -4,28 +4,26 @@ import Test from './test.comp.vue';
 describe('useTitle', () => {
   it('test title', async () => {
     const component = mount(Test);
+    const Sub = { name: 'Sub' };
 
-    setTimeout(() => expect(document.title).toBe('d'));
+    // show Sub defaults to `true`.
+    await component.findComponent(Sub).vm.$nextTick();
 
-    await component.find('#show').trigger('click');
+    expect(document.title).toBe('d');
+
+    await component.find('#show').trigger('click'); // show Sub changing to `false`.
 
     expect(document.title).toBe('c');
 
-    await component.find('#show').trigger('click');
+    await component.find('#show').trigger('click'); // show Sub changing to `true`.
 
-    setTimeout(() => expect(document.title).toBe('d'));
+    await component.findComponent(Sub).vm.$nextTick();
 
-    // expect(() => {
-    //   component.find('#error').trigger('click');
-    // }).toThrow(error => {
-    //   console.log(error)
-    // });
+    expect(document.title).toBe('d');
 
-    // try {
-    //   await component.find('#error').trigger('click');
-    // } catch (e) {
-    //   expect(e).toMatch(/Invalid hook call/);
-    // }
+    expect(() => {
+      (component.vm.useTitleByEvent as Function)();
+    }).toThrowError();
 
     component.unmount();
   });

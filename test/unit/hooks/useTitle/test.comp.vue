@@ -1,10 +1,9 @@
 <template>
   <div>
     <p>test useTitle</p>
-    <sub v-if="show" />
+    <Sub v-if="show" />
     <button id="show" @click="() => (show = !show)">show</button>
     <br />
-    <!-- <button id="error" @click="useTitle('error')">error</button> -->
   </div>
 </template>
 
@@ -30,9 +29,13 @@ export default {
     useTitle('b');
     useTitle('c');
 
+    function useTitleByEvent() {
+      useTitle('e');
+    }
+
     return {
       show,
-      useTitle,
+      useTitleByEvent,
     };
   },
 };
