@@ -9,6 +9,7 @@ let counter = 0;
 
 /**
  * hashes an array of objects and returns a string.
+ * 
  * @param args Hash objects
  */
 export default function hash(args: any[]): string {
