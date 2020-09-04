@@ -5,15 +5,15 @@ describe('useTitle', () => {
   it('test title', async () => {
     const component = mount(Test);
 
-    setTimeout(() => expect(document.title).toBe('d'))
+    setTimeout(() => expect(document.title).toBe('d'));
 
     await component.find('#show').trigger('click');
 
     expect(document.title).toBe('c');
 
     await component.find('#show').trigger('click');
-    
-    setTimeout(() => expect(document.title).toBe('d'))
+
+    setTimeout(() => expect(document.title).toBe('d'));
 
     // expect(() => {
     //   component.find('#error').trigger('click');
