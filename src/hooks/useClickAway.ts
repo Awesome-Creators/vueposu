@@ -15,7 +15,7 @@ type EventType = MouseEvent | TouchEvent;
 function useClickAway(
   eventHandler: (event: EventType) => void,
   target: Target | Target[],
-  eventName: string = defaultEvent,
+  eventName: string | string[] = defaultEvent,
 ) {
   const handler = event => {
     !(Array.isArray(target) ? target : [target]).some(t =>
@@ -24,10 +24,11 @@ function useClickAway(
   };
 
   watchEffect(onCleanup => {
-    document.addEventListener(eventName, handler);
+    const evts = Array.isArray(eventName) ? eventName : [eventName];
+    evts.map(evt => document.addEventListener(evt, handler));
 
     onCleanup(() => {
-      document.removeEventListener(eventName, handler);
+      evts.map(evt => document.removeEventListener(evt, handler));
     });
   });
 }
