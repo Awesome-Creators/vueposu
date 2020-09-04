@@ -11,7 +11,7 @@ let counter = 0;
  * hashes an array of objects and returns a string.
  * @param args Hash objects
  */
-function hash(args: any[]): string {
+export default function hash(args: any[]): string {
   if (!args.length) return '';
   let key = 'arg';
   for (let i = 0; i < args.length; ++i) {
@@ -44,5 +44,3 @@ function hash(args: any[]): string {
   }
   return key;
 }
-
-export default hash;
