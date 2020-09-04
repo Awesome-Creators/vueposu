@@ -19,19 +19,12 @@ function useClickAway(
 ) {
   const handler = event => {
     const targets = Array.isArray(target) ? target : [target];
-    const targetElements = targets.map(t => {
-      return getTargetElement(t);
-    }) as HTMLElement[];
-
-    if (
-      targetElements.some(
-        targetElement => !targetElement || targetElement.contains(event.target),
-      )
-    ) {
-      return;
-    }
-
-    eventHandler(event);
+    !targets
+      .map(t => getTargetElement(t))
+      .some(
+        (targetElement: HTMLElement) =>
+          !targetElement || targetElement.contains(event.target),
+      ) && eventHandler(event);
   };
 
   watchEffect(onCleanup => {
