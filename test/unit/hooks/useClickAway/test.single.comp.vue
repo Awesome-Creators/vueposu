@@ -1,6 +1,7 @@
 <template>
   <div>
-    <button ref="buttonRef">click me outside</button><br />
+    <button ref="buttonRef">click me outside</button>
+    <br />
     <span>{{ count }}</span>
   </div>
 </template>

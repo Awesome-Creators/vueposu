@@ -1,7 +1,5 @@
 <template>
-  <div id="click" @click="changeIcon('https://www.another.com/icon.ico')">
-    testing
-  </div>
+  <div id="click" @click="changeIcon('https://www.another.com/icon.ico')">testing</div>
   <div id="empty" @click="changeIcon(1)">testing</div>
   <div id="emptyII" @click="changeIcon()">testing</div>
 </template>

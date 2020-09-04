@@ -5,44 +5,44 @@ import DefaultValue from './test.defaultValue.comp.vue';
 describe('useToggle', () => {
   it('simple toggle test', async () => {
     const wrapper = mount(WithoutParams);
-    expect(wrapper.find('span').text()).toMatch('true');
+    expect(wrapper.find('span').text()).toBe('true');
 
     await wrapper.find('#toggle').trigger('click');
-    expect(wrapper.find('span').text()).toMatch('false');
+    expect(wrapper.find('span').text()).toBe('false');
 
     await wrapper.find('#boy').trigger('click');
-    expect(wrapper.find('span').text()).toMatch('boy next door');
+    expect(wrapper.find('span').text()).toBe('boy next door');
 
     await wrapper.find('#toggle').trigger('click');
-    expect(wrapper.find('span').text()).toMatch('true');
+    expect(wrapper.find('span').text()).toBe('true');
 
     await wrapper.find('#right').trigger('click');
-    expect(wrapper.find('span').text()).toMatch('false');
+    expect(wrapper.find('span').text()).toBe('false');
 
     await wrapper.find('#left').trigger('click');
-    expect(wrapper.find('span').text()).toMatch('true');
+    expect(wrapper.find('span').text()).toBe('true');
 
     wrapper.unmount();
   });
 
   it('defaultValue toggle test', async () => {
     const wrapper = mount(DefaultValue);
-    expect(wrapper.find('span').text()).toMatch('open');
+    expect(wrapper.find('span').text()).toBe('open');
 
     await wrapper.find('#toggle').trigger('click');
-    expect(wrapper.find('span').text()).toMatch('close');
+    expect(wrapper.find('span').text()).toBe('close');
 
     await wrapper.find('#boy').trigger('click');
-    expect(wrapper.find('span').text()).toMatch('boy next door');
+    expect(wrapper.find('span').text()).toBe('boy next door');
 
     await wrapper.find('#toggle').trigger('click');
-    expect(wrapper.find('span').text()).toMatch('open');
+    expect(wrapper.find('span').text()).toBe('open');
 
     await wrapper.find('#right').trigger('click');
-    expect(wrapper.find('span').text()).toMatch('close');
+    expect(wrapper.find('span').text()).toBe('close');
 
     await wrapper.find('#left').trigger('click');
-    expect(wrapper.find('span').text()).toMatch('open');
+    expect(wrapper.find('span').text()).toBe('open');
 
     wrapper.unmount();
   });

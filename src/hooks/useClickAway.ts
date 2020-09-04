@@ -19,9 +19,9 @@ function useClickAway(
 ) {
   const handler = event => {
     const targets = Array.isArray(target) ? target : [target];
-    const targetElements = targets.map(t =>
-      getTargetElement(t),
-    ) as HTMLElement[];
+    const targetElements = targets.map(t => {
+      return getTargetElement(t);
+    }) as HTMLElement[];
 
     if (
       targetElements.some(
@@ -34,10 +34,10 @@ function useClickAway(
     eventHandler(event);
   };
 
-  watchEffect(cleanup => {
+  watchEffect(onCleanup => {
     document.addEventListener(eventName, handler);
 
-    cleanup(() => {
+    onCleanup(() => {
       document.removeEventListener(eventName, handler);
     });
   });
