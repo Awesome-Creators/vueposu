@@ -8,31 +8,38 @@ interface ITitleState {
 const titleMap = new Map<number, ITitleState>();
 
 /**
- * useTitle function
+ * set the string to the page title.
  *
  * @param title The string to set to the page title.
  */
-async function useTitle(title: string) {
+
+export default function useTitle(title: string) {
+  title = String(title);
   const instance = getCurrentInstance();
 
-  if (instance) {
+  if (instance && document.title !== title) {
     let t = titleMap.get(instance.uid);
+
     if (!t) {
       titleMap.set(instance.uid, (t = {} as ITitleState));
     }
+
     if (!t.before) {
       t.before = document.title;
     }
-    t.current = title;
 
-    watchEffect(() => {
-      document.title = t.current;
-    });
+    if (t.current !== title) {
+      t.current = title;
 
-    onUnmounted(() => {
-      document.title = t.before;
-      titleMap.delete(instance.uid);
-    });
+      watchEffect(() => {
+        document.title = t.current;
+      });
+
+      onUnmounted(() => {
+        document.title = t.before;
+        titleMap.delete(instance.uid);
+      });
+    }
   } else {
     throw new Error(
       'Invalid hook call. Hooks can only be called inside of `setup()`.',
@@ -141,5 +148,3 @@ async function useTitle(title: string) {
 //     });
 //   }
 // }
-
-export default useTitle;
