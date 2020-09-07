@@ -22,6 +22,7 @@ yarn add euv
 - [x] useFavicon
 - [x] useTitle
 - [x] useToggle
+- [ ] useSwr
 - [ ] useEffect
 - [ ] useDebounce
 - [ ] useThrottle
