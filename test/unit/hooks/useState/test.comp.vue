@@ -11,14 +11,9 @@ import useState from '@hooks/useState';
 export default {
   setup() {
     const [count, setCount] = useState(0);
-
-    function add() {
-      setCount(count + 1);
-    }
-
     return {
       count,
-      add,
+      add: () => setCount(count + 1),
     };
   },
 };
