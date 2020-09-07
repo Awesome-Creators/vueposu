@@ -1,18 +1,25 @@
-import { shallowRef } from 'vue';
+import { ref } from 'vue';
 
-type SetStateAction<S> = [S, (action: S | ((prevState: S) => S)) => S];
+type Dispatch<A> = (value: A) => void;
+type DispatchType<S> = S | ((prevState: S) => S);
+type SetStateAction<S> = [S, Dispatch<DispatchType<S>>];
 
 function useState<S>(initialState: S): SetStateAction<S> {
-  const state = shallowRef(
+  let state = ref(
     typeof initialState === 'function' ? initialState() : initialState,
   );
 
-  const dispatcher = (action: S) => {
-    return (state.value =
-      typeof action === 'function' ? action(state.value) : action);
+  const setState: Dispatch<DispatchType<S>> = action => {
+    // console.log('action', JSON.stringify(action.value as any));
+    state.value =
+      typeof action === 'function' ? (action as Function)(state.value) : action;
   };
 
-  return [state.value, dispatcher];
+  const $proxy = state;
+
+  $proxy.valueOf = () => state.value;
+
+  return [$proxy, setState];
 }
 
 export default useState;
