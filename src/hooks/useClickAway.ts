@@ -18,9 +18,18 @@ function useClickAway(
   eventName: string | string[] = defaultEvent,
 ) {
   const handler = event => {
-    !(Array.isArray(target) ? target : [target]).some(t =>
-      (getTargetElement(t) as HTMLElement)?.contains(event.target),
-    ) && eventHandler(event);
+    const targets = Array.isArray(target) ? target : [target];
+
+    if (
+      targets.some(targetItem => {
+        const targetElement = getTargetElement(targetItem) as HTMLElement;
+        return !targetElement || targetElement.contains(event.target);
+      })
+    ) {
+      return;
+    }
+
+    eventHandler(event);
   };
 
   watchEffect(onCleanup => {
