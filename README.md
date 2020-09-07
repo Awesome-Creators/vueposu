@@ -22,9 +22,11 @@ yarn add euv
 - [x] useFavicon
 - [x] useTitle
 - [x] useToggle
+- [ ] useBrowserTabChange
+- [ ] useAudio
+- [ ] useLocalStorage
 - [ ] useSwr
 - [ ] useEffect
 - [ ] useDebounce
 - [ ] useThrottle
-- [ ] useMedia
 - [ ] etc..
