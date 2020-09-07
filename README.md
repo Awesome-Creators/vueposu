@@ -16,6 +16,14 @@ yarn add euv
 
 ## TODO LIST
 
-- [ ] useTitle
+- [x] useTitle
+- [x] useClickAway
+- [x] useState
+- [x] useFavicon
+- [x] useTitle
+- [x] useToggle
+- [ ] useEffect
+- [ ] useDebounce
+- [ ] useThrottle
 - [ ] useMedia
 - [ ] etc..
