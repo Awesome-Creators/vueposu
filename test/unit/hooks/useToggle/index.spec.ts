@@ -4,46 +4,46 @@ import DefaultValue from './test.defaultValue.comp.vue';
 
 describe('useToggle', () => {
   it('simple toggle test', async () => {
-    const wrapper = mount(WithoutParams);
-    expect(wrapper.find('span').text()).toBe('true');
+    const component = mount(WithoutParams);
+    expect(component.find('span').text()).toBe('true');
 
-    await wrapper.find('#toggle').trigger('click');
-    expect(wrapper.find('span').text()).toBe('false');
+    await component.find('#toggle').trigger('click');
+    expect(component.find('span').text()).toBe('false');
 
-    await wrapper.find('#boy').trigger('click');
-    expect(wrapper.find('span').text()).toBe('boy next door');
+    await component.find('#boy').trigger('click');
+    expect(component.find('span').text()).toBe('boy next door');
 
-    await wrapper.find('#toggle').trigger('click');
-    expect(wrapper.find('span').text()).toBe('true');
+    await component.find('#toggle').trigger('click');
+    expect(component.find('span').text()).toBe('true');
 
-    await wrapper.find('#right').trigger('click');
-    expect(wrapper.find('span').text()).toBe('false');
+    await component.find('#right').trigger('click');
+    expect(component.find('span').text()).toBe('false');
 
-    await wrapper.find('#left').trigger('click');
-    expect(wrapper.find('span').text()).toBe('true');
+    await component.find('#left').trigger('click');
+    expect(component.find('span').text()).toBe('true');
 
-    wrapper.unmount();
+    component.unmount();
   });
 
   it('defaultValue toggle test', async () => {
-    const wrapper = mount(DefaultValue);
-    expect(wrapper.find('span').text()).toBe('open');
+    const component = mount(DefaultValue);
+    expect(component.find('span').text()).toBe('open');
 
-    await wrapper.find('#toggle').trigger('click');
-    expect(wrapper.find('span').text()).toBe('close');
+    await component.find('#toggle').trigger('click');
+    expect(component.find('span').text()).toBe('close');
 
-    await wrapper.find('#boy').trigger('click');
-    expect(wrapper.find('span').text()).toBe('boy next door');
+    await component.find('#boy').trigger('click');
+    expect(component.find('span').text()).toBe('boy next door');
 
-    await wrapper.find('#toggle').trigger('click');
-    expect(wrapper.find('span').text()).toBe('open');
+    await component.find('#toggle').trigger('click');
+    expect(component.find('span').text()).toBe('open');
 
-    await wrapper.find('#right').trigger('click');
-    expect(wrapper.find('span').text()).toBe('close');
+    await component.find('#right').trigger('click');
+    expect(component.find('span').text()).toBe('close');
 
-    await wrapper.find('#left').trigger('click');
-    expect(wrapper.find('span').text()).toBe('open');
+    await component.find('#left').trigger('click');
+    expect(component.find('span').text()).toBe('open');
 
-    wrapper.unmount();
+    component.unmount();
   });
 });
