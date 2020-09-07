@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 export default function isDocumentVisible(): boolean {
   if (
     typeof document !== 'undefined' &&

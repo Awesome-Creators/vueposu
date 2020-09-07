@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 export default function isOnline(): boolean {
   if (typeof navigator.onLine !== 'undefined') {
     return navigator.onLine;
