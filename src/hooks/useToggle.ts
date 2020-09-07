@@ -5,7 +5,7 @@ type IState = string | number | boolean | null | undefined;
 interface IActions<T = IState> {
   setLeft: () => T;
   setRight: () => T;
-  toggle: (value: T) => T;
+  toggle: (value?: T) => T;
 }
 
 function useToggle<D = boolean | undefined>(): [
