@@ -1,6 +1,4 @@
-# EUV
-
-[![CircleCI](https://circleci.com/gh/Awesome-Creators/euv.svg?style=svg&circle-token=74859479154a741060b1bd036508b21782ae7424)](https://circleci.com/gh/Awesome-Creators/euv) [![codecov](https://codecov.io/gh/Awesome-Creators/euv/branch/master/graph/badge.svg?token=FA4WQGNR20)](https://codecov.io/gh/Awesome-Creators/euv)
+# EUV [![CircleCI](https://circleci.com/gh/Awesome-Creators/euv.svg?style=svg&circle-token=74859479154a741060b1bd036508b21782ae7424)](https://circleci.com/gh/Awesome-Creators/euv) [![codecov](https://codecov.io/gh/Awesome-Creators/euv/branch/master/graph/badge.svg?token=FA4WQGNR20)](https://codecov.io/gh/Awesome-Creators/euv)
 
 A new coding style for vue .
 
@@ -8,7 +6,7 @@ A new coding style for vue .
 euv = ['v', 'u', 'e'].sort().join('');
 ```
 
-## Installation
+## INSTALLATION
 
 ```bash
 yarn add euv
@@ -16,17 +14,21 @@ yarn add euv
 
 ## TODO LIST
 
+### DOM
+
 - [x] useTitle
 - [x] useClickAway
-- [x] useState
 - [x] useFavicon
-- [x] useTitle
-- [x] useToggle
-- [ ] useBrowserTabChange
 - [ ] useAudio
+- [ ] useBrowserTabChange
 - [ ] useLocalStorage
-- [ ] useSwr
+
+### FUNCTIONALITY
+
+- [x] useState
 - [ ] useEffect
 - [ ] useDebounce
 - [ ] useThrottle
+- [x] useToggle
+- [ ] useSwr
 - [ ] etc..
