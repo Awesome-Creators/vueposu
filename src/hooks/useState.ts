@@ -4,12 +4,19 @@ type Dispatch<A> = (value: A) => void;
 type DispatchType<S> = S | ((prevState: S) => S);
 type SetStateAction<S> = [S, Dispatch<DispatchType<S>>];
 
+/**
+ * Returns a stateful value, and a function to update it.
+ * useState just like React-style.
+ *
+ * @param initialState The initial state.
+ */
+
 function useState<S>(initialState: S): SetStateAction<S> {
   const state = ref(
     typeof initialState === 'function' ? initialState() : initialState,
   );
 
-  const setState: Dispatch<DispatchType<S>> = action => {
+  const dispatcher: Dispatch<DispatchType<S>> = action => {
     state.value =
       typeof action === 'function' ? (action as Function)(state.value) : action;
   };
@@ -18,7 +25,7 @@ function useState<S>(initialState: S): SetStateAction<S> {
 
   $val.valueOf = () => $val.value;
 
-  return [($val as unknown) as S, setState];
+  return [($val as unknown) as S, dispatcher];
 }
 
 export default useState;
