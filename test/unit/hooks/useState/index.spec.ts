@@ -19,6 +19,9 @@ describe('useState', () => {
     await component.find('#minus').trigger('click');
     expect(component.find('span').text()).toBe('0');
 
+    await component.find('#not-working').trigger('click');
+    expect(component.find('span').text()).toBe('0');
+
     component.unmount();
   });
 });
