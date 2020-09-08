@@ -1,8 +1,8 @@
-import { computed, ref } from 'vue';
+import { computed, ref, ComputedRef } from 'vue';
 
 type Dispatch<A> = (value: A) => void;
 type DispatchType<S> = S | ((prevState: S) => S);
-type SetStateAction<S> = [S, Dispatch<DispatchType<S>>];
+type SetStateAction<S> = [ComputedRef<S>, Dispatch<DispatchType<S>>];
 
 /**
  * Returns a stateful value, and a function to update it.
@@ -21,11 +21,7 @@ function useState<S>(initialState: S): SetStateAction<S> {
       typeof action === 'function' ? (action as Function)(state.value) : action;
   };
 
-  const $val = computed(() => state.value);
-
-  $val.valueOf = () => $val.value;
-
-  return [($val as unknown) as S, dispatcher];
+  return [computed(() => state.value), dispatcher];
 }
 
 export default useState;
