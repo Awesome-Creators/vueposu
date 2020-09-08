@@ -1,7 +1,8 @@
 <template>
   <div>
     <span>{{ count }}</span>
-    <button @click="add">add</button>
+    <button id="add" @click="add">add</button>
+    <button id="minus" @click="minus">minus</button>
   </div>
 </template>
 
@@ -14,6 +15,7 @@ export default {
     return {
       count,
       add: () => setCount(count + 1),
+      minus: () => setCount(count - 1),
     };
   },
 };

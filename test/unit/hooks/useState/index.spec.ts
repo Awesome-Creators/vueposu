@@ -7,13 +7,17 @@ describe('useState', () => {
 
     expect(component.find('span').text()).toBe('0');
 
-    await component.find('button').trigger('click');
+    await component.find('#add').trigger('click');
+    expect(component.find('span').text()).toBe('1');
+    
+    await component.find('#add').trigger('click');
+    expect(component.find('span').text()).toBe('2');
 
+    await component.find('#minus').trigger('click');
     expect(component.find('span').text()).toBe('1');
 
-    await component.find('button').trigger('click');
-
-    expect(component.find('span').text()).toBe('2');
+    await component.find('#minus').trigger('click');
+    expect(component.find('span').text()).toBe('0');
 
     component.unmount();
   });
