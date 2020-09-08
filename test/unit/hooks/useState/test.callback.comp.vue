@@ -1,8 +1,8 @@
 <template>
   <div>
     <span>{{ count }}</span>
-    <button id="add" @click="setCount(count + 1)">add</button>
-    <button id="minus" @click="setCount(count - 1)">minus</button>
+    <button id="add" @click="setCount(prev => prev + 1)">add</button>
+    <button id="minus" @click="setCount(prev => prev - 1)">minus</button>
   </div>
 </template>
 
@@ -11,7 +11,7 @@ import useState from '@hooks/useState';
 
 export default {
   setup() {
-    const [count, setCount] = useState(0);
+    const [count, setCount] = useState(() => 0);
     return {
       count,
       setCount,
