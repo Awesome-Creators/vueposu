@@ -22,11 +22,13 @@ yarn add euv
 - [ ] useAudio
 - [ ] useBrowserTabChange
 - [ ] useLocalStorage
+- [ ] useScrollTo
+- [ ] useScrollToBottom
+- [ ] useScrollToTop
 
 ### FUNCTIONALITY
 
 - [x] useState
-- [ ] useNumber
 - [ ] useCounter
 - [ ] useDynamicList
 - [ ] useEffect
