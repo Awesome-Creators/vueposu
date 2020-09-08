@@ -26,6 +26,9 @@ yarn add euv
 ### FUNCTIONALITY
 
 - [x] useState
+- [ ] useNumber
+- [ ] useCounter
+- [ ] useDynamicList
 - [ ] useEffect
 - [ ] useDebounce
 - [ ] useThrottle
