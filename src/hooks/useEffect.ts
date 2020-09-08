@@ -1,10 +1,4 @@
-import {
-  watch,
-  watchEffect,
-  onMounted,
-  onBeforeUnmount,
-  WatchSource,
-} from 'vue';
+import { watch, onUpdated, onMounted, onBeforeUnmount, WatchSource } from 'vue';
 
 type EffectCallback = () => void | (() => void);
 
@@ -26,7 +20,8 @@ function useEffect(
       });
     }
   } else {
-    watchEffect(resolveDispatcher);
+    resolveDispatcher();
+    onUpdated(resolveDispatcher);
   }
 
   onBeforeUnmount(() => {
