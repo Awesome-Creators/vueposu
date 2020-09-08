@@ -23,8 +23,7 @@ yarn add euv
 - [ ] useBrowserTabChange
 - [ ] useLocalStorage
 - [ ] useScrollTo
-- [ ] useScrollToBottom
-- [ ] useScrollToTop
+- [ ] useCopyToClipboard
 
 ### FUNCTIONALITY
 
