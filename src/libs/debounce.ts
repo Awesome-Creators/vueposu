@@ -1,21 +1,18 @@
+import $debounce from 'lodash.debounce';
+
 /**
  * Debounce function
- * @param callback The function to debounce.
+ * @param callback The function or a promise to debounce.
  * @param wait The number of milliseconds to delay.
  * @param immediate Immediately execute the function, default is false
- * @returns debounce function
+ * @returns debounced function
+ * @returns debounced.cancel function
+ * @returns debounced.run function
  */
-export default function debounce(
-  callback: Function,
+export default function debounce<T extends (...args: any) => any>(
+  callback: T,
   wait = 200,
-  immediate = false,
 ) {
-  let timeout: any = null;
-  return function () {
-    const callImmediate = immediate && !timeout;
-    const fn = () => callback?.apply(this, arguments);
-    clearTimeout(timeout);
-    timeout = setTimeout(fn, wait);
-    callImmediate && fn();
-  };
+  const debounced = $debounce(callback, wait);
+  return debounced;
 }

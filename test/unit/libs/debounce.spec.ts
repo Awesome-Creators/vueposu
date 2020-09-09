@@ -1,49 +1,67 @@
 import debounce from '@libs/debounce';
 
 describe('debounce', () => {
-  it('should be call once', () => {
-    jest.useFakeTimers();
+  it('should be call once', done => {
     const callback = jest.fn();
+    const fn = debounce(callback, 300);
 
-    const fn = debounce(callback, 200);
-
     fn();
+    expect(callback).toHaveBeenCalledTimes(0);
     fn();
+    expect(callback).toHaveBeenCalledTimes(0);
     fn();
+    expect(callback).toHaveBeenCalledTimes(0);
     fn();
+    expect(callback).toHaveBeenCalledTimes(0);
     fn();
-    fn();
-    fn();
-
-    expect(setTimeout).toHaveBeenCalledTimes(7);
-
-    const callback2 = jest.fn();
-    const fn2 = debounce(callback2);
-
-    fn2();
-    fn2();
-    fn2();
-    fn2();
-    fn2();
-    fn2();
-    fn2();
+    expect(callback).toHaveBeenCalledTimes(0);
 
     setTimeout(() => {
       expect(callback).toHaveBeenCalledTimes(1);
-      expect(callback).toHaveBeenCalledTimes(1);
-    }, 1000);
+      done();
+    }, 310);
   });
 
-  it('shold be call immediate', () => {
-    jest.useFakeTimers();
-
+  it('should be call zero', done => {
     const callback = jest.fn();
-    const fn = debounce(callback, 200, true);
+    const fn = debounce(callback, 300);
 
     fn();
+    expect(callback).toHaveBeenCalledTimes(0);
     fn();
+    expect(callback).toHaveBeenCalledTimes(0);
     fn();
+    expect(callback).toHaveBeenCalledTimes(0);
+    fn();
+    expect(callback).toHaveBeenCalledTimes(0);
+    fn();
+    expect(callback).toHaveBeenCalledTimes(0);
+    fn.cancel();
 
-    expect(callback).toHaveBeenCalledTimes(1);
+    setTimeout(() => {
+      expect(callback).toHaveBeenCalledTimes(0);
+      done();
+    }, 310);
+  });
+
+  it('default time test', done => {
+    const callback = jest.fn();
+    const fn = debounce(callback);
+
+    fn();
+    expect(callback).toHaveBeenCalledTimes(0);
+    fn();
+    expect(callback).toHaveBeenCalledTimes(0);
+    fn();
+    expect(callback).toHaveBeenCalledTimes(0);
+    fn();
+    expect(callback).toHaveBeenCalledTimes(0);
+    fn();
+    expect(callback).toHaveBeenCalledTimes(0);
+
+    setTimeout(() => {
+      expect(callback).toHaveBeenCalledTimes(1);
+      done();
+    }, 210);
   });
 });

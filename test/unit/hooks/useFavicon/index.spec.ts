@@ -1,7 +1,18 @@
 import { mount } from '@vue/test-utils';
 import Test from './test.comp.vue';
+import Nothing from './test.nothing.comp.vue';
 
 describe('useFavicon', () => {
+  it('test useFavicon', async () => {
+    const component = mount(Nothing);
+
+    expect(document.querySelector("link[rel*='icon']") as HTMLLinkElement).toBe(
+      null,
+    );
+
+    component.unmount();
+  });
+
   it('test useFavicon', async () => {
     const component = mount(Test);
 
@@ -26,5 +37,7 @@ describe('useFavicon', () => {
     expect(
       (document.querySelector("link[rel*='icon']") as HTMLLinkElement).href,
     ).toBe('http://localhost/1');
+
+    component.unmount();
   });
 });

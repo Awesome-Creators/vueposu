@@ -5,7 +5,6 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs } from 'vue';
 import useFavicon from '@hooks/useFavicon';
 
 export default {

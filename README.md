@@ -28,6 +28,7 @@ yarn add euv
 ### FUNCTIONALITY
 
 - [x] useState
+- [ ] useEventEmitter
 - [ ] useCounter
 - [ ] useDynamicList
 - [ ] useEffect
