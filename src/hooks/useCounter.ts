@@ -1,66 +1,93 @@
 import { ref, computed, ComputedRef } from 'vue';
+import { plus, minus } from 'number-precision';
 
-interface ICounterOptions {
-  min?: number;
-  max?: number;
-  granularity?: number;
+type NumberType = number | bigint | string;
+
+interface ICounterOptions<T = number> {
+  min?: T;
+  max?: T;
+  granularity?: T;
 }
 
-interface ICounterActions {
-  inc: (n?: number) => void;
-  dec: (n?: number) => void;
-  set: (value: number | ((currentValue: number) => number)) => void;
+interface ICounterActions<T = number> {
+  inc: (n?: T) => void;
+  dec: (n?: T) => void;
+  set: (value: T | ((currentValue: T) => T)) => void;
   reset: () => void;
 }
 
-const isNumber = (n: any) => typeof n === 'number' && !isNaN(n);
+const isNumberType = (n: any) => !isNaN(Number(n));
 
-export default function useCounter(
-  initialValue: number = 0,
-  options: ICounterOptions = {},
-): [ComputedRef<number>, ICounterActions] {
-  const { min, max } = options;
-  const granularity = isNumber(options.granularity) ? options.granularity : 1;
+function useCounter(
+  initialValue?: number,
+  options?: ICounterOptions<number>,
+): [ComputedRef<number>, ICounterActions<number>];
 
-  const current = ref(
-    isNumber(initialValue)
-      ? (() => {
-          if (isNumber(max)) {
-            initialValue = Math.min(max, initialValue);
-          }
-          if (isNumber(min)) {
-            initialValue = Math.max(min, initialValue);
-          }
-          return initialValue;
-        })()
-      : (initialValue = 0),
-  );
+function useCounter(
+  initialValue?: string,
+  options?: ICounterOptions<number>,
+): [ComputedRef<number>, ICounterActions<number>];
+
+function useCounter(
+  initialValue?: bigint,
+  options?: ICounterOptions<bigint>,
+): [ComputedRef<bigint>, ICounterActions<bigint>];
+
+function useCounter(
+  initialValue: NumberType,
+  options: ICounterOptions<NumberType> = {},
+): [ComputedRef<NumberType>, ICounterActions<NumberType>] {
+  const counterType = typeof initialValue === 'bigint' ? BigInt : Number;
+
+  let { min, max, granularity = 1 } = options;
+
+  granularity = isNumberType(granularity) ? Number(granularity) : 1;
+  initialValue = isNumberType(initialValue) ? Number(initialValue) : 0;
+
+  if (isNumberType(max)) {
+    initialValue = Math.min(Number(max), initialValue);
+  }
+  if (isNumberType(min)) {
+    initialValue = Math.max(Number(min), initialValue);
+  }
+
+  const current = ref(initialValue);
 
   const set: ICounterActions['set'] = v => {
     let result = typeof v === 'function' ? v(current.value) : v;
-    if (isNumber(max)) {
-      result = Math.min(max, result);
+    if (isNumberType(max)) {
+      result = Math.min(Number(max), result);
     }
-    if (isNumber(min)) {
-      result = Math.max(min, result);
+    if (isNumberType(min)) {
+      result = Math.max(Number(min), result);
     }
     current.value = result;
   };
 
-  const inc: ICounterActions['inc'] = (n = granularity) => {
-    set(current.value + n);
+  const inc: ICounterActions['inc'] = n => {
+    set(
+      plus(
+        current.value,
+        isNumberType(n) ? Number(n) : (granularity as number),
+      ),
+    );
   };
 
-  const dec: ICounterActions['dec'] = (n = granularity) => {
-    set(current.value - n);
+  const dec: ICounterActions['dec'] = n => {
+    set(
+      minus(
+        current.value,
+        isNumberType(n) ? Number(n) : (granularity as number),
+      ),
+    );
   };
 
   const reset: ICounterActions['reset'] = () => {
-    current.value = initialValue;
+    current.value = initialValue as number;
   };
 
   return [
-    computed(() => current.value),
+    computed(() => counterType(current.value)),
     {
       inc,
       dec,
@@ -69,3 +96,5 @@ export default function useCounter(
     },
   ];
 }
+
+export default useCounter;
