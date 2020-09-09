@@ -23,7 +23,7 @@ describe('useState', () => {
     component.unmount();
   });
 
-  it('test useState', async () => {
+  it('test useState callback', async () => {
     const component = mount(CallbackTest);
 
     expect(component.find('span').text()).toBe('0');
