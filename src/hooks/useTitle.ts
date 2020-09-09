@@ -13,7 +13,7 @@ const titleMap = new Map<number, ITitleState>();
  * @param title The string to set to the page title.
  */
 
-export default function useTitle(title: string) {
+export default function useTitle(title: string, callback?: () => void) {
   title = String(title);
   const instance = getCurrentInstance();
 
@@ -33,6 +33,7 @@ export default function useTitle(title: string) {
 
       watchEffect(() => {
         document.title = t.current;
+        callback && callback();
       });
 
       onUnmounted(() => {
