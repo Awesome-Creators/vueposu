@@ -3,6 +3,7 @@ import Test from './test.comp.vue';
 import Limit from './test.limit.comp.vue';
 import Granularity from './test.granularity.comp.vue';
 import Bigint from './test.bigint.comp.vue';
+import Any from './test.any.comp.vue';
 
 describe('useCounter', () => {
   it('test useCounter', async () => {
@@ -87,6 +88,29 @@ describe('useCounter', () => {
 
     await component.find('#reset').trigger('click');
     expect(component.find('span').text()).toBe('11');
+
+    component.unmount();
+  });
+
+  it('mock js user', async () => {
+    const component = mount(Any);
+
+    expect(component.find('span').text()).toBe('0');
+
+    await component.find('#inc').trigger('click');
+    expect(component.find('span').text()).toBe('0.1');
+
+    await component.find('#dec').trigger('click');
+    expect(component.find('span').text()).toBe('-0.9');
+
+    await component.find('#set').trigger('click');
+    expect(component.find('span').text()).toBe('8');
+
+    await component.find('#set-with-callback').trigger('click');
+    expect(component.find('span').text()).toBe('10');
+
+    await component.find('#reset').trigger('click');
+    expect(component.find('span').text()).toBe('0');
 
     component.unmount();
   });
