@@ -1,5 +1,5 @@
 import { ref, computed, ComputedRef } from 'vue';
-import { plus, minus } from 'number-precision';
+import * as math from 'mathjs';
 
 type NumberType = number | bigint | string;
 
@@ -66,18 +66,22 @@ function useCounter(
 
   const inc: ICounterActions['inc'] = n => {
     set(
-      plus(
-        current.value,
-        isNumberType(n) ? Number(n) : (granularity as number),
+      Number(
+        math.add(
+          math.bignumber(current.value),
+          math.bignumber(isNumberType(n) ? Number(n) : (granularity as number)),
+        ),
       ),
     );
   };
 
   const dec: ICounterActions['dec'] = n => {
     set(
-      minus(
-        current.value,
-        isNumberType(n) ? Number(n) : (granularity as number),
+      Number(
+        math.subtract(
+          math.bignumber(current.value),
+          math.bignumber(isNumberType(n) ? Number(n) : (granularity as number)),
+        ),
       ),
     );
   };
