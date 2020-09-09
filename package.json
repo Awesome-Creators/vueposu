@@ -10,7 +10,12 @@
     "test": "jest",
     "test:ci": "jest --coverage --collectCoverage=true --verbose --collectCoverageFrom='<rootDir>/src/**/*.{js,vue,ts}'"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@types/lodash.debounce": "^4.0.6",
+    "@types/lodash.throttle": "^4.1.6",
+    "lodash.debounce": "^4.0.8",
+    "lodash.throttle": "^4.1.1"
+  },
   "devDependencies": {
     "@babel/core": "^7.11.4",
     "@babel/preset-env": "^7.11.0",
