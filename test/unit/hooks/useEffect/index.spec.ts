@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
 import NotDeps from './test.notdeps.comp.vue';
 import Deps from './test.deps.comp.vue';
-import EmptyDeps from './test.emptyDeps.comp.vue';
+import EmptyDeps from './test.emptydeps.comp.vue';
 
 describe('useEffect', () => {
   it('test not deps', () => {
