@@ -2,7 +2,7 @@
  * useFavicon - change site icon
  * @param url favicon url
  */
-export default function useFavicon(url: string) {
+export default function useFavicon(url?: string) {
   // change site favicon
   const changeIcon = ($url: string) => {
     if ($url) {
