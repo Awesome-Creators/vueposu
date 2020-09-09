@@ -30,7 +30,7 @@ describe('debounce', () => {
 
     setTimeout(() => {
       expect(callback).toHaveBeenCalledTimes(1);
-      expect(callback).toHaveBeenCalledTimes(1);
+      expect(callback2).toHaveBeenCalledTimes(1);
     }, 1000);
   });
 
@@ -45,5 +45,28 @@ describe('debounce', () => {
     fn();
 
     expect(callback).toHaveBeenCalledTimes(1);
+  });
+
+  it('should be call zero', () => {
+    jest.useFakeTimers();
+    const callback = jest.fn();
+
+    const fn = debounce(callback, 200);
+
+    fn();
+    fn();
+    fn();
+    fn();
+    fn();
+    fn();
+    fn();
+
+    expect(setTimeout).toHaveBeenCalledTimes(7);
+
+    fn.cancel();
+
+    setTimeout(() => {
+      expect(callback).toHaveBeenCalledTimes(0);
+    }, 1000);
   });
 });

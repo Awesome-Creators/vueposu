@@ -11,11 +11,41 @@ export default function debounce(
   immediate = false,
 ) {
   let timeout: any = null;
-  return function () {
+
+  const useRAF =
+    !wait && wait !== 0 && typeof window.requestAnimationFrame === 'function';
+
+  const startTimer = (pendingFunc, wait) => {
+    if (useRAF) {
+      return window.requestAnimationFrame(pendingFunc);
+    }
+    return setTimeout(pendingFunc, wait);
+  };
+
+  const cancelTimer = () => {
+    if (useRAF) {
+      return window.cancelAnimationFrame(timeout);
+    }
+    clearTimeout();
+  };
+
+  const cancel = () => {
+    timeout !== undefined && cancelTimer();
+  };
+
+  const fn = function () {
     const callImmediate = immediate && !timeout;
     const fn = () => callback?.apply(this, arguments);
-    clearTimeout(timeout);
-    timeout = setTimeout(fn, wait);
-    callImmediate && fn();
+    if (wait === 0) {
+      fn();
+    } else {
+      cancelTimer();
+      timeout = startTimer(fn, wait);
+      callImmediate && fn();
+    }
   };
+
+  fn.cancel = cancel;
+
+  return fn;
 }
