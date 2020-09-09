@@ -32,7 +32,7 @@ yarn add euv
 - [ ] useCounter
 - [ ] useCalculator
 - [ ] useDynamicList
-- [ ] useEffect
+- [x] useEffect
 - [ ] useDebounce
 - [ ] useThrottle
 - [x] useToggle
