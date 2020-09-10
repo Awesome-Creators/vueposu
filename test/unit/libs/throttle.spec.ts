@@ -1,67 +1,52 @@
 import throttle from '@libs/throttle';
+import { times, wait } from '../../utils/helper';
 
 describe('throttle', () => {
-  it('should be call once', done => {
+  it('should be call once', async () => {
     const callback = jest.fn();
     const fn = throttle(callback, 300);
 
     fn();
     expect(callback).toHaveBeenCalledTimes(1);
-    fn();
-    expect(callback).toHaveBeenCalledTimes(1);
-    fn();
-    expect(callback).toHaveBeenCalledTimes(1);
-    fn();
-    expect(callback).toHaveBeenCalledTimes(1);
+
     fn();
     expect(callback).toHaveBeenCalledTimes(1);
 
-    setTimeout(() => {
-      expect(callback).toHaveBeenCalledTimes(2);
-      done();
-    }, 310);
+    fn();
+    expect(callback).toHaveBeenCalledTimes(1);
+
+    fn();
+    expect(callback).toHaveBeenCalledTimes(1);
+
+    fn();
+    expect(callback).toHaveBeenCalledTimes(1);
+
+    await wait(310);
+    expect(callback).toHaveBeenCalledTimes(2);
   });
 
-  it('should be call zero', done => {
+  it('should be call zero', async () => {
     const callback = jest.fn();
     const fn = throttle(callback, 300);
 
-    fn();
+    times(10, fn);
     expect(callback).toHaveBeenCalledTimes(1);
-    fn();
-    expect(callback).toHaveBeenCalledTimes(1);
-    fn();
-    expect(callback).toHaveBeenCalledTimes(1);
-    fn();
-    expect(callback).toHaveBeenCalledTimes(1);
-    fn();
-    expect(callback).toHaveBeenCalledTimes(1);
+
     fn.cancel();
-
-    setTimeout(() => {
-      expect(callback).toHaveBeenCalledTimes(1);
-      done();
-    }, 310);
+    await wait(310);
+    expect(callback).toHaveBeenCalledTimes(1);
   });
 
-  it('default time test', done => {
+  it('default time test', async () => {
     const callback = jest.fn();
     const fn = throttle(callback);
 
     fn();
-    expect(callback).toHaveBeenCalledTimes(1);
-    fn();
-    expect(callback).toHaveBeenCalledTimes(1);
-    fn();
-    expect(callback).toHaveBeenCalledTimes(1);
-    fn();
-    expect(callback).toHaveBeenCalledTimes(1);
-    fn();
+    await wait();
     expect(callback).toHaveBeenCalledTimes(1);
 
-    setTimeout(() => {
-      expect(callback).toHaveBeenCalledTimes(2);
-      done();
-    }, 210);
+    times(10, fn);
+    await wait();
+    expect(callback).toHaveBeenCalledTimes(11);
   });
 });

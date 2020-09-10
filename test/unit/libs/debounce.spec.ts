@@ -1,67 +1,44 @@
 import debounce from '@libs/debounce';
+import { times, wait } from '../../utils/helper';
 
 describe('debounce', () => {
-  it('should be call once', done => {
+  it('should be call once', async () => {
     const callback = jest.fn();
     const fn = debounce(callback, 300);
 
-    fn();
-    expect(callback).toHaveBeenCalledTimes(0);
-    fn();
-    expect(callback).toHaveBeenCalledTimes(0);
-    fn();
-    expect(callback).toHaveBeenCalledTimes(0);
-    fn();
-    expect(callback).toHaveBeenCalledTimes(0);
-    fn();
+    times(30, fn);
+    await wait(0);
     expect(callback).toHaveBeenCalledTimes(0);
 
-    setTimeout(() => {
-      expect(callback).toHaveBeenCalledTimes(1);
-      done();
-    }, 310);
+    fn();
+    await wait(310);
+    expect(callback).toHaveBeenCalledTimes(1);
   });
 
-  it('should be call zero', done => {
+  it('should be call zero', async () => {
     const callback = jest.fn();
     const fn = debounce(callback, 300);
 
-    fn();
-    expect(callback).toHaveBeenCalledTimes(0);
-    fn();
-    expect(callback).toHaveBeenCalledTimes(0);
-    fn();
-    expect(callback).toHaveBeenCalledTimes(0);
-    fn();
-    expect(callback).toHaveBeenCalledTimes(0);
-    fn();
+    times(15, fn);
+    await wait();
+
     expect(callback).toHaveBeenCalledTimes(0);
     fn.cancel();
 
-    setTimeout(() => {
-      expect(callback).toHaveBeenCalledTimes(0);
-      done();
-    }, 310);
+    await wait(310);
+    expect(callback).toHaveBeenCalledTimes(0);
   });
 
-  it('default time test', done => {
+  it('default time test', async () => {
     const callback = jest.fn();
     const fn = debounce(callback);
 
     fn();
-    expect(callback).toHaveBeenCalledTimes(0);
-    fn();
-    expect(callback).toHaveBeenCalledTimes(0);
-    fn();
-    expect(callback).toHaveBeenCalledTimes(0);
-    fn();
-    expect(callback).toHaveBeenCalledTimes(0);
-    fn();
-    expect(callback).toHaveBeenCalledTimes(0);
+    await wait();
+    expect(callback).toHaveBeenCalledTimes(1);
 
-    setTimeout(() => {
-      expect(callback).toHaveBeenCalledTimes(1);
-      done();
-    }, 210);
+    times(10, fn);
+    await wait();
+    expect(callback).toHaveBeenCalledTimes(2);
   });
 });
