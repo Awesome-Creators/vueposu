@@ -29,12 +29,12 @@ yarn add euv
 
 - [x] useState
 - [ ] useEventEmitter
-- [ ] useCounter
+- [x] useCounter
 - [ ] useCalculator
 - [ ] useDynamicList
 - [x] useEffect
-- [ ] useDebounce
-- [ ] useThrottle
+- [x] useDebounce
+- [x] useThrottle
 - [x] useToggle
 - [ ] useSwr
 - [ ] etc..
