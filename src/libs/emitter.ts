@@ -10,6 +10,6 @@ export default class Emitter {
       this.events[type].splice(this.events[type].indexOf(handler) >>> 0, 1);
   }
   emit(type: string, ...args) {
-    (this.events[type] || []).forEach(handler => handler(args));
+    this.events[type]?.forEach(handler => handler(args));
   }
 }
