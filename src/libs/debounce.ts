@@ -3,14 +3,6 @@ import $debounce from 'lodash.debounce';
 // debounce function type
 export type Fn = (...args: any) => any;
 
-/**
- * Debounce function
- * @param callback The function or a promise to debounce.
- * @param wait The number of milliseconds to delay.
- * @returns debounced function
- * @returns debounced.cancel function
- */
-
 interface DebouncedFunc<T extends (...args: any[]) => any> {
   /**
    * Call the original function, but applying the debounce rules.
@@ -29,6 +21,13 @@ interface DebouncedFunc<T extends (...args: any[]) => any> {
   cancel(): void;
 }
 
+/**
+ * Debounce function
+ * @param callback The function or a promise to debounce.
+ * @param wait The number of milliseconds to delay.
+ * @returns debounced function
+ * @returns debounced.cancel function
+ */
 export default function debounce<T extends Fn>(
   callback: T,
   wait = 0,

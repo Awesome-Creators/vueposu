@@ -12,9 +12,13 @@
   },
   "dependencies": {
     "@types/lodash.debounce": "^4.0.6",
+    "@types/lodash.isfunction": "^3.0.6",
+    "@types/lodash.isobject": "^3.0.6",
     "@types/lodash.throttle": "^4.1.6",
     "@types/mathjs": "^6.0.5",
     "lodash.debounce": "^4.0.8",
+    "lodash.isfunction": "^3.0.9",
+    "lodash.isobject": "^3.0.2",
     "lodash.throttle": "^4.1.1",
     "mathjs": "^7.2.0"
   },

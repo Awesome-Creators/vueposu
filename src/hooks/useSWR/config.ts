@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import deepEqual from 'fast-deep-equal';
 import isDocumentVisible from '@libs/isDocumentVisible';
 import {

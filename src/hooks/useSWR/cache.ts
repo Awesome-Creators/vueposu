@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { CacheInterface, KeyInterface, CacheListener } from './types';
 import hash from '@libs/hash';
 

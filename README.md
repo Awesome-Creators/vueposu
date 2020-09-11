@@ -20,7 +20,7 @@ yarn add euv
 - [x] useClickAway
 - [x] useFavicon
 - [ ] useAudio
-- [ ] useBrowserTabChange
+- [x] useBrowserTabChange
 - [ ] useLocalStorage
 - [ ] useScrollTo
 - [ ] useCopyToClipboard

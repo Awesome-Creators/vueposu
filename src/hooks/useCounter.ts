@@ -1,5 +1,6 @@
 import { ref, computed, ComputedRef } from 'vue';
 import * as math from 'mathjs';
+import isFunction from 'lodash.isfunction';
 
 type NumberType = number | bigint | string;
 
@@ -54,7 +55,7 @@ function useCounter(
   const current = ref(initialValue);
 
   const set: ICounterActions['set'] = v => {
-    let result = typeof v === 'function' ? v(current.value) : v;
+    let result = isFunction(v) ? v(current.value) : v;
     if (isNumberType(max)) {
       result = Math.min(Number(max), result);
     }
