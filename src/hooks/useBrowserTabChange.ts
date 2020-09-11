@@ -30,21 +30,6 @@ interface useBrowserTabChangeCallback {
 }
 
 /**
- * useBrowserTabChangeCallback
- * callback function for useBrowserTabChange
-
- * @callback boolean `optons.leave`  when user leave tab will be true, otherwise false
- * @callback boolean `optons.back`  when user back tab will be true, otherwise false
- */
-const useBrowserTabChangeCallback = () =>
-  // options: useBrowserTabChangeCallbackOptions,
-  {
-    return () => {
-      // callback(document.hidden)
-    };
-  };
-
-/**
  * useBrowserTabChange function
  * when user `leave`/`back` current tab will trigger this hook
  * always execute the last one
@@ -75,7 +60,7 @@ export default function useBrowserTabChange(
 export default function useBrowserTabChange(options): void {
   useEffect(() => {
     let listener;
-    let shouldListen = true;
+    let shouldListen = false;
 
     if (isFunction(options)) {
       const $listener = options as useBrowserTabChangeCallback;
@@ -84,6 +69,7 @@ export default function useBrowserTabChange(options): void {
           $listener({ leave: document.hidden, back: !document.hidden });
         }, 0);
       };
+      shouldListen = true;
     } else if (isObject(options)) {
       const $options = options as useBrowserTabChangeOptions;
       if ($options.back || $options.leave) {
@@ -93,8 +79,7 @@ export default function useBrowserTabChange(options): void {
           }, 0);
         };
       }
-    } else {
-      shouldListen = false;
+      shouldListen = true;
     }
 
     shouldListen &&
