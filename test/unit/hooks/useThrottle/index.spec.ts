@@ -77,5 +77,7 @@ describe('useThrottle', () => {
 
     await wait(310);
     expect(component.find('#count').text()).toBe('5');
+
+    component.unmount();
   });
 });

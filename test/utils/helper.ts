@@ -7,3 +7,8 @@ export const times = (times = 0, cb: Function) => {
     cb(i);
   }
 };
+
+// trigger dom event
+export const triggerDomEvent = evt => {
+  document.dispatchEvent(new Event(evt));
+};

@@ -2,6 +2,14 @@ import useEffect from './useEffect';
 import isObject from 'lodash.isobject';
 import isFunction from 'lodash.isfunction';
 
+// the difference platfrom listen
+const DIFFERENCE_PLATFORM_EVT = [
+  'mozvisibilitychange',
+  'webkitvisibilitychange',
+  'msvisibilitychange',
+  'visibilitychange',
+];
+
 /**
  * useBrowserTabChange function options define
  * @property `leave` when user leave tab will call it callback function
@@ -67,25 +75,37 @@ export default function useBrowserTabChange(
 export default function useBrowserTabChange(options): void {
   useEffect(() => {
     let listener;
-    let shouldListen = false;
+    let shouldListen = true;
 
-    if (isObject(options)) {
+    if (isFunction(options)) {
+      const $listener = options as useBrowserTabChangeCallback;
+      listener = () => {
+        setTimeout(() => {
+          $listener({ leave: document.hidden, back: !document.hidden });
+        }, 0);
+      };
+    } else if (isObject(options)) {
       const $options = options as useBrowserTabChangeOptions;
       if ($options.back || $options.leave) {
-        shouldListen = true;
         listener = () => {
-          document.hidden ? $options?.leave() : $options.back?.();
+          setTimeout(() => {
+            document.hidden ? $options?.leave() : $options.back?.();
+          }, 0);
         };
       }
-    } else if (isFunction(options)) {
-      const $listener = listener as useBrowserTabChangeCallback;
-      $listener({ leave: document.hidden, back: !document.hidden });
+    } else {
+      shouldListen = false;
     }
 
-    shouldListen && document.addEventListener('visibilitychange', listener);
+    shouldListen &&
+      DIFFERENCE_PLATFORM_EVT.forEach(evt => {
+        document.addEventListener(evt, listener);
+      });
 
     return () =>
       shouldListen &&
-      document.removeEventListener('visibilitychange', listener);
-  });
+      DIFFERENCE_PLATFORM_EVT.forEach(evt => {
+        document.removeEventListener(evt, listener);
+      });
+  }, []);
 }

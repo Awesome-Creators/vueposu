@@ -76,5 +76,7 @@ describe('useDebounce', () => {
 
     await wait(310);
     expect(component.find('#count').text()).toBe('3');
+
+    component.unmount();
   });
 });
