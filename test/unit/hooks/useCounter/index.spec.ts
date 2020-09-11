@@ -5,7 +5,7 @@ import Granularity from './test.granularity.comp.vue';
 import Bigint from './test.bigint.comp.vue';
 import Any from './test.any.comp.vue';
 
-describe('useCounter', () => {
+describe('hooks/useCounter', () => {
   it('test useCounter', async () => {
     const component = mount(Test);
 

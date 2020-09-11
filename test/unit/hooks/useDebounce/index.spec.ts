@@ -3,7 +3,7 @@ import Default from './test.default.comp.vue';
 import Common from './test.common.comp.vue';
 import { wait } from '../../../utils/helper';
 
-describe('useDebounce', () => {
+describe('hooks/useDebounce', () => {
   it('test default case', async () => {
     const component = mount(Default);
 

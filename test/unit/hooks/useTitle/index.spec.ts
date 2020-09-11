@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
 import Test from './test.comp.vue';
 
-describe('useTitle', () => {
+describe('hooks/useTitle', () => {
   it('test title', async () => {
     (window as any).testUseTitleCallback = 0;
     const component = mount(Test);

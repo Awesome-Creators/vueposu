@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils';
 import Test from './test.comp.vue';
 import Nothing from './test.nothing.comp.vue';
 
-describe('useFavicon', () => {
+describe('hooks/useFavicon', () => {
   it('test useFavicon', async () => {
     const component = mount(Nothing);
 

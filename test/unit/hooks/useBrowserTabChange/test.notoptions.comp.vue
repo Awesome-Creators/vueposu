@@ -15,10 +15,7 @@ export default {
   setup() {
     const $leave = ref(false);
     const $back = ref(true);
-    const [$leaveRef, $backRef] = useBrowserTabChange(({ leave, back }) => {
-      $leave.value = leave;
-      $back.value = back;
-    });
+    const [$leaveRef, $backRef] = useBrowserTabChange();
     return { $leave, $back, $leaveRef, $backRef };
   },
 };

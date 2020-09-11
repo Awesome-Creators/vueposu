@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils';
 import Test from './test.comp.vue';
 import CallbackTest from './test.callback.comp.vue';
 
-describe('useState', () => {
+describe('hooks/useState', () => {
   it('test useState', async () => {
     const component = mount(Test);
 

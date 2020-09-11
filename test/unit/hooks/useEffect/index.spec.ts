@@ -3,7 +3,7 @@ import NotDeps from './test.notdeps.comp.vue';
 import Deps from './test.deps.comp.vue';
 import EmptyDeps from './test.emptydeps.comp.vue';
 
-describe('useEffect', () => {
+describe('hooks/useEffect', () => {
   it('test not deps', () => {
     (window as any).testNotDepsEffect = 1;
     const component = mount(NotDeps);

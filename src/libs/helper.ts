@@ -8,17 +8,4 @@ import isUndefined from 'lodash.isundefined';
 const isDef = val => !isUndefined(val) && val !== null;
 const isUndef = val => isUndefined(val) || val === null;
 
-const isOneOfPropertyDef = (object, properties: string[]) => {
-  return properties.some(property => isDef(object[property]));
-};
-
-export {
-  debounce,
-  throttle,
-  isObject,
-  isFunction,
-  isUndefined,
-  isDef,
-  isUndef,
-  isOneOfPropertyDef,
-};
+export { isObject, isFunction, debounce, throttle, isDef, isUndef };

@@ -1,7 +1,7 @@
 import throttle from '@libs/throttle';
 import { times, wait } from '../../utils/helper';
 
-describe('throttle', () => {
+describe('libs/throttle', () => {
   it('should be call once', async () => {
     const callback = jest.fn();
     const fn = throttle(callback, 300);

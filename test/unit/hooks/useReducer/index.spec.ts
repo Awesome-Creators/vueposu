@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils';
 import Test from './test.comp.vue';
 import Initializer from './test.init.comp.vue';
 
-describe('useState', () => {
+describe('hooks/useState', () => {
   it('test useState', async () => {
     const component = mount(Test);
 

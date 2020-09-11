@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils';
 import WithoutParams from './test.withoutParams.comp.vue';
 import DefaultValue from './test.defaultValue.comp.vue';
 
-describe('useToggle', () => {
+describe('hooks/useToggle', () => {
   it('simple toggle test', async () => {
     const component = mount(WithoutParams);
     expect(component.find('span').text()).toBe('true');

@@ -1,7 +1,6 @@
 <template>
   <div>
-    <span id="leave">{{ $leave }}</span>
-    <span id="back">{{ $back }}</span>
+    <span id="count">{{ count }}</span>
     <span id="leaveRef">{{ $leaveRef }}</span>
     <span id="backRef">{{ $backRef }}</span>
   </div>
@@ -13,20 +12,13 @@ import useBrowserTabChange from '@hooks/useBrowserTabChange';
 
 export default {
   setup() {
-    const $leave = ref(false);
-    const $back = ref(true);
+    const count = ref(0);
     const [$leaveRef, $backRef] = useBrowserTabChange({
       leave: () => {
-        $leave.value = true;
-        $back.value = false;
-      },
-      back: () => {
-        $leave.value = false;
-        $back.value = true;
+        count.value += 1;
       },
     });
-
-    return { $leave, $back, $leaveRef, $backRef };
+    return { count, $leaveRef, $backRef };
   },
 };
 </script>

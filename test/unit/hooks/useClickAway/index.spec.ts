@@ -4,7 +4,7 @@ import Multiple from './test.multiple.comp.vue';
 import OtherEvt from './test.otherEvt.comp.vue';
 import OtherEvtMultiple from './test.otherEvtMultiple.comp.vue';
 
-describe('useClickAway', () => {
+describe('hooks/useClickAway', () => {
   it('test single', async () => {
     const component = mount(Single, { attachTo: document.body });
     expect(component.find('span').text()).toBe('0');
