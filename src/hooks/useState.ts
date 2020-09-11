@@ -1,6 +1,6 @@
-import { computed, ref, ComputedRef } from 'vue';
+import { ComputedRef } from 'vue';
+import useReducer, { Dispatch } from './useReducer';
 
-type Dispatch<A> = (value: A) => void;
 type DispatchType<S> = S | ((prevState: S) => S);
 type SetStateAction<S> = [ComputedRef<S>, Dispatch<DispatchType<S>>];
 
@@ -12,16 +12,19 @@ type SetStateAction<S> = [ComputedRef<S>, Dispatch<DispatchType<S>>];
  */
 
 function useState<S>(initialState: S): SetStateAction<S> {
-  const state = ref(
+  const [state, dispatch] = useReducer(
+    (prevState, nextState) => (prevState === nextState ? prevState : nextState),
     typeof initialState === 'function' ? initialState() : initialState,
   );
 
-  const dispatcher: Dispatch<DispatchType<S>> = action => {
-    state.value =
-      typeof action === 'function' ? (action as Function)(state.value) : action;
-  };
-
-  return [computed(() => state.value), dispatcher];
+  return [
+    state,
+    action => {
+      dispatch(
+        typeof action === 'function' ? (action as Function)(state.value) : action,
+      );
+    },
+  ];
 }
 
 export default useState;
