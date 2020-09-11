@@ -34,8 +34,5 @@ export default function throttle<T extends Fn>(
 ): ThrottleFunc<T> {
   const throttled = $throttle(callback, wait);
 
-  // ban flush because we don't need it
-  throttled.flush = null;
-
   return throttled;
 }

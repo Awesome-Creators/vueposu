@@ -35,8 +35,5 @@ export default function debounce<T extends Fn>(
 ): DebouncedFunc<T> {
   const debounced = $debounce(callback, wait);
 
-  // ban flush because we don't need it
-  debounced.flush = null;
-
   return debounced;
 }
