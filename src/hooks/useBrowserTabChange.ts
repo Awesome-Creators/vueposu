@@ -1,5 +1,5 @@
 import useEffect from './useEffect';
-import { isFunction, isObject } from '@libs/helper';
+import { isFunction, isObject, isOneOfPropertyDef } from '@libs/helper';
 
 // the difference platfrom listen
 const DIFFERENCE_PLATFORM_EVT = [
@@ -71,7 +71,7 @@ export default function useBrowserTabChange(options): void {
       shouldListen = true;
     } else if (isObject(options)) {
       const $options = options as useBrowserTabChangeOptions;
-      if ($options.back || $options.leave) {
+      if (isOneOfPropertyDef($options, ['back', 'leave'])) {
         listener = () => {
           setTimeout(() => {
             document.hidden ? $options?.leave() : $options.back?.();
