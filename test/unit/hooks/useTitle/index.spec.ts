@@ -1,7 +1,12 @@
 import { mount } from '@vue/test-utils';
 import Test from './test.comp.vue';
 
+const warn = console.warn.bind(this);
+
 describe('hooks/useTitle', () => {
+  beforeAll(() => (console.warn = () => {}));
+  afterAll(() => (console.warn = warn));
+
   it('test title', async () => {
     (window as any).testUseTitleCallback = 0;
     const component = mount(Test);

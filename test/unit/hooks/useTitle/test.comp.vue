@@ -10,7 +10,7 @@
 <script lang="ts">
 import { h, ref } from 'vue';
 import useTitle from '@hooks/useTitle';
-import { isUndefined } from '@libs/helper';
+import { isDef } from '@libs/helper';
 
 export default {
   components: {
@@ -30,7 +30,7 @@ export default {
     useTitle('b');
     useTitle('b');
     useTitle('c', () => {
-      if (!isUndefined((window as any).testUseTitleCallback)) {
+      if (isDef((window as any).testUseTitleCallback)) {
         (window as any).testUseTitleCallback = 1;
       }
     });
