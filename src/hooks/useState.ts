@@ -1,5 +1,5 @@
 import { ComputedRef } from 'vue';
-import isFunction from 'lodash.isfunction';
+import { isFunction } from '@libs/helper';
 import useReducer, { Dispatch } from './useReducer';
 
 type DispatchType<S> = S | ((prevState: S) => S);

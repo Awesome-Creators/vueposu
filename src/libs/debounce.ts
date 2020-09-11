@@ -1,4 +1,4 @@
-import $debounce from 'lodash.debounce';
+import { debounce as $debounce } from '@libs/helper';
 
 // debounce function type
 export type Fn = (...args: any) => any;

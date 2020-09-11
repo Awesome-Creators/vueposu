@@ -1,6 +1,5 @@
 import useEffect from './useEffect';
-import isObject from 'lodash.isobject';
-import isFunction from 'lodash.isfunction';
+import { isFunction, isObject } from '@libs/helper';
 
 // the difference platfrom listen
 const DIFFERENCE_PLATFORM_EVT = [
@@ -78,8 +77,10 @@ export default function useBrowserTabChange(options): void {
             document.hidden ? $options?.leave() : $options.back?.();
           }, 0);
         };
+        shouldListen = true;
+      } else {
+        shouldListen = false;
       }
-      shouldListen = true;
     }
 
     shouldListen &&

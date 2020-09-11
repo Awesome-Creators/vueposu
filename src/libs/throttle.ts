@@ -1,4 +1,4 @@
-import $throttle from 'lodash.throttle';
+import { throttle as $throttle } from '@libs/helper';
 
 // throttle function type
 export type Fn = (...args: any) => any;
