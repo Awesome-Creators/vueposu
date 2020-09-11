@@ -8,16 +8,16 @@ describe('useState', () => {
 
     expect(component.find('span').text()).toBe('0');
 
-    await component.find('#add').trigger('click');
+    await component.find('#inc').trigger('click');
     expect(component.find('span').text()).toBe('1');
 
-    await component.find('#add').trigger('click');
+    await component.find('#inc').trigger('click');
     expect(component.find('span').text()).toBe('2');
 
-    await component.find('#minus').trigger('click');
+    await component.find('#dec').trigger('click');
     expect(component.find('span').text()).toBe('1');
 
-    await component.find('#minus').trigger('click');
+    await component.find('#dec').trigger('click');
     expect(component.find('span').text()).toBe('0');
 
     component.unmount();
@@ -28,16 +28,16 @@ describe('useState', () => {
 
     expect(component.find('span').text()).toBe('0');
 
-    await component.find('#add').trigger('click');
+    await component.find('#inc').trigger('click');
     expect(component.find('span').text()).toBe('1');
 
-    await component.find('#add').trigger('click');
+    await component.find('#inc').trigger('click');
     expect(component.find('span').text()).toBe('2');
 
-    await component.find('#minus').trigger('click');
+    await component.find('#dec').trigger('click');
     expect(component.find('span').text()).toBe('1');
 
-    await component.find('#minus').trigger('click');
+    await component.find('#dec').trigger('click');
     expect(component.find('span').text()).toBe('0');
 
     component.unmount();

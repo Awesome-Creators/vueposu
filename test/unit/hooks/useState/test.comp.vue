@@ -1,8 +1,8 @@
 <template>
   <div>
     <span>{{ count }}</span>
-    <button id="add" @click="setCount(count + 1)">add</button>
-    <button id="minus" @click="setCount(count - 1)">minus</button>
+    <button id="inc" @click="setCount(count + 1)">inc</button>
+    <button id="dec" @click="setCount(count - 1)">dec</button>
   </div>
 </template>
 
