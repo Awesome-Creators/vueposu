@@ -1,5 +1,7 @@
 import { mount } from '@vue/test-utils';
-import Test from './test.comp.vue';
+import { wait } from '../../../utils/helper';
+import Common from './test.common.comp.vue';
+import SideEffect from './test.sideEffect.comp.vue';
 
 const warn = console.warn.bind(this);
 
@@ -9,7 +11,7 @@ describe('hooks/useTitle', () => {
 
   it('test title', async () => {
     (window as any).testUseTitleCallback = 0;
-    const component = mount(Test);
+    const component = mount(Common);
     const Sub = { name: 'Sub' };
 
     expect((window as any).testUseTitleCallback).toBe(1);
@@ -27,7 +29,21 @@ describe('hooks/useTitle', () => {
 
     expect(() => {
       (component.vm.useTitleByEvent as Function)();
-    }).toThrowError();
+    }).toThrowError(
+      'Invalid hook call. Hooks can only be called inside of `setup()`',
+    );
+
+    component.unmount();
+  });
+
+  it('test sideEffect', async () => {
+    (window as any).testUseTitleSideEffect = 0;
+
+    document.title = 'a';
+    const component = mount(SideEffect);
+
+    await wait();
+    expect((window as any).testUseTitleSideEffect).toBe(0);
 
     component.unmount();
   });

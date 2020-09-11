@@ -1,8 +1,8 @@
 import { mount } from '@vue/test-utils';
 import Options from './test.options.comp.vue';
 import Common from './test.common.comp.vue';
-import NotOptions from './test.notoptions.comp.vue';
-import SingleOptions from './test.singleoptions.comp.vue';
+import NotOptions from './test.notOptions.comp.vue';
+import SingleOptions from './test.singleOptions.comp.vue';
 import MockJs from './test.mockjs.comp.vue';
 import { triggerDomEvent, wait } from '../../../utils/helper';
 

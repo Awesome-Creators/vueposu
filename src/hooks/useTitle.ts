@@ -31,19 +31,17 @@ export default function useTitle(title: string, callback?: () => void) {
         t.before = document.title;
       }
 
-      if (t.current !== title) {
-        t.current = title;
+      t.current = title;
 
-        useEffect(() => {
-          document.title = t.current;
-          callback && callback();
+      useEffect(() => {
+        document.title = t.current;
+        callback && callback();
 
-          return () => {
-            document.title = t.before;
-            titleMap.delete(instance.uid);
-          };
-        }, [t]);
-      }
+        return () => {
+          document.title = t.before;
+          titleMap.delete(instance.uid);
+        };
+      }, [t]);
     }
   } else {
     throw new Error(
