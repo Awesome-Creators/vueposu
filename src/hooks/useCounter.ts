@@ -1,5 +1,6 @@
 import { ref, computed, ComputedRef } from 'vue';
-import { plus, minus } from 'number-precision';
+import * as math from 'mathjs';
+import isFunction from 'lodash.isfunction';
 
 type NumberType = number | bigint | string;
 
@@ -54,7 +55,7 @@ function useCounter(
   const current = ref(initialValue);
 
   const set: ICounterActions['set'] = v => {
-    let result = typeof v === 'function' ? v(current.value) : v;
+    let result = isFunction(v) ? v(current.value) : v;
     if (isNumberType(max)) {
       result = Math.min(Number(max), result);
     }
@@ -66,18 +67,22 @@ function useCounter(
 
   const inc: ICounterActions['inc'] = n => {
     set(
-      plus(
-        current.value,
-        isNumberType(n) ? Number(n) : (granularity as number),
+      Number(
+        math.add(
+          math.bignumber(current.value),
+          math.bignumber(isNumberType(n) ? Number(n) : (granularity as number)),
+        ),
       ),
     );
   };
 
   const dec: ICounterActions['dec'] = n => {
     set(
-      minus(
-        current.value,
-        isNumberType(n) ? Number(n) : (granularity as number),
+      Number(
+        math.subtract(
+          math.bignumber(current.value),
+          math.bignumber(isNumberType(n) ? Number(n) : (granularity as number)),
+        ),
       ),
     );
   };

@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { shallowReactive } from 'vue';
 import { ConfigInterface } from './types';
 

@@ -20,7 +20,7 @@ yarn add euv
 - [x] useClickAway
 - [x] useFavicon
 - [ ] useAudio
-- [ ] useBrowserTabChange
+- [x] useBrowserTabChange
 - [ ] useLocalStorage
 - [ ] useScrollTo
 - [ ] useCopyToClipboard
@@ -28,12 +28,14 @@ yarn add euv
 ### FUNCTIONALITY
 
 - [x] useState
+- [x] useReducer
 - [ ] useEventEmitter
-- [ ] useCounter
+- [x] useCounter
+- [ ] useCalculator
 - [ ] useDynamicList
-- [ ] useEffect
-- [ ] useDebounce
-- [ ] useThrottle
+- [x] useEffect
+- [x] useDebounce
+- [x] useThrottle
 - [x] useToggle
 - [ ] useSwr
 - [ ] etc..

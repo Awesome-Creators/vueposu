@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 export type Fetcher<Data> = (...args: any) => Data | Promise<Data>;
 
 export interface ConfigInterface<

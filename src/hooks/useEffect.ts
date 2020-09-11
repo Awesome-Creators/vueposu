@@ -1,6 +1,6 @@
 import { watch, onUpdated, onMounted, onBeforeUnmount, WatchSource } from 'vue';
 
-type EffectCallback = () => void | (() => void);
+type EffectCallback = () => void | (() => void | undefined);
 
 function useEffect(
   effect: EffectCallback,
