@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 // use WeakMap to store the object -> key mapping
 // so the objects can be garbage collected.
 // WeakMap uses a hashtable under the hood, so the lookup
