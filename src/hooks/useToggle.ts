@@ -1,26 +1,25 @@
-import { ref, Ref, UnwrapRef } from 'vue';
+import { ComputedRef } from 'vue';
+import useState from './useState';
 
 type IState = string | number | boolean | null | undefined;
 
 interface IActions<T = IState> {
-  setLeft: () => T;
-  setRight: () => T;
-  toggle: (value?: T) => T;
+  setLeft: () => void;
+  setRight: () => void;
+  toggle: (value?: T) => void;
 }
 
 function useToggle<D = boolean | undefined>(): [
-  Ref<UnwrapRef<boolean>>,
+  ComputedRef<boolean>,
   IActions<D>,
 ];
 
-function useToggle<D = IState>(
-  defaultValue: D,
-): [Ref<UnwrapRef<D>>, IActions<D>];
+function useToggle<D = IState>(defaultValue: D): [ComputedRef<D>, IActions<D>];
 
 function useToggle<D = IState, R = IState>(
   defaultValue: D,
   reverseValue: R,
-): [Ref<UnwrapRef<D | R>>, IActions<D | R>];
+): [ComputedRef<D | R>, IActions<D | R>];
 
 /**
  * useToggle function
@@ -35,18 +34,19 @@ function useToggle<D extends IState = IState, R extends IState = IState>(
 ) {
   reverseValue = (reverseValue ?? !defaultValue) as R;
 
-  const status = ref<D | R>(defaultValue);
+  const [status, setStatus] = useState<D | R>(defaultValue);
 
   const actions: IActions = {
     toggle: (value?: any) =>
-      (status.value =
+      setStatus(
         value !== void 0
           ? value
           : status.value !== defaultValue
           ? defaultValue
-          : reverseValue),
-    setLeft: () => (status.value = defaultValue as UnwrapRef<D>),
-    setRight: () => (status.value = reverseValue as UnwrapRef<R>),
+          : reverseValue,
+      ),
+    setLeft: () => setStatus(defaultValue),
+    setRight: () => setStatus(reverseValue),
   };
 
   return [status, actions];
