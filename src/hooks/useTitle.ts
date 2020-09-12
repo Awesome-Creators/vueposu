@@ -1,5 +1,6 @@
 import { getCurrentInstance } from 'vue';
 import useEffect from './useEffect';
+import { isUndef } from '@libs/helper';
 
 interface ITitleState {
   before: string;
@@ -22,16 +23,19 @@ export default function useTitle(title: string, callback?: () => void) {
     if (document.title !== title) {
       let t = titleMap.get(instance.uid);
 
-      if (!t) {
+      if (isUndef(t)) {
         titleMap.set(instance.uid, (t = {} as ITitleState));
       }
 
-      if (!t.before) {
+      if (isUndef(t.before)) {
         t.before = document.title;
       }
 
       t.current = title;
 
+      // TODO: bug
+      // it is wrong order when parent component 
+      // and sub component set title at the same time.
       useEffect(() => {
         document.title = t.current;
         callback && callback();
@@ -40,7 +44,7 @@ export default function useTitle(title: string, callback?: () => void) {
           document.title = t.before;
           titleMap.delete(instance.uid);
         };
-      }, [t]);
+      }, []);
     }
   } else {
     throw new Error(
