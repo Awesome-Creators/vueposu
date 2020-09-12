@@ -3,6 +3,7 @@ import { wait } from '../../../utils/helper';
 import Common from './test.common.comp.vue';
 import SideEffect from './test.sideEffect.comp.vue';
 
+// TODO: remove warn
 const warn = console.warn.bind(this);
 
 describe('hooks/useTitle', () => {
@@ -20,10 +21,12 @@ describe('hooks/useTitle', () => {
     await component.findComponent(Sub).vm.$nextTick();
     expect(document.title).toBe('d');
 
-    await component.find('#show').trigger('click'); // show Sub changing to `false`.
+    // show Sub changing to `false`.
+    await component.find('#show').trigger('click');
     expect(document.title).toBe('c');
 
-    await component.find('#show').trigger('click'); // show Sub changing to `true`.
+    // show Sub changing to `true`.
+    await component.find('#show').trigger('click');
     await component.findComponent(Sub).vm.$nextTick();
     expect(document.title).toBe('d');
 
