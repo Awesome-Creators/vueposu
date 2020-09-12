@@ -8,109 +8,119 @@ import Any from './test.any.comp.vue';
 describe('hooks/useCounter', () => {
   it('test useCounter', async () => {
     const component = mount(Test);
+    const getCountText = () => component.find('span').text();
+    const click = selector => component.find(selector).trigger('click');
 
-    expect(component.find('span').text()).toBe('0.2');
+    expect(getCountText()).toBe('0.2');
 
-    await component.find('#inc').trigger('click');
-    expect(component.find('span').text()).toBe('0.3');
+    await click('#inc');
+    expect(getCountText()).toBe('0.3');
 
-    await component.find('#dec').trigger('click');
-    expect(component.find('span').text()).toBe('-0.7');
+    await click('#dec');
+    expect(getCountText()).toBe('-0.7');
 
-    await component.find('#set').trigger('click');
-    expect(component.find('span').text()).toBe('8');
+    await click('#set');
+    expect(getCountText()).toBe('8');
 
-    await component.find('#set-with-callback').trigger('click');
-    expect(component.find('span').text()).toBe('10');
+    await click('#set-with-callback');
+    expect(getCountText()).toBe('10');
 
-    await component.find('#reset').trigger('click');
-    expect(component.find('span').text()).toBe('0.2');
+    await click('#reset');
+    expect(getCountText()).toBe('0.2');
 
     component.unmount();
   });
 
   it('test useCounter min limit and max limit', async () => {
     const component = mount(Limit);
+    const getCountText = () => component.find('span').text();
+    const click = selector => component.find(selector).trigger('click');
 
-    expect(component.find('span').text()).toBe('0');
+    expect(getCountText()).toBe('0');
 
-    await component.find('#inc').trigger('click');
-    expect(component.find('span').text()).toBe('2');
+    await click('#inc');
+    expect(getCountText()).toBe('2');
 
-    await component.find('#dec').trigger('click');
-    expect(component.find('span').text()).toBe('1');
+    await click('#dec');
+    expect(getCountText()).toBe('1');
 
-    await component.find('#reset').trigger('click');
-    expect(component.find('span').text()).toBe('0');
+    await click('#reset');
+    expect(getCountText()).toBe('0');
 
-    await component.find('#set').trigger('click');
-    expect(component.find('span').text()).toBe('2');
+    await click('#set');
+    expect(getCountText()).toBe('2');
 
     component.unmount();
   });
 
   it('test useCounter granularity', async () => {
     const component = mount(Granularity);
+    const getCountText = () => component.find('span').text();
+    const click = selector => component.find(selector).trigger('click');
 
-    expect(component.find('span').text()).toBe('0.2');
+    expect(getCountText()).toBe('0.2');
 
-    await component.find('#inc').trigger('click');
-    expect(component.find('span').text()).toBe('0.3');
+    await click('#inc');
+    expect(getCountText()).toBe('0.3');
 
     await component.find('#set-callback').trigger('click');
-    expect(component.find('span').text()).toBe('0.4');
+    expect(getCountText()).toBe('0.4');
 
-    await component.find('#dec').trigger('click');
-    expect(component.find('span').text()).toBe('0.3');
+    await click('#dec');
+    expect(getCountText()).toBe('0.3');
 
     await component.find('#dec-to-min').trigger('click');
-    expect(component.find('span').text()).toBe('0');
+    expect(getCountText()).toBe('0');
 
-    await component.find('#reset').trigger('click');
-    expect(component.find('span').text()).toBe('0.2');
+    await click('#reset');
+    expect(getCountText()).toBe('0.2');
 
     component.unmount();
   });
 
   it('test useCounter bigint', async () => {
     const component = mount(Bigint);
+    const getCountText = () => component.find('span').text();
+    const click = selector => component.find(selector).trigger('click');
 
-    expect(component.find('span').text()).toBe('11');
+    expect(getCountText()).toBe('11');
 
-    await component.find('#set').trigger('click');
-    expect(component.find('span').text()).toBe('2');
+    await click('#set');
+    expect(getCountText()).toBe('2');
 
-    await component.find('#inc').trigger('click');
-    expect(component.find('span').text()).toBe('3');
+    await click('#inc');
+    expect(getCountText()).toBe('3');
 
-    await component.find('#dec').trigger('click');
-    expect(component.find('span').text()).toBe('1');
+    await click('#dec');
+    expect(getCountText()).toBe('1');
 
-    await component.find('#reset').trigger('click');
-    expect(component.find('span').text()).toBe('11');
+    await click('#reset');
+    expect(getCountText()).toBe('11');
 
     component.unmount();
   });
 
   it('mock js user', async () => {
     const component = mount(Any);
+    const getCountText = () => component.find('span').text();
+    const click = selector => component.find(selector).trigger('click');
 
-    expect(component.find('span').text()).toBe('0');
+    expect(getCountText()).toBe('0');
 
-    await component.find('#inc').trigger('click');
-    expect(component.find('span').text()).toBe('0.1');
+    await click('#inc');
+    expect(getCountText()).toBe('0.1');
 
-    await component.find('#dec').trigger('click');
-    expect(component.find('span').text()).toBe('-0.9');
+    await click('#dec');
+    expect(getCountText()).toBe('-0.9');
 
-    await component.find('#set').trigger('click');
-    expect(component.find('span').text()).toBe('8');
+    await click('#set');
+    expect(getCountText()).toBe('8');
 
-    await component.find('#set-with-callback').trigger('click');
-    expect(component.find('span').text()).toBe('10');
+    await click('#set-with-callback');
+    expect(getCountText()).toBe('10');
 
-    await component.find('#reset').trigger('click');
-    expect(component.find('span').text()).toBe('0');
+    await click('#reset');
+    expect(getCountText()).toBe('0');
 
     component.unmount();
   });

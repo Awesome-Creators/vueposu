@@ -5,44 +5,50 @@ import DefaultValue from './test.defaultValue.comp.vue';
 describe('hooks/useToggle', () => {
   it('simple toggle test', async () => {
     const component = mount(WithoutParams);
-    expect(component.find('span').text()).toBe('true');
+    const getToggleStatusText = () => component.find('span').text();
+    const click = selector => component.find(selector).trigger('click');
 
-    await component.find('#toggle').trigger('click');
-    expect(component.find('span').text()).toBe('false');
+    expect(getToggleStatusText()).toBe('true');
 
-    await component.find('#boy').trigger('click');
-    expect(component.find('span').text()).toBe('boy next door');
+    await click('#toggle');
+    expect(getToggleStatusText()).toBe('false');
 
-    await component.find('#toggle').trigger('click');
-    expect(component.find('span').text()).toBe('true');
+    await click('#boy');
+    expect(getToggleStatusText()).toBe('boy next door');
 
-    await component.find('#right').trigger('click');
-    expect(component.find('span').text()).toBe('false');
+    await click('#toggle');
+    expect(getToggleStatusText()).toBe('true');
 
-    await component.find('#left').trigger('click');
-    expect(component.find('span').text()).toBe('true');
+    await click('#right');
+    expect(getToggleStatusText()).toBe('false');
+
+    await click('#left');
+    expect(getToggleStatusText()).toBe('true');
 
     component.unmount();
   });
 
   it('defaultValue toggle test', async () => {
     const component = mount(DefaultValue);
-    expect(component.find('span').text()).toBe('open');
+    const getToggleStatusText = () => component.find('span').text();
+    const click = selector => component.find(selector).trigger('click');
 
-    await component.find('#toggle').trigger('click');
-    expect(component.find('span').text()).toBe('close');
+    expect(getToggleStatusText()).toBe('open');
 
-    await component.find('#boy').trigger('click');
-    expect(component.find('span').text()).toBe('boy next door');
+    await click('#toggle');
+    expect(getToggleStatusText()).toBe('close');
 
-    await component.find('#toggle').trigger('click');
-    expect(component.find('span').text()).toBe('open');
+    await click('#boy');
+    expect(getToggleStatusText()).toBe('boy next door');
 
-    await component.find('#right').trigger('click');
-    expect(component.find('span').text()).toBe('close');
+    await click('#toggle');
+    expect(getToggleStatusText()).toBe('open');
 
-    await component.find('#left').trigger('click');
-    expect(component.find('span').text()).toBe('open');
+    await click('#right');
+    expect(getToggleStatusText()).toBe('close');
+
+    await click('#left');
+    expect(getToggleStatusText()).toBe('open');
 
     component.unmount();
   });

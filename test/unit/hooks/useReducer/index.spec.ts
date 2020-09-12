@@ -5,40 +5,44 @@ import Initializer from './test.init.comp.vue';
 describe('hooks/useState', () => {
   it('test useState', async () => {
     const component = mount(Test);
+    const getStateText = () => component.find('span').text();
+    const click = selector => component.find(selector).trigger('click');
 
-    expect(component.find('span').text()).toBe('0');
+    expect(getStateText()).toBe('0');
 
-    await component.find('#inc').trigger('click');
-    expect(component.find('span').text()).toBe('1');
+    await click('#inc');
+    expect(getStateText()).toBe('1');
 
-    await component.find('#inc').trigger('click');
-    expect(component.find('span').text()).toBe('2');
+    await click('#inc');
+    expect(getStateText()).toBe('2');
 
-    await component.find('#dec').trigger('click');
-    expect(component.find('span').text()).toBe('1');
+    await click('#dec');
+    expect(getStateText()).toBe('1');
 
-    await component.find('#dec').trigger('click');
-    expect(component.find('span').text()).toBe('0');
+    await click('#dec');
+    expect(getStateText()).toBe('0');
 
     component.unmount();
   });
 
   it('test useReducer initializer', async () => {
     const component = mount(Initializer);
+    const getStateText = () => component.find('span').text();
+    const click = selector => component.find(selector).trigger('click');
 
-    expect(component.find('span').text()).toBe('8');
+    expect(getStateText()).toBe('8');
 
-    await component.find('#inc').trigger('click');
-    expect(component.find('span').text()).toBe('9');
+    await click('#inc');
+    expect(getStateText()).toBe('9');
 
-    await component.find('#inc').trigger('click');
-    expect(component.find('span').text()).toBe('10');
+    await click('#inc');
+    expect(getStateText()).toBe('10');
 
-    await component.find('#dec').trigger('click');
-    expect(component.find('span').text()).toBe('9');
+    await click('#dec');
+    expect(getStateText()).toBe('9');
 
-    await component.find('#reset').trigger('click');
-    expect(component.find('span').text()).toBe('8');
+    await click('#reset');
+    expect(getStateText()).toBe('8');
 
     component.unmount();
   });

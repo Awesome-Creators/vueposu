@@ -1,82 +1,87 @@
 import { mount } from '@vue/test-utils';
 import Default from './test.default.comp.vue';
 import Common from './test.common.comp.vue';
-import { wait } from '../../../utils/helper';
+import { wait } from '@test/utils/helper';
 
 describe('hooks/useThrottle', () => {
   it('test default case', async () => {
     const component = mount(Default);
+    const getCountText = () => component.find('#count').text();
+    const click = (selector) => component.find(selector).trigger('click');
 
-    await component.find('#trigger').trigger('click');
+    await click('#trigger');
     await wait();
-    expect(component.find('#count').text()).toBe('2');
+    expect(getCountText()).toBe('2');
 
     // multiple test
-    await component.find('#trigger').trigger('click');
+    await click('#trigger');
     await wait();
 
-    await component.find('#trigger').trigger('click');
+    await click('#trigger');
     await wait();
 
-    await component.find('#trigger').trigger('click');
+    await click('#trigger');
     await wait();
 
-    expect(component.find('#count').text()).toBe('5');
+    expect(getCountText()).toBe('5');
 
     // cancel test
-    await component.find('#trigger').trigger('click');
-    await component.find('#trigger').trigger('click');
-    await component.find('#trigger').trigger('click');
-    await component.find('#cancel').trigger('click');
+    await click('#trigger');
+    await click('#trigger');
+    await click('#trigger');
+    await click('#cancel');
     await wait();
-    expect(component.find('#count').text()).toBe('8');
+    expect(getCountText()).toBe('8');
 
     component.unmount();
   });
 
   it('test common case', async () => {
     const component = mount(Common);
-    await component.find('#trigger').trigger('click');
+    const getCountText = () => component.find('#count').text();
+    const click = (selector) => component.find(selector).trigger('click');
+
+    await click('#trigger');
 
     await wait();
-    expect(component.find('#count').text()).toBe('2');
+    expect(getCountText()).toBe('2');
 
     await wait(210);
-    expect(component.find('#count').text()).toBe('2');
+    expect(getCountText()).toBe('2');
 
     await wait(310);
-    expect(component.find('#count').text()).toBe('2');
+    expect(getCountText()).toBe('2');
 
     // multiple test
-    await component.find('#trigger').trigger('click');
-    await component.find('#trigger').trigger('click');
-    await component.find('#trigger').trigger('click');
-    await component.find('#trigger').trigger('click');
+    await click('#trigger');
+    await click('#trigger');
+    await click('#trigger');
+    await click('#trigger');
 
     await wait();
-    expect(component.find('#count').text()).toBe('3');
+    expect(getCountText()).toBe('3');
 
     await wait(210);
-    expect(component.find('#count').text()).toBe('3');
+    expect(getCountText()).toBe('3');
 
     await wait(310);
-    expect(component.find('#count').text()).toBe('4');
+    expect(getCountText()).toBe('4');
 
     // cancel test
-    await component.find('#trigger').trigger('click');
-    await component.find('#trigger').trigger('click');
-    await component.find('#trigger').trigger('click');
-    await component.find('#trigger').trigger('click');
-    await component.find('#cancel').trigger('click');
+    await click('#trigger');
+    await click('#trigger');
+    await click('#trigger');
+    await click('#trigger');
+    await click('#cancel');
 
     await wait();
-    expect(component.find('#count').text()).toBe('5');
+    expect(getCountText()).toBe('5');
 
     await wait(210);
-    expect(component.find('#count').text()).toBe('5');
+    expect(getCountText()).toBe('5');
 
     await wait(310);
-    expect(component.find('#count').text()).toBe('5');
+    expect(getCountText()).toBe('5');
 
     component.unmount();
   });

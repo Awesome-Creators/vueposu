@@ -24,8 +24,7 @@ export default {
     },
   },
   setup() {
-    const show = ref(true);
-
+    const show = ref(false);
     useTitle('a');
     useTitle('b');
     useTitle('b');

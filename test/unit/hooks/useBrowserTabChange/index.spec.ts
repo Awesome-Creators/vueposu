@@ -4,7 +4,7 @@ import Common from './test.common.comp.vue';
 import NotOptions from './test.notOptions.comp.vue';
 import SingleOptions from './test.singleOptions.comp.vue';
 import MockJs from './test.mockjs.comp.vue';
-import { triggerDomEvent, wait } from '../../../utils/helper';
+import { triggerDomEvent, wait } from '@test/utils/helper';
 
 describe('hooks/useBrowserTabChange', () => {
   beforeEach(() => {
