@@ -14,7 +14,6 @@ const titleMap = new Map<number, ITitleState>();
  * @param title The string to set to the page title.
  * @param callback callback function when set the page title.
  */
-
 export default function useTitle(title: string, callback?: () => void) {
   title = String(title);
   const instance = getCurrentInstance();
