@@ -32,6 +32,7 @@ yarn add euv
 - [x] useReducer
 - [ ] useEventEmitter
 - [x] useCounter
+- [ ] useCounterInterval
 - [ ] useCalculator
 - [ ] useDynamicList
 - [x] useEffect
