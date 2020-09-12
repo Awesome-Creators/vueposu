@@ -17,12 +17,17 @@ function useEffect<T = any>(effect: EffectCallback, deps?: Readonly<Array<T>>) {
   };
 
   if (deps) {
+    deps = deps.filter(d => isProxy(d) || isRef(d) || isReactive(d));
+
     if (deps.length === 0) {
       onMounted(resolveDispatcher);
     } else {
       watch(
-        deps.filter(d => isProxy(d) || isRef(d) || isReactive(d)),
-        resolveDispatcher,
+        deps,
+        () => {
+          unmountEffect && unmountEffect();
+          resolveDispatcher();
+        },
         {
           immediate: true,
         },
