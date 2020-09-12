@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import useClickAway from '@hooks/useClickAway';
 
 export default {
@@ -21,11 +21,9 @@ export default {
     const buttonRef2 = ref();
     const buttonRef3 = ref();
 
-    onMounted(() => {
-      useClickAway(() => {
-        count.value += 1;
-      }, [buttonRef, buttonRef2, buttonRef3]);
-    });
+    useClickAway(() => {
+      count.value += 1;
+    }, [buttonRef, buttonRef2, buttonRef3]);
 
     return {
       count,
