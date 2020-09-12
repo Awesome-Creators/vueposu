@@ -30,6 +30,9 @@ yarn add euv
 
 - [x] useState
 - [x] useReducer
+- [ ] useTimeout
+- [ ] useInterval
+- [ ] useRaf
 - [ ] useEventEmitter
 - [x] useCounter
 - [ ] useCounterInterval
