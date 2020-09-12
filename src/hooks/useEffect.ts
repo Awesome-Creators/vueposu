@@ -1,12 +1,17 @@
-import { watch, onUpdated, onMounted, onBeforeUnmount, WatchSource } from 'vue';
+import {
+  watch,
+  onUpdated,
+  onMounted,
+  onBeforeUnmount,
+  isProxy,
+  isRef,
+  isReactive,
+} from 'vue';
 
 type EffectCallback = () => void | (() => void | undefined);
 
-function useEffect(
-  effect: EffectCallback,
-  deps?: Readonly<Array<WatchSource<unknown> | object>>,
-) {
-  let unmountEffect;
+function useEffect<T = any>(effect: EffectCallback, deps?: Readonly<Array<T>>) {
+  let unmountEffect: ReturnType<EffectCallback>;
   const resolveDispatcher = () => {
     unmountEffect = effect();
   };
@@ -15,13 +20,20 @@ function useEffect(
     if (deps.length === 0) {
       onMounted(resolveDispatcher);
     } else {
-      watch(deps, resolveDispatcher, {
-        immediate: true,
-      });
+      watch(
+        deps.filter(d => isProxy(d) || isRef(d) || isReactive(d)),
+        resolveDispatcher,
+        {
+          immediate: true,
+        },
+      );
     }
   } else {
     resolveDispatcher();
-    onUpdated(resolveDispatcher);
+    onUpdated(() => {
+      unmountEffect && unmountEffect();
+      resolveDispatcher();
+    });
   }
 
   onBeforeUnmount(() => {
