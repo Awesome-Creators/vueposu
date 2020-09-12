@@ -1,4 +1,4 @@
-import { watchEffect } from 'vue';
+import useEffect from './useEffect';
 import { getTargetElement, Target } from '@libs/dom';
 
 const defaultEvent = 'click';
@@ -19,7 +19,7 @@ function useClickAway(
 ) {
   const handler = event => {
     const targets = Array.isArray(target) ? target : [target];
-
+    
     if (
       targets.some(targetItem => {
         const targetElement = getTargetElement(targetItem) as HTMLElement;
@@ -32,14 +32,14 @@ function useClickAway(
     eventHandler(event);
   };
 
-  watchEffect(onCleanup => {
+  useEffect(() => {
     const evts = Array.isArray(eventName) ? eventName : [eventName];
     evts.map(evt => document.addEventListener(evt, handler));
 
-    onCleanup(() => {
+    return () => {
       evts.map(evt => document.removeEventListener(evt, handler));
-    });
-  });
+    };
+  }, [eventHandler, target, eventName]);
 }
 
 export default useClickAway;
