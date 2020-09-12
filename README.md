@@ -22,6 +22,7 @@ yarn add euv
 - [ ] useAudio
 - [x] useBrowserTabChange
 - [ ] useLocalStorage
+- [x] useMouse
 - [ ] useScrollTo
 - [ ] useCopyToClipboard
 
