@@ -19,7 +19,7 @@ function useClickAway(
 ) {
   const handler = event => {
     const targets = Array.isArray(target) ? target : [target];
-    
+
     if (
       targets.some(targetItem => {
         const targetElement = getTargetElement(targetItem) as HTMLElement;
