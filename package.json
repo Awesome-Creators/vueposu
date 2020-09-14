@@ -6,6 +6,7 @@
   "author": "yuxino <nbsawz@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "build": "tsc --build",
     "format": "prettier --write \"src/**/*.{ts,vue,tsx}\" \"test/**/*.{ts,vue,tsx}\" --vue-indent-script-and-styl",
     "test": "jest",
     "test:ci": "jest --coverage --collectCoverage=true --verbose --collectCoverageFrom='<rootDir>/src/**/*.{js,vue,ts}'"

@@ -3,7 +3,7 @@ import { debounce as $debounce } from '@libs/helper';
 // debounce function type
 export type Fn = (...args: any) => any;
 
-interface DebouncedFunc<T extends (...args: any[]) => any> {
+export interface DebouncedFunc<T extends (...args: any[]) => any> {
   /**
    * Call the original function, but applying the debounce rules.
    *

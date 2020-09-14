@@ -2,6 +2,7 @@
   "include": ["**/*.ts", "**/*.vue"],
   "exclude": ["node_modules"],
   "compilerOptions": {
+    "outDir": "dist",
     "allowSyntheticDefaultImports": true,
     "module": "esnext",
     "target": "esnext",
@@ -14,6 +15,7 @@
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
     "allowJs": true,
+    "declaration": true,
     "paths": {
       "@hooks/*": ["src/hooks/*"],
       "@libs/*": ["src/libs/*"],

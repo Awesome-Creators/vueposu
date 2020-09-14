@@ -3,7 +3,7 @@ import { throttle as $throttle } from '@libs/helper';
 // throttle function type
 export type Fn = (...args: any) => any;
 
-interface ThrottleFunc<T extends (...args: any[]) => any> {
+export interface ThrottleFunc<T extends (...args: any[]) => any> {
   /**
    * Call the original function, but applying the debounce rules.
    *
