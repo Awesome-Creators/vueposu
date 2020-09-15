@@ -1,12 +1,27 @@
-export * from './hooks/useBrowserTabChange';
-export * from './hooks/useClickAway';
-export * from './hooks/useCounter';
-export * from './hooks/useDebounce';
-export * from './hooks/useEffect';
-export * from './hooks/useFavicon';
-export * from './hooks/useMouse';
-export * from './hooks/useReducer';
-export * from './hooks/useState';
-export * from './hooks/useThrottle';
-export * from './hooks/useTitle';
-export * from './hooks/useToggle';
+import useBrowserTabChange from './hooks/useBrowserTabChange';
+import useClickAway from './hooks/useClickAway';
+import useCounter from './hooks/useCounter';
+import useDebounce from './hooks/useDebounce';
+import useEffect from './hooks/useEffect';
+import useFavicon from './hooks/useFavicon';
+import useMouse from './hooks/useMouse';
+import useReducer from './hooks/useReducer';
+import useState from './hooks/useState';
+import useThrottle from './hooks/useThrottle';
+import useTitle from './hooks/useTitle';
+import useToggle from './hooks/useToggle';
+
+export {
+  useBrowserTabChange,
+  useClickAway,
+  useCounter,
+  useDebounce,
+  useEffect,
+  useFavicon,
+  useMouse,
+  useReducer,
+  useState,
+  useThrottle,
+  useTitle,
+  useToggle,
+};
