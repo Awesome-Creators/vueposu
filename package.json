@@ -4,12 +4,13 @@
   "repository": "git@github.com:Awesome-Creators/euv.git",
   "author": "yuxino <nbsawz@gmail.com>",
   "license": "MIT",
+  "types": "index.d.ts",
   "scripts": {
     "build": "rimraf dist && tsc --build tsconfig.build.json && yarn format:dist && cp package.json dist && cp README.md dist",
     "format": "prettier --write \"src/**/*.{ts,vue,tsx}\" \"test/**/*.{ts,vue,tsx}\" --vue-indent-script-and-styl",
     "format:dist": "prettier --write \"dist/**/*.{js,d.ts}\"",
     "test": "jest",
-    "test:ci": "jest --coverage --collectCoverage=true --verbose --collectCoverageFrom='<rootDir>/src/**/*.{js,vue,ts}'"
+    "test:ci": "jest --coverage --collectCoverage=true --verbose --collectCoverageFrom='<rootDir>/src/**/*.{ts}'"
   },
   "dependencies": {
     "@types/lodash-es": "^4.17.3",
