@@ -51,19 +51,18 @@ describe('hooks/useState', () => {
       }),
     );
 
-    // FIXME: fix type
     expect(component.vm.count).toBe(0);
 
-    component.vm.setCount((count => count + 1) as any);
+    component.vm.setCount(count => count + 1);
     expect(component.vm.count).toBe(1);
 
-    component.vm.setCount((count => count + 1) as any);
+    component.vm.setCount(count => count + 1);
     expect(component.vm.count).toBe(2);
 
-    component.vm.setCount((count => count - 1) as any);
+    component.vm.setCount(count => count - 1);
     expect(component.vm.count).toBe(1);
 
-    component.vm.setCount((count => count - 1) as any);
+    component.vm.setCount(count => count - 1);
 
     expect(component.vm.count).toBe(0);
 

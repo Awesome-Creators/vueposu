@@ -12,14 +12,14 @@ type SetStateAction<S> = [ComputedRef<S>, Dispatch<DispatchType<S>>];
  * @param initialState The initial state.
  */
 
-function useState<S>(initialState: S): SetStateAction<S> {
+function useState<S>(initialState: S | (() => S)): SetStateAction<S> {
   const [state, dispatch] = useReducer(
     (prevState, nextState) => (prevState === nextState ? prevState : nextState),
     isFunction(initialState) ? initialState() : initialState,
   );
 
   return [
-    state,
+    isFunction(state) ? state() : state,
     action => {
       dispatch(isFunction(action) ? (action as Function)(state.value) : action);
     },
