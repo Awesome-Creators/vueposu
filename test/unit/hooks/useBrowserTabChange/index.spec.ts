@@ -1,10 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { ref } from 'vue';
 import useBrowserTabChange from '@hooks/useBrowserTabChange';
-import Common from './test.common.comp.vue';
-import NotOptions from './test.notOptions.comp.vue';
-import SingleOptions from './test.singleOptions.comp.vue';
-import MockJs from './test.mockjs.comp.vue';
 import { triggerDomEvent, wait } from '@test/utils/helper';
 import { defineComponent } from 'vue';
 
@@ -40,20 +36,13 @@ describe('hooks/useBrowserTabChange', () => {
           });
           return { $leave, $back, $leaveRef, $backRef };
         },
-        template: `
-          <div>
-            <span id="leave">{{ $leave }}</span>
-            <span id="back">{{ $back }}</span>
-            <span id="leaveRef">{{ $leaveRef }}</span>
-            <span id="backRef">{{ $backRef }}</span>
-          </div>
-      `,
+        template: `<template />`,
       }),
     );
-    expect(component.find('#leave').text()).toBe('false');
-    expect(component.find('#back').text()).toBe('true');
-    expect(component.find('#leaveRef').text()).toBe('false');
-    expect(component.find('#backRef').text()).toBe('true');
+    expect(component.vm.$leave).toBe(false);
+    expect(component.vm.$back).toBe(true);
+    expect(component.vm.$leaveRef).toBe(false);
+    expect(component.vm.$backRef).toBe(true);
 
     // leave
     triggerDomEvent('visibilitychange');
@@ -61,10 +50,10 @@ describe('hooks/useBrowserTabChange', () => {
 
     // wait dom change
     await wait();
-    expect(component.find('#leave').text()).toBe('true');
-    expect(component.find('#back').text()).toBe('false');
-    expect(component.find('#leaveRef').text()).toBe('true');
-    expect(component.find('#backRef').text()).toBe('false');
+    expect(component.vm.$leave).toBe(true);
+    expect(component.vm.$back).toBe(false);
+    expect(component.vm.$leaveRef).toBe(true);
+    expect(component.vm.$backRef).toBe(false);
 
     // back
     triggerDomEvent('visibilitychange');
@@ -72,20 +61,35 @@ describe('hooks/useBrowserTabChange', () => {
 
     // wait dom change
     await wait();
-    expect(component.find('#leave').text()).toBe('false');
-    expect(component.find('#back').text()).toBe('true');
-    expect(component.find('#leaveRef').text()).toBe('false');
-    expect(component.find('#backRef').text()).toBe('true');
+    expect(component.vm.$leave).toBe(false);
+    expect(component.vm.$back).toBe(true);
+    expect(component.vm.$leaveRef).toBe(false);
+    expect(component.vm.$backRef).toBe(true);
 
     component.unmount();
   });
 
   it('test common', async () => {
-    const component = mount(Common);
-    expect(component.find('#leave').text()).toBe('false');
-    expect(component.find('#back').text()).toBe('true');
-    expect(component.find('#leaveRef').text()).toBe('false');
-    expect(component.find('#backRef').text()).toBe('true');
+    const component = mount(
+      defineComponent({
+        template: `<template />`,
+        setup() {
+          const $leave = ref(false);
+          const $back = ref(true);
+          const [$leaveRef, $backRef] = useBrowserTabChange(
+            ({ leave, back }) => {
+              $leave.value = leave;
+              $back.value = back;
+            },
+          );
+          return { $leave, $back, $leaveRef, $backRef };
+        },
+      }),
+    );
+    expect(component.vm.$leave).toBe(false);
+    expect(component.vm.$back).toBe(true);
+    expect(component.vm.$leaveRef).toBe(false);
+    expect(component.vm.$backRef).toBe(true);
 
     // leave
     triggerDomEvent('visibilitychange');
@@ -93,10 +97,10 @@ describe('hooks/useBrowserTabChange', () => {
 
     // wait dom change
     await wait();
-    expect(component.find('#leave').text()).toBe('true');
-    expect(component.find('#back').text()).toBe('false');
-    expect(component.find('#leaveRef').text()).toBe('true');
-    expect(component.find('#backRef').text()).toBe('false');
+    expect(component.vm.$leave).toBe(true);
+    expect(component.vm.$back).toBe(false);
+    expect(component.vm.$leaveRef).toBe(true);
+    expect(component.vm.$backRef).toBe(false);
 
     // back
     triggerDomEvent('visibilitychange');
@@ -104,102 +108,154 @@ describe('hooks/useBrowserTabChange', () => {
 
     // wait dom change
     await wait();
-    expect(component.find('#leave').text()).toBe('false');
-    expect(component.find('#back').text()).toBe('true');
-    expect(component.find('#leaveRef').text()).toBe('false');
-    expect(component.find('#backRef').text()).toBe('true');
+    expect(component.vm.$leave).toBe(false);
+    expect(component.vm.$back).toBe(true);
+    expect(component.vm.$leaveRef).toBe(false);
+    expect(component.vm.$backRef).toBe(true);
 
     component.unmount();
   });
 
   it('test not options', async () => {
-    const component = mount(NotOptions);
-    expect(component.find('#leave').text()).toBe('false');
-    expect(component.find('#back').text()).toBe('true');
-    expect(component.find('#leaveRef').text()).toBe('false');
-    expect(component.find('#backRef').text()).toBe('true');
+    const component = mount(
+      defineComponent({
+        template: `<template />`,
+        setup() {
+          const $leave = ref(false);
+          const $back = ref(true);
+          const [$leaveRef, $backRef] = useBrowserTabChange();
+          return { $leave, $back, $leaveRef, $backRef };
+        },
+      }),
+    );
+    expect(component.vm.$leave).toBe(false);
+    expect(component.vm.$back).toBe(true);
+    expect(component.vm.$leaveRef).toBe(false);
+    expect(component.vm.$backRef).toBe(true);
 
     component.unmount();
   });
 
   it('test single options', async () => {
-    const component = mount(SingleOptions);
-    expect(component.find('#count').text()).toBe('0');
-    expect(component.find('#leaveRef').text()).toBe('false');
-    expect(component.find('#backRef').text()).toBe('true');
+    const component = mount(
+      defineComponent({
+        template: `<template />`,
+        setup() {
+          const count = ref(0);
+          const [$leaveRef, $backRef] = useBrowserTabChange({
+            leave: () => {
+              count.value += 1;
+            },
+          });
+          return { count, $leaveRef, $backRef };
+        },
+      }),
+    );
+    expect(component.vm.count).toBe(0);
+    expect(component.vm.$leaveRef).toBe(false);
+    expect(component.vm.$backRef).toBe(true);
 
     // leave
     triggerDomEvent('visibilitychange');
     (document as any).hidden = true;
 
     await wait();
-    expect(component.find('#count').text()).toBe('1');
-    expect(component.find('#leaveRef').text()).toBe('true');
-    expect(component.find('#backRef').text()).toBe('false');
+    expect(component.vm.count).toBe(1);
+    expect(component.vm.$leaveRef).toBe(true);
+    expect(component.vm.$backRef).toBe(false);
 
     // back
     triggerDomEvent('visibilitychange');
     (document as any).hidden = false;
 
     await wait();
-    expect(component.find('#count').text()).toBe('1');
-    expect(component.find('#leaveRef').text()).toBe('false');
-    expect(component.find('#backRef').text()).toBe('true');
+    expect(component.vm.count).toBe(1);
+    expect(component.vm.$leaveRef).toBe(false);
+    expect(component.vm.$backRef).toBe(true);
 
     // leave
     triggerDomEvent('visibilitychange');
     (document as any).hidden = true;
 
     await wait();
-    expect(component.find('#count').text()).toBe('2');
-    expect(component.find('#leaveRef').text()).toBe('true');
-    expect(component.find('#backRef').text()).toBe('false');
+    expect(component.vm.count).toBe(2);
+    expect(component.vm.$leaveRef).toBe(true);
+    expect(component.vm.$backRef).toBe(false);
 
     component.unmount();
   });
 
   it('mock js user', async () => {
-    const component = mount(MockJs);
-    expect(component.find('#leaveRef').text()).toBe('false');
-    expect(component.find('#backRef').text()).toBe('true');
+    const component = mount(
+      defineComponent({
+        template: `<template />`,
+        setup() {
+          const [$leaveRef, $backRef] = useBrowserTabChange(
+            '屁股我们能' as any,
+          );
+          return { $leaveRef, $backRef };
+        },
+      }),
+    );
+    expect(component.vm.$leaveRef).toBe(false);
+    expect(component.vm.$backRef).toBe(true);
 
     // leave
     triggerDomEvent('visibilitychange');
     (document as any).hidden = true;
 
     await wait();
-    expect(component.find('#leaveRef').text()).toBe('true');
-    expect(component.find('#backRef').text()).toBe('false');
+    expect(component.vm.$leaveRef).toBe(true);
+    expect(component.vm.$backRef).toBe(false);
 
     // back
     triggerDomEvent('visibilitychange');
     (document as any).hidden = false;
 
     await wait();
-    expect(component.find('#leaveRef').text()).toBe('false');
-    expect(component.find('#backRef').text()).toBe('true');
+    expect(component.vm.$leaveRef).toBe(false);
+    expect(component.vm.$backRef).toBe(true);
 
     // leave
     triggerDomEvent('visibilitychange');
     (document as any).hidden = true;
 
     await wait();
-    expect(component.find('#leaveRef').text()).toBe('true');
-    expect(component.find('#backRef').text()).toBe('false');
+    expect(component.vm.$leaveRef).toBe(true);
+    expect(component.vm.$backRef).toBe(false);
     component.unmount();
   });
 
-  // it('test unmount', async () => {
-  //   const removeEventListener = document.removeEventListener.bind(document);
-  //   const fn = jest.fn();
-  //   document.removeEventListener = (...args) => {
-  //     removeEventListener(...args);
-  //     fn();
-  //   };
+  it('test unmount', async () => {
+    const removeEventListener = document.removeEventListener.bind(document);
+    const fn = jest.fn();
+    document.removeEventListener = (...args) => {
+      removeEventListener(...args);
+      fn();
+    };
 
-  //   const component = mount(Options);
-  //   component.unmount();
+    const component = mount(
+      defineComponent({
+        setup() {
+          const $leave = ref(false);
+          const $back = ref(true);
+          const [$leaveRef, $backRef] = useBrowserTabChange({
+            leave: () => {
+              $leave.value = true;
+              $back.value = false;
+            },
+            back: () => {
+              $leave.value = false;
+              $back.value = true;
+            },
+          });
+          return { $leave, $back, $leaveRef, $backRef };
+        },
+        template: `<template />`,
+      }),
+    );
+    component.unmount();
 
-  //   expect(fn).toBeCalledTimes(4);
-  // });
+    expect(fn).toBeCalledTimes(4);
+  });
 });
