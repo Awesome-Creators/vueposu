@@ -1,13 +1,6 @@
-import { getCurrentInstance } from 'vue';
 import useEffect from './useEffect';
-import { isUndef } from '@libs/helper';
 
-interface ITitleState {
-  before: string;
-  current: string;
-}
-
-const titleMap = new Map<number, ITitleState>();
+let someUsedIsUnmounted = false;
 
 /**
  * set the string to the page title.
@@ -17,38 +10,21 @@ const titleMap = new Map<number, ITitleState>();
  */
 export default function useTitle(title: string, callback?: () => void) {
   title = String(title);
-  const instance = getCurrentInstance();
+  let used = false;
 
-  if (instance) {
-    if (document.title !== title) {
-      let t = titleMap.get(instance.uid);
-
-      if (isUndef(t)) {
-        titleMap.set(instance.uid, (t = {} as ITitleState));
-      }
-
-      if (isUndef(t.before)) {
-        t.before = document.title;
-      }
-
-      t.current = title;
-
-      // TODO: bug
-      // it is wrong order when parent component 
-      // and sub component set title at the same time.
-      useEffect(() => {
-        document.title = t.current;
-        callback && callback();
-
-        return () => {
-          document.title = t.before;
-          titleMap.delete(instance.uid);
-        };
-      }, []);
+  useEffect(() => {
+    if (someUsedIsUnmounted) {
+      someUsedIsUnmounted = false;
+      used = false;
     }
-  } else {
-    throw new Error(
-      'Invalid hook call. Hooks can only be called inside of `setup()`.',
-    );
-  }
+    if (!used) {
+      used = true;
+      document.title = title;
+      callback && callback();
+    }
+
+    return () => {
+      someUsedIsUnmounted = true;
+    };
+  });
 }
