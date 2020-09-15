@@ -1,12 +1,11 @@
 {
   "name": "euv",
   "version": "1.0.0",
-  "main": "dist",
   "repository": "git@github.com:Awesome-Creators/euv.git",
   "author": "yuxino <nbsawz@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "rimraf dist && tsc --build tsconfig.build.json && babel --config-file ./babel.build.config.js -d dist dist && yarn format:dist",
+    "build": "rimraf dist && tsc --build tsconfig.build.json && babel --config-file ./babel.build.config.js -d dist dist && yarn format:dist && cp package.json dist && cp README.md dist",
     "format": "prettier --write \"src/**/*.{ts,vue,tsx}\" \"test/**/*.{ts,vue,tsx}\" --vue-indent-script-and-styl",
     "format:dist": "prettier --write \"dist/**/*.{js,d.ts}\"",
     "test": "jest",
