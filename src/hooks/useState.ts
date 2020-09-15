@@ -1,9 +1,9 @@
-import { ComputedRef } from 'vue';
+import { ComputedRef, UnwrapRef } from 'vue';
 import { isFunction } from '../libs/helper';
 import useReducer, { Dispatch } from './useReducer';
 
 type DispatchType<S> = S | ((prevState: S) => S);
-type SetStateAction<S> = [ComputedRef<S>, Dispatch<DispatchType<S>>];
+type SetStateAction<S> = [ComputedRef<UnwrapRef<S>>, Dispatch<DispatchType<S>>];
 
 /**
  * Returns a stateful value, and a function to update it.
@@ -19,7 +19,7 @@ function useState<S>(initialState: S | (() => S)): SetStateAction<S> {
   );
 
   return [
-    isFunction(state) ? state() : state,
+    state,
     action => {
       dispatch(isFunction(action) ? (action as Function)(state.value) : action);
     },
