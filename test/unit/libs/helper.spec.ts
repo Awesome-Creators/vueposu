@@ -1,4 +1,4 @@
-import { isUndef } from '../../../src/libs/helper';
+import { isUndef } from '@libs/helper';
 
 describe('libs/helper', () => {
   it('isUndef', () => {

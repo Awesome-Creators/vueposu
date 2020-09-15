@@ -1,5 +1,5 @@
 import debounce from '@libs/debounce';
-import { times, wait } from '../../utils/helper';
+import { times, wait } from '@test/utils/helper';
 
 describe('libs/debounce', () => {
   it('should be call once', async () => {

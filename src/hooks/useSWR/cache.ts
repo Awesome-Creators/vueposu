@@ -1,6 +1,6 @@
 /* istanbul ignore file */
 import { CacheInterface, KeyInterface, CacheListener } from './types';
-import hash from '@libs/hash';
+import hash from '../../libs/hash';
 
 export default class Cache implements CacheInterface {
   private __cache: Map<string, any>;

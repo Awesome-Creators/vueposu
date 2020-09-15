@@ -1,5 +1,5 @@
 import useEffect from './useEffect';
-import { isDef, isFunction, isObject } from '@libs/helper';
+import { isDef, isFunction, isObject } from '../libs/helper';
 import type { Ref } from 'vue';
 import { ref } from 'vue';
 

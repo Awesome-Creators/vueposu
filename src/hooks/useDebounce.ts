@@ -1,5 +1,5 @@
-import debounce from '@libs/debounce';
-import type { Fn } from '@libs/debounce';
+import debounce from '../libs/debounce';
+import type { Fn } from '../libs/debounce';
 
 /**
  * useDebounce function

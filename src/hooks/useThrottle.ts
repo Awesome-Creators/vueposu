@@ -1,5 +1,5 @@
-import throttle from '@libs/throttle';
-import type { Fn } from '@libs/throttle';
+import throttle from '../libs/throttle';
+import type { Fn } from '../libs/throttle';
 
 /**
  * useDebounce function

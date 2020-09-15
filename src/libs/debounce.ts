@@ -1,4 +1,4 @@
-import { debounce as $debounce } from '@libs/helper';
+import { debounce as $debounce } from './helper';
 
 // debounce function type
 export type Fn = (...args: any) => any;

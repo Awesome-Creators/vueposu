@@ -1,6 +1,6 @@
 import { ref, computed, ComputedRef } from 'vue';
 import * as math from 'mathjs';
-import { isFunction } from '@libs/helper';
+import { isFunction } from '../libs/helper';
 
 type NumberType = number | string;
 

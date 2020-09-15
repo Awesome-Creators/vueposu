@@ -1,4 +1,4 @@
-import { throttle as $throttle } from '@libs/helper';
+import { throttle as $throttle } from './helper';
 
 // throttle function type
 export type Fn = (...args: any) => any;

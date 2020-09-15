@@ -1,5 +1,5 @@
 import throttle from '@libs/throttle';
-import { times, wait } from '../../utils/helper';
+import { times, wait } from '@test/utils/helper';
 
 describe('libs/throttle', () => {
   it('should be call once', async () => {

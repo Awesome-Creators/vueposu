@@ -1,5 +1,5 @@
 import useEffect from './useEffect';
-import { getTargetElement, Target } from '@libs/dom';
+import { getTargetElement, Target } from '../libs/dom';
 
 const defaultEvent = 'click';
 
