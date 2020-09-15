@@ -2,7 +2,7 @@ import { ref, computed, ComputedRef } from 'vue';
 import * as math from 'mathjs';
 import { isFunction } from '@libs/helper';
 
-type NumberType = number | bigint | string;
+type NumberType = number | string;
 
 interface ICounterOptions<T = number> {
   min?: T;
@@ -30,15 +30,10 @@ function useCounter(
 ): [ComputedRef<number>, ICounterActions<number>];
 
 function useCounter(
-  initialValue?: bigint,
-  options?: ICounterOptions<bigint>,
-): [ComputedRef<bigint>, ICounterActions<bigint>];
-
-function useCounter(
   initialValue: NumberType,
   options: ICounterOptions<NumberType> = {},
 ): [ComputedRef<NumberType>, ICounterActions<NumberType>] {
-  const counterType = typeof initialValue === 'bigint' ? BigInt : Number;
+  const counterType = Number;
 
   let { min, max, granularity = 1 } = options;
 

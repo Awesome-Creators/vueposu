@@ -1,87 +1,103 @@
 import { mount } from '@vue/test-utils';
-import Default from './test.default.comp.vue';
-import Common from './test.common.comp.vue';
+import { ref } from 'vue';
+import useThrottle from '@hooks/useThrottle';
 import { wait } from '@test/utils/helper';
+import { defineComponent } from 'vue';
 
 describe('hooks/useThrottle', () => {
   it('test default case', async () => {
-    const component = mount(Default);
-    const getCountText = () => component.find('#count').text();
-    const click = selector => component.find(selector).trigger('click');
+    const component = mount(
+      defineComponent({
+        template: '<template />',
+        setup() {
+          const count = ref(1);
+          const fn = useThrottle(() => (count.value = count.value + 1));
+          return {
+            count,
+            fn,
+          };
+        },
+      }),
+    );
 
-    await click('#trigger');
+    component.vm.fn();
     await wait();
-    expect(getCountText()).toBe('2');
+    expect(component.vm.count).toBe(2);
 
     // multiple test
-    await click('#trigger');
+    component.vm.fn();
     await wait();
 
-    await click('#trigger');
+    component.vm.fn();
     await wait();
 
-    await click('#trigger');
+    component.vm.fn();
     await wait();
 
-    expect(getCountText()).toBe('5');
+    expect(component.vm.count).toBe(5);
 
     // cancel test
-    await click('#trigger');
-    await click('#trigger');
-    await click('#trigger');
-    await click('#cancel');
+    component.vm.fn();
+    component.vm.fn();
+    component.vm.fn();
+    component.vm.fn.cancel();
     await wait();
-    expect(getCountText()).toBe('8');
+    expect(component.vm.count).toBe(8);
 
     component.unmount();
   });
 
   it('test common case', async () => {
-    const component = mount(Common);
-    const getCountText = () => component.find('#count').text();
-    const click = selector => component.find(selector).trigger('click');
+    const component = mount(
+      defineComponent({
+        template: '<template />',
+        setup() {
+          const count = ref(1);
+          const fn = useThrottle(() => (count.value = count.value + 1), 300);
+          return {
+            count,
+            fn,
+          };
+        },
+      }),
+    );
 
-    await click('#trigger');
-
+    component.vm.fn();
     await wait();
-    expect(getCountText()).toBe('2');
+    expect(component.vm.count).toBe(2);
 
     await wait(210);
-    expect(getCountText()).toBe('2');
+    expect(component.vm.count).toBe(2);
 
     await wait(310);
-    expect(getCountText()).toBe('2');
+    expect(component.vm.count).toBe(2);
 
     // multiple test
-    await click('#trigger');
-    await click('#trigger');
-    await click('#trigger');
-    await click('#trigger');
-
+    component.vm.fn();
+    component.vm.fn();
+    component.vm.fn();
+    component.vm.fn();
+    component.vm.fn();
     await wait();
-    expect(getCountText()).toBe('3');
+    expect(component.vm.count).toBe(3);
 
     await wait(210);
-    expect(getCountText()).toBe('3');
+    expect(component.vm.count).toBe(3);
 
     await wait(310);
-    expect(getCountText()).toBe('4');
+    expect(component.vm.count).toBe(4);
 
     // cancel test
-    await click('#trigger');
-    await click('#trigger');
-    await click('#trigger');
-    await click('#trigger');
-    await click('#cancel');
+    component.vm.fn();
 
     await wait();
-    expect(getCountText()).toBe('5');
+    expect(component.vm.count).toBe(5);
 
     await wait(210);
-    expect(getCountText()).toBe('5');
+    expect(component.vm.count).toBe(5);
 
     await wait(310);
-    expect(getCountText()).toBe('5');
+    expect(component.vm.count).toBe(5);
 
     component.unmount();
   });

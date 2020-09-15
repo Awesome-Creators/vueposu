@@ -15,36 +15,31 @@ describe('hooks/useDebounce', () => {
             fn,
           };
         },
-        template: `
-          <div>
-            <span id="trigger" @click="fn"></span>
-            <span id="cancel" @click="fn.cancel"></span>
-          </div>
-      `,
+        template: `<template />`,
       }),
     );
 
-    await component.find('#trigger').trigger('click');
+    component.vm.fn();
     await wait();
     expect(component.vm.count).toBe(2);
 
     // multiple test
-    await component.find('#trigger').trigger('click');
+    component.vm.fn();
     await wait();
 
-    await component.find('#trigger').trigger('click');
+    component.vm.fn();
     await wait();
 
-    await component.find('#trigger').trigger('click');
+    component.vm.fn();
     await wait();
 
     expect(component.vm.count).toBe(5);
 
     // cancel test
-    await component.find('#trigger').trigger('click');
-    await component.find('#trigger').trigger('click');
-    await component.find('#trigger').trigger('click');
-    await component.find('#cancel').trigger('click');
+    component.vm.fn();
+    component.vm.fn();
+    component.vm.fn();
+    component.vm.fn.cancel();
     await wait();
 
     expect(component.vm.count).toBe(5);
@@ -63,17 +58,10 @@ describe('hooks/useDebounce', () => {
             fn,
           };
         },
-        template: `
-          <div>
-            <span id="count">{{ count }}</span>
-            <span id="trigger" @click="fn"></span>
-            <span id="cancel" @click="fn.cancel"></span>
-          </div>
-      `,
+        template: `<template />`,
       }),
     );
-    await component.find('#trigger').trigger('click');
-
+    component.vm.fn();
     await wait();
     expect(component.vm.count).toBe(1);
     await wait(210);
@@ -82,11 +70,7 @@ describe('hooks/useDebounce', () => {
     expect(component.vm.count).toBe(2);
 
     // multiple test
-    await component.find('#trigger').trigger('click');
-    await component.find('#trigger').trigger('click');
-    await component.find('#trigger').trigger('click');
-    await component.find('#trigger').trigger('click');
-
+    component.vm.fn();
     await wait();
     expect(component.vm.count).toBe(2);
 
@@ -97,12 +81,8 @@ describe('hooks/useDebounce', () => {
     expect(component.vm.count).toBe(3);
 
     // cancel test
-    await component.find('#trigger').trigger('click');
-    await component.find('#trigger').trigger('click');
-    await component.find('#trigger').trigger('click');
-    await component.find('#trigger').trigger('click');
-
-    await component.find('#cancel').trigger('click');
+    component.vm.fn();
+    component.vm.fn.cancel();
 
     await wait();
     expect(component.vm.count).toBe(3);

@@ -1,48 +1,67 @@
 import { mount } from '@vue/test-utils';
-import Test from './test.comp.vue';
-import CallbackTest from './test.callback.comp.vue';
+import useState from '@hooks/useState';
+import { defineComponent } from 'vue';
 
 describe('hooks/useState', () => {
   it('test useState', async () => {
-    const component = mount(Test);
-    const getStateText = () => component.find('span').text();
-    const click = selector => component.find(selector).trigger('click');
+    const component = mount(
+      defineComponent({
+        template: '<template />',
+        setup() {
+          const [count, setCount] = useState(0);
+          return {
+            count,
+            setCount,
+          };
+        },
+      }),
+    );
 
-    expect(getStateText()).toBe('0');
+    expect(component.vm.count).toBe(0);
 
-    await click('#inc');
-    expect(getStateText()).toBe('1');
+    component.vm.setCount(component.vm.count + 1);
+    expect(component.vm.count).toBe(1);
 
-    await click('#inc');
-    expect(getStateText()).toBe('2');
+    component.vm.setCount(component.vm.count + 1);
+    expect(component.vm.count).toBe(2);
 
-    await click('#dec');
-    expect(getStateText()).toBe('1');
+    component.vm.setCount(component.vm.count - 1);
+    expect(component.vm.count).toBe(1);
 
-    await click('#dec');
-    expect(getStateText()).toBe('0');
+    component.vm.setCount(component.vm.count - 1);
 
+    expect(component.vm.count).toBe(0);
     component.unmount();
   });
 
   it('test useState callback', async () => {
-    const component = mount(CallbackTest);
-    const getStateText = () => component.find('span').text();
-    const click = selector => component.find(selector).trigger('click');
+    const component = mount(
+      defineComponent({
+        template: '<template />',
+        setup() {
+          const [count, setCount] = useState(0);
+          return {
+            count,
+            setCount,
+          };
+        },
+      }),
+    );
 
-    expect(getStateText()).toBe('0');
+    expect(component.vm.count).toBe(0);
 
-    await click('#inc');
-    expect(getStateText()).toBe('1');
+    component.vm.setCount(count => count + 1);
+    expect(component.vm.count).toBe(1);
 
-    await click('#inc');
-    expect(getStateText()).toBe('2');
+    component.vm.setCount(count => count + 1);
+    expect(component.vm.count).toBe(2);
 
-    await click('#dec');
-    expect(getStateText()).toBe('1');
+    component.vm.setCount(count => count - 1);
+    expect(component.vm.count).toBe(1);
 
-    await click('#dec');
-    expect(getStateText()).toBe('0');
+    component.vm.setCount(count => count - 1);
+
+    expect(component.vm.count).toBe(0);
 
     component.unmount();
   });

@@ -46,4 +46,24 @@ describe('hooks/useMouse', () => {
 
     component.unmount();
   });
+
+  it('check unmount', () => {
+    const removeEventListener = document.removeEventListener.bind(document);
+    const fn = jest.fn();
+    document.removeEventListener = (...args) => {
+      removeEventListener(...args);
+      fn();
+    };
+    const component = mount(
+      defineComponent({
+        template: `<template />`,
+        setup: () => ({
+          state: useMouse(),
+        }),
+      }),
+    );
+
+    component.unmount();
+    expect(fn).toBeCalledTimes(1);
+  });
 });

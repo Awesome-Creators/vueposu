@@ -1,45 +1,87 @@
 import { mount } from '@vue/test-utils';
-import NotDeps from './test.notdeps.comp.vue';
-import Deps from './test.deps.comp.vue';
-import EmptyDeps from './test.emptydeps.comp.vue';
+import { defineComponent, onMounted, ref } from 'vue';
+import useEffect from '@hooks/useEffect';
 
 describe('hooks/useEffect', () => {
   it('test not deps', () => {
-    (window as any).testNotDepsEffect = 1;
-    const component = mount(NotDeps);
+    const fn = jest.fn();
+    const component = mount(
+      defineComponent({
+        template: '<template />',
+        setup() {
+          useEffect(() => {
+            return () => {
+              fn();
+            };
+          });
+        },
+      }),
+    );
     component.unmount();
-    expect((window as any).testNotDepsEffect).toBe(0);
+    expect(fn).toBeCalledTimes(1);
   });
 
   it('test deps', async done => {
-    (window as any).testDepsEffect = 1;
-    (window as any).testDepsSpy = jest.fn();
+    const fn = jest.fn();
 
-    const component = mount(Deps);
+    const component = mount(
+      defineComponent({
+        template: '<template />',
+        setup() {
+          const val = ref(0);
+
+          useEffect(() => {
+            if (val.value === 20) {
+              fn();
+            }
+            return () => {
+              val.value = 1;
+              fn();
+            };
+          }, [val]);
+
+          onMounted(() => {
+            setTimeout(() => {
+              val.value = 20;
+            }, 200);
+          });
+
+          return {
+            val,
+          };
+        },
+      }),
+    );
 
     await new Promise(res => {
       setTimeout(() => {
         res(null);
-        expect((window as any).testDepsEffect).toBe(20);
+        expect(fn).toBeCalledTimes(1);
       }, 300);
     });
 
     component.unmount();
 
-    expect((window as any).testDepsEffect).toBe(0);
-    expect((window as any).testDepsSpy).toBeCalledTimes(2);
+    expect(fn).toBeCalledTimes(2);
     done();
   });
 
   it('test empty deps', async done => {
-    (window as any).testEmptyDepsEffect = 1;
-    (window as any).testEmptyDepsSpy = jest.fn();
-
-    const component = mount(EmptyDeps);
+    const fn = jest.fn();
+    const component = mount(
+      defineComponent({
+        template: '<template />',
+        setup() {
+          useEffect(() => {
+            return () => {
+              fn();
+            };
+          }, []);
+        },
+      }),
+    );
     component.unmount();
-
-    expect((window as any).testEmptyDepsEffect).toBe(0);
-    expect((window as any).testEmptyDepsSpy).toBeCalledTimes(1);
+    expect(fn).toBeCalledTimes(1);
     done();
   });
 });

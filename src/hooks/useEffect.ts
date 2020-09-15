@@ -22,23 +22,13 @@ function useEffect<T = any>(effect: EffectCallback, deps?: Readonly<Array<T>>) {
     if (deps.length === 0) {
       onMounted(resolveDispatcher);
     } else {
-      watch(
-        deps,
-        () => {
-          unmountEffect && unmountEffect();
-          resolveDispatcher();
-        },
-        {
-          immediate: true,
-        },
-      );
+      watch(deps, resolveDispatcher, {
+        immediate: true,
+      });
     }
   } else {
     resolveDispatcher();
-    onUpdated(() => {
-      unmountEffect && unmountEffect();
-      resolveDispatcher();
-    });
+    onUpdated(resolveDispatcher);
   }
 
   onBeforeUnmount(() => {

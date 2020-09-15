@@ -1,127 +1,149 @@
 import { mount } from '@vue/test-utils';
-import Test from './test.comp.vue';
-import Limit from './test.limit.comp.vue';
-import Granularity from './test.granularity.comp.vue';
-import Bigint from './test.bigint.comp.vue';
-import Any from './test.any.comp.vue';
+import useCounter from '@hooks/useCounter';
+import { defineComponent } from 'vue';
 
 describe('hooks/useCounter', () => {
   it('test useCounter', async () => {
-    const component = mount(Test);
-    const getCountText = () => component.find('span').text();
-    const click = selector => component.find(selector).trigger('click');
+    const component = mount(
+      defineComponent({
+        template: '<template />',
+        setup() {
+          const [count, actions] = useCounter(0.2);
 
-    expect(getCountText()).toBe('0.2');
+          return {
+            count,
+            ...actions,
+          };
+        },
+      }),
+    );
 
-    await click('#inc');
-    expect(getCountText()).toBe('0.3');
+    expect(component.vm.count).toBe(0.2);
 
-    await click('#dec');
-    expect(getCountText()).toBe('-0.7');
+    component.vm.inc(0.1);
+    expect(component.vm.count).toBe(0.3);
 
-    await click('#set');
-    expect(getCountText()).toBe('8');
+    component.vm.dec();
+    expect(component.vm.count).toBe(-0.7);
 
-    await click('#set-with-callback');
-    expect(getCountText()).toBe('10');
+    component.vm.set(8);
+    expect(component.vm.count).toBe(8);
 
-    await click('#reset');
-    expect(getCountText()).toBe('0.2');
+    component.vm.set(v => v + 2);
+    expect(component.vm.count).toBe(10);
+
+    component.vm.reset();
+    expect(component.vm.count).toBe(0.2);
 
     component.unmount();
   });
 
   it('test useCounter min limit and max limit', async () => {
-    const component = mount(Limit);
-    const getCountText = () => component.find('span').text();
-    const click = selector => component.find(selector).trigger('click');
+    const component = mount(
+      defineComponent({
+        template: '<template />',
+        setup() {
+          const [count, actions] = useCounter(-10, {
+            min: 0,
+            max: 10,
+          });
 
-    expect(getCountText()).toBe('0');
+          return {
+            count,
+            ...actions,
+          };
+        },
+      }),
+    );
 
-    await click('#inc');
-    expect(getCountText()).toBe('2');
+    expect(component.vm.count).toBe(0);
 
-    await click('#dec');
-    expect(getCountText()).toBe('1');
+    component.vm.inc(2);
+    expect(component.vm.count).toBe(2);
 
-    await click('#reset');
-    expect(getCountText()).toBe('0');
+    component.vm.dec();
+    expect(component.vm.count).toBe(1);
 
-    await click('#set');
-    expect(getCountText()).toBe('2');
+    component.vm.reset();
+    expect(component.vm.count).toBe(0);
+
+    component.vm.set(2);
+    expect(component.vm.count).toBe(2);
 
     component.unmount();
   });
 
   it('test useCounter granularity', async () => {
-    const component = mount(Granularity);
-    const getCountText = () => component.find('span').text();
-    const click = selector => component.find(selector).trigger('click');
+    const component = mount(
+      defineComponent({
+        template: '<template />',
+        setup() {
+          const [count, actions] = useCounter(0.2, {
+            min: 0,
+            granularity: 0.1,
+          });
 
-    expect(getCountText()).toBe('0.2');
+          return {
+            count,
+            ...actions,
+          };
+        },
+      }),
+    );
 
-    await click('#inc');
-    expect(getCountText()).toBe('0.3');
+    expect(component.vm.count).toBe(0.2);
 
-    await component.find('#set-callback').trigger('click');
-    expect(getCountText()).toBe('0.4');
+    component.vm.inc();
+    expect(component.vm.count).toBe(0.3);
 
-    await click('#dec');
-    expect(getCountText()).toBe('0.3');
+    component.vm.set(v => v + 0.1);
+    expect(component.vm.count).toBe(0.4);
 
-    await component.find('#dec-to-min').trigger('click');
-    expect(getCountText()).toBe('0');
+    component.vm.dec();
+    expect(component.vm.count).toBe(0.3);
 
-    await click('#reset');
-    expect(getCountText()).toBe('0.2');
+    component.vm.dec(99);
+    expect(component.vm.count).toBe(0);
 
-    component.unmount();
-  });
-
-  it('test useCounter bigint', async () => {
-    const component = mount(Bigint);
-    const getCountText = () => component.find('span').text();
-    const click = selector => component.find(selector).trigger('click');
-
-    expect(getCountText()).toBe('11');
-
-    await click('#set');
-    expect(getCountText()).toBe('2');
-
-    await click('#inc');
-    expect(getCountText()).toBe('3');
-
-    await click('#dec');
-    expect(getCountText()).toBe('1');
-
-    await click('#reset');
-    expect(getCountText()).toBe('11');
+    component.vm.reset();
+    expect(component.vm.count).toBe(0.2);
 
     component.unmount();
   });
 
   it('mock js user', async () => {
-    const component = mount(Any);
-    const getCountText = () => component.find('span').text();
-    const click = selector => component.find(selector).trigger('click');
+    const component = mount(
+      defineComponent({
+        template: '<template />',
+        setup() {
+          const [count, actions] = useCounter('屁股我们能' as any, {
+            granularity: '男孩下个门' as any,
+          });
 
-    expect(getCountText()).toBe('0');
+          return {
+            count,
+            ...actions,
+          };
+        },
+      }),
+    );
 
-    await click('#inc');
-    expect(getCountText()).toBe('0.1');
+    expect(component.vm.count).toBe(0);
 
-    await click('#dec');
-    expect(getCountText()).toBe('-0.9');
+    component.vm.inc(0.1);
+    expect(component.vm.count).toBe(0.1);
 
-    await click('#set');
-    expect(getCountText()).toBe('8');
+    component.vm.dec();
+    expect(component.vm.count).toBe(-0.9);
 
-    await click('#set-with-callback');
-    expect(getCountText()).toBe('10');
+    component.vm.set(8);
+    expect(component.vm.count).toBe(8);
 
-    await click('#reset');
-    expect(getCountText()).toBe('0');
+    component.vm.set(v => v + 2);
+    expect(component.vm.count).toBe(10);
 
+    component.vm.reset();
+    expect(component.vm.count).toBe(0);
     component.unmount();
   });
 });

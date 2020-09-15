@@ -24,13 +24,7 @@ describe('hooks/useFavicon', () => {
         setup: () => ({
           changeIcon: useFavicon('https://www.test.com/icon.ico')[0],
         }),
-        template: `
-          <template>
-            <div id="click" @click="changeIcon('https://www.another.com/icon.ico')">testing</div>
-            <div id="empty" @click="changeIcon(1)">testing</div>
-            <div id="emptyII" @click="changeIcon()">testing</div>
-          </template>
-      `,
+        template: `<template />`,
       }),
     );
 
@@ -38,17 +32,17 @@ describe('hooks/useFavicon', () => {
       (document.querySelector("link[rel*='icon']") as HTMLLinkElement).href,
     ).toBe('https://www.test.com/icon.ico');
 
-    await component.find('#click').trigger('click');
+    component.vm.changeIcon('https://www.another.com/icon.ico');
     expect(
       (document.querySelector("link[rel*='icon']") as HTMLLinkElement).href,
     ).toBe('https://www.another.com/icon.ico');
 
-    await component.find('#empty').trigger('click');
+    component.vm.changeIcon('1');
     expect(
       (document.querySelector("link[rel*='icon']") as HTMLLinkElement).href,
     ).toBe('http://localhost/1');
 
-    await component.find('#emptyII').trigger('click');
+    component.vm.changeIcon('');
     expect(
       (document.querySelector("link[rel*='icon']") as HTMLLinkElement).href,
     ).toBe('http://localhost/1');

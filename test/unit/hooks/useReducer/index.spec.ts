@@ -1,48 +1,104 @@
 import { mount } from '@vue/test-utils';
-import Test from './test.comp.vue';
-import Initializer from './test.init.comp.vue';
+import { defineComponent } from 'vue';
+import useReducer from '@hooks/useReducer';
 
 describe('hooks/useState', () => {
   it('test useState', async () => {
-    const component = mount(Test);
-    const getStateText = () => component.find('span').text();
-    const click = selector => component.find(selector).trigger('click');
+    const component = mount(
+      defineComponent({
+        template: '<template />',
+        setup() {
+          const [state, dispatch] = useReducer(reducer, { count: 0 });
+          function reducer(state, action) {
+            switch (action.type) {
+              case 'inc':
+                return { count: state.count + 1 };
+              case 'dec':
+                return { count: state.count - 1 };
+              default:
+                return state;
+            }
+          }
 
-    expect(getStateText()).toBe('0');
+          return {
+            state,
+            dispatch,
+          };
+        },
+      }),
+    );
 
-    await click('#inc');
-    expect(getStateText()).toBe('1');
+    expect(component.vm.state.count).toBe(0);
 
-    await click('#inc');
-    expect(getStateText()).toBe('2');
+    // FIXME: fix it type
 
-    await click('#dec');
-    expect(getStateText()).toBe('1');
+    component.vm.dispatch({ type: 'inc' } as any);
+    expect(component.vm.state.count).toBe(1);
 
-    await click('#dec');
-    expect(getStateText()).toBe('0');
+    component.vm.dispatch({ type: 'inc' } as any);
+    expect(component.vm.state.count).toBe(2);
+
+    component.vm.dispatch({ type: 'dec' } as any);
+    expect(component.vm.state.count).toBe(1);
+
+    component.vm.dispatch({ type: 'dec' } as any);
+    expect(component.vm.state.count).toBe(0);
 
     component.unmount();
   });
 
   it('test useReducer initializer', async () => {
-    const component = mount(Initializer);
-    const getStateText = () => component.find('span').text();
-    const click = selector => component.find(selector).trigger('click');
+    const component = mount(
+      defineComponent({
+        template: '<template />',
+        setup() {
+          let initialCount = 0;
+          const [state, dispatch] = useReducer(
+            reducer,
+            { count: initialCount },
+            init,
+          );
 
-    expect(getStateText()).toBe('8');
+          function init() {
+            return { count: initialCount + 8 };
+          }
 
-    await click('#inc');
-    expect(getStateText()).toBe('9');
+          function reducer(state, action) {
+            switch (action.type) {
+              case 'inc':
+                return { count: state.count + 1 };
+              case 'dec':
+                return { count: state.count - 1 };
+              case 'reset':
+                return init();
+              default:
+                return state;
+            }
+          }
 
-    await click('#inc');
-    expect(getStateText()).toBe('10');
+          return {
+            state,
+            dispatch,
+          };
+        },
+      }),
+    );
 
-    await click('#dec');
-    expect(getStateText()).toBe('9');
+    expect(component.vm.state.count).toBe(8);
 
-    await click('#reset');
-    expect(getStateText()).toBe('8');
+    // FIXME: fix it type
+
+    component.vm.dispatch({ type: 'inc' } as any);
+    expect(component.vm.state.count).toBe(9);
+
+    component.vm.dispatch({ type: 'inc' } as any);
+    expect(component.vm.state.count).toBe(10);
+
+    component.vm.dispatch({ type: 'dec' } as any);
+    expect(component.vm.state.count).toBe(9);
+
+    component.vm.dispatch({ type: 'reset' } as any);
+    expect(component.vm.state.count).toBe(8);
 
     component.unmount();
   });
