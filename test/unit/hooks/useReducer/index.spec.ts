@@ -30,18 +30,16 @@ describe('hooks/useState', () => {
 
     expect(component.vm.state.count).toBe(0);
 
-    // FIXME: fix it type
-
-    component.vm.dispatch({ type: 'inc' } as any);
+    component.vm.dispatch({ type: 'inc' });
     expect(component.vm.state.count).toBe(1);
 
-    component.vm.dispatch({ type: 'inc' } as any);
+    component.vm.dispatch({ type: 'inc' });
     expect(component.vm.state.count).toBe(2);
 
-    component.vm.dispatch({ type: 'dec' } as any);
+    component.vm.dispatch({ type: 'dec' });
     expect(component.vm.state.count).toBe(1);
 
-    component.vm.dispatch({ type: 'dec' } as any);
+    component.vm.dispatch({ type: 'dec' });
     expect(component.vm.state.count).toBe(0);
 
     component.unmount();
@@ -86,18 +84,16 @@ describe('hooks/useState', () => {
 
     expect(component.vm.state.count).toBe(8);
 
-    // FIXME: fix it type
-
-    component.vm.dispatch({ type: 'inc' } as any);
+    component.vm.dispatch({ type: 'inc' });
     expect(component.vm.state.count).toBe(9);
 
-    component.vm.dispatch({ type: 'inc' } as any);
+    component.vm.dispatch({ type: 'inc' });
     expect(component.vm.state.count).toBe(10);
 
-    component.vm.dispatch({ type: 'dec' } as any);
+    component.vm.dispatch({ type: 'dec' });
     expect(component.vm.state.count).toBe(9);
 
-    component.vm.dispatch({ type: 'reset' } as any);
+    component.vm.dispatch({ type: 'reset' });
     expect(component.vm.state.count).toBe(8);
 
     component.unmount();
