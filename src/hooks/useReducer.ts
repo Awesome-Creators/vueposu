@@ -15,7 +15,7 @@ function useReducer<R extends Reducer<any, any>, I>(
   reducer: R,
   initializerArg: I,
   initializer?: (arg?: I) => UnwrapRef<I>,
-): [ComputedRef<UnwrapRef<I>>, Dispatch<R>] {
+): [ComputedRef<UnwrapRef<I>>, Dispatch<Parameters<R>[1]>] {
   const state = ref(initializerArg);
 
   if (initializer && typeof initializer === 'function') {
