@@ -1,7 +1,6 @@
 module.exports = {
   moduleFileExtensions: ['ts', 'js', 'json', 'vue'],
   transform: {
-    '.*\\.(vue)$': ['vue-jest', { configFile: './babel.jest.config.js' }],
     '.*\\.(js|json|ts)$': [
       'babel-jest',
       { configFile: './babel.jest.config.js' },
