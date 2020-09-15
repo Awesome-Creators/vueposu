@@ -1,36 +1,48 @@
+import { defineComponent } from 'vue';
+import useMouse from '@hooks/useMouse';
 import { mount } from '@vue/test-utils';
-import Test from './test.comp.vue';
 
-// TODO:
 describe('hooks/useMouse', () => {
   it('test useMouse', async () => {
-    const component = mount(Test);
+    const component = mount(
+      defineComponent({
+        template: `<template />`,
+        setup: () => ({
+          state: useMouse(),
+        }),
+      }),
+    );
 
-    // const pageX = () => component.find('#page-x').text();
-    // const pageY = () => component.find('#page-y').text();
-    // const screenX = () => component.find('#screen-x').text();
-    // const screenY = () => component.find('#screen-y').text();
-    // const clientX = () => component.find('#client-x').text();
-    // const clientY = () => component.find('#client-y').text();
-    // const move = (x: number, y: number) => {
-    //   document.dispatchEvent(
-    //     new MouseEvent('mousemove', {
-    //       clientX: x,
-    //       clientY: y,
-    //       screenX: x,
-    //       screenY: y,
-    //     }),
-    //   );
-    // };
+    expect(component.vm.state).toEqual({
+      pageX: 0,
+      pageY: 0,
+      screenX: 0,
+      screenY: 0,
+      clientX: 0,
+      clientY: 0,
+    });
 
-    // move(100, 100);
+    const move = (x: number, y: number) => {
+      document.dispatchEvent(
+        new MouseEvent('mousemove', {
+          clientX: x,
+          clientY: y,
+          screenX: x,
+          screenY: y,
+        }),
+      );
+    };
 
-    // expect(pageX()).toEqual(100);
-    // expect(pageY()).toEqual(100);
-    // expect(screenX()).toEqual(100);
-    // expect(screenY()).toEqual(100);
-    // expect(clientX()).toEqual(100);
-    // expect(clientY()).toEqual(100);
+    move(100, 100);
+
+    expect(component.vm.state).toEqual({
+      pageX: undefined,
+      pageY: undefined,
+      screenX: 100,
+      screenY: 100,
+      clientX: 100,
+      clientY: 100,
+    });
 
     component.unmount();
   });

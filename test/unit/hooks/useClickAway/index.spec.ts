@@ -1,86 +1,190 @@
 import { mount } from '@vue/test-utils';
-import Single from './test.single.comp.vue';
-import Multiple from './test.multiple.comp.vue';
-import OtherEvt from './test.otherEvt.comp.vue';
-import OtherEvtMultiple from './test.otherEvtMultiple.comp.vue';
+import useClickAway from '@hooks/useClickAway';
+import { defineComponent, ref } from 'vue';
 
 describe('hooks/useClickAway', () => {
   it('test single', async () => {
-    const component = mount(Single, { attachTo: document.body });
-    const getCountText = () => component.find('span').text();
-    const click = selector => component.find(selector).trigger('click');
+    const component = mount(
+      defineComponent({
+        setup() {
+          const count = ref(0);
+          const buttonRef = ref();
 
-    expect(getCountText()).toBe('0');
+          useClickAway(() => {
+            count.value += 1;
+          }, buttonRef);
 
-    await click('span');
-    expect(getCountText()).toBe('1');
+          return {
+            count,
+            buttonRef,
+          };
+        },
+        template: `
+          <div>
+            <button ref="buttonRef">click me outside</button>
+            <span>{{ count }}</span>
+          </div>
+      `,
+      }),
+      { attachTo: document.body },
+    );
 
-    await click('button');
-    expect(getCountText()).toBe('1');
+    expect(component.vm.count).toBe(0);
+
+    await component.find('span').trigger('click');
+    expect(component.vm.count).toBe(1);
+
+    await component.find('button').trigger('click');
+    expect(component.vm.count).toBe(1);
 
     await document.body.click();
-    expect(getCountText()).toBe('2');
+    expect(component.vm.count).toBe(2);
 
     component.unmount();
   });
 
   it('test multiple', async () => {
-    const component = mount(Multiple, { attachTo: document.body });
-    const getCountText = () => component.find('span').text();
-    const click = selector => component.find(selector).trigger('click');
+    const component = mount(
+      defineComponent({
+        setup() {
+          const count = ref(0);
+          const buttonRef = ref();
+          const buttonRef2 = ref();
+          const buttonRef3 = ref();
 
-    expect(getCountText()).toBe('0');
+          useClickAway(() => {
+            count.value += 1;
+          }, [buttonRef, buttonRef2, buttonRef3]);
 
-    await click('span');
-    expect(getCountText()).toBe('1');
+          return {
+            count,
+            buttonRef,
+            buttonRef2,
+            buttonRef3,
+          };
+        },
+        template: `
+          <div>
+            <button ref="buttonRef">click me outside</button>
+            <button ref="buttonRef2">
+              click me outside
+              <button ref="buttonRef3">click me outside</button>
+            </button>
+            <br />
+            <span>{{ count }}</span>
+          </div>
+      `,
+      }),
+      { attachTo: document.body },
+    );
+
+    expect(component.vm.count).toBe(0);
+
+    await component.find('span').trigger('click');
+
+    expect(component.vm.count).toBe(1);
 
     await component.findAll('button')[0].trigger('click');
-    expect(getCountText()).toBe('1');
+    expect(component.vm.count).toBe(1);
 
     await component.findAll('button')[1].trigger('click');
-    expect(getCountText()).toBe('1');
+    expect(component.vm.count).toBe(1);
 
     await component.findAll('button')[2].trigger('click');
-    expect(getCountText()).toBe('1');
+    expect(component.vm.count).toBe(1);
 
     await document.body.click();
-    expect(getCountText()).toBe('2');
+    expect(component.vm.count).toBe(2);
 
     component.unmount();
   });
 
   it('test otherEvt', async () => {
-    const component = mount(OtherEvt, { attachTo: document.body });
-    const getCountText = () => component.find('span').text();
+    const component = mount(
+      defineComponent({
+        setup() {
+          const count = ref(0);
+          const buttonRef = ref();
 
-    expect(getCountText()).toBe('0');
+          useClickAway(
+            () => {
+              count.value += 1;
+            },
+            buttonRef,
+            ['touchstart'],
+          );
+
+          return {
+            count,
+            buttonRef,
+          };
+        },
+        template: `
+          <div>
+            <button ref="buttonRef">click me outside</button>
+            <br />
+            <span>{{ count }}</span>
+          </div>
+    `,
+      }),
+      { attachTo: document.body },
+    );
+
+    expect(component.vm.count).toBe(0);
 
     await component.find('span').trigger('touchstart');
-    expect(getCountText()).toBe('1');
+    expect(component.vm.count).toBe(1);
 
     await component.find('button').trigger('touchstart');
-    expect(getCountText()).toBe('1');
+    expect(component.vm.count).toBe(1);
 
     await document.body.click();
-    expect(getCountText()).toBe('1');
+    expect(component.vm.count).toBe(1);
 
     component.unmount();
   });
 
   it('test otherEvtMultiple ', async () => {
-    const component = mount(OtherEvtMultiple, { attachTo: document.body });
-    const getCountText = () => component.find('span').text();
-    
-    expect(getCountText()).toBe('0');
+    const component = mount(
+      defineComponent({
+        setup() {
+          const count = ref(0);
+          const buttonRef = ref();
+
+          useClickAway(
+            () => {
+              count.value += 1;
+            },
+            buttonRef,
+            ['touchstart', 'click'],
+          );
+
+          return {
+            count,
+            buttonRef,
+          };
+        },
+        template: `
+          <div>
+            <button ref="buttonRef">click me outside</button>
+            <br />
+            <span>{{ count }}</span>
+          </div>
+      `,
+      }),
+      { attachTo: document.body },
+    );
+
+    expect(component.vm.count).toBe(0);
 
     await component.find('span').trigger('touchstart');
-    expect(getCountText()).toBe('1');
+    expect(component.vm.count).toBe(1);
 
     await component.find('button').trigger('touchstart');
-    expect(getCountText()).toBe('1');
+    expect(component.vm.count).toBe(1);
 
     await document.body.click();
-    expect(getCountText()).toBe('2');
+    expect(component.vm.count).toBe(2);
 
     component.unmount();
   });

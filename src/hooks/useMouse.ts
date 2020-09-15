@@ -1,5 +1,5 @@
-import useState from './useState';
 import useEffect from './useEffect';
+import useState from './useState';
 
 interface IMouseCursorState {
   pageX: number;
