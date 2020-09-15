@@ -13,6 +13,5 @@ module.exports = {
     '@test/(.*)': '<rootDir>/test/$1',
   },
   setupFilesAfterEnv: ['<rootDir>/test/unit/jest.setup.ts'],
+  transformIgnorePatterns: ['<rootDir>/node_modules/(?!lodash-es/.*)'],
 };
-
-//
