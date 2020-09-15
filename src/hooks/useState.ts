@@ -14,7 +14,7 @@ type SetStateAction<S> = [ComputedRef<S>, Dispatch<DispatchType<S>>];
 
 function useState<S>(initialState: S | (() => S)): SetStateAction<S> {
   const [state, dispatch] = useReducer(
-    (prevState, nextState) => (prevState === nextState ? prevState : nextState),
+    (_, nextState) => nextState,
     isFunction(initialState) ? initialState() : initialState,
   );
 
