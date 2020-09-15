@@ -7,7 +7,7 @@ describe('hooks/useThrottle', () => {
   it('test default case', async () => {
     const component = mount(Default);
     const getCountText = () => component.find('#count').text();
-    const click = (selector) => component.find(selector).trigger('click');
+    const click = selector => component.find(selector).trigger('click');
 
     await click('#trigger');
     await wait();
@@ -39,7 +39,7 @@ describe('hooks/useThrottle', () => {
   it('test common case', async () => {
     const component = mount(Common);
     const getCountText = () => component.find('#count').text();
-    const click = (selector) => component.find(selector).trigger('click');
+    const click = selector => component.find(selector).trigger('click');
 
     await click('#trigger');
 

@@ -1,25 +1,23 @@
 import { ComputedRef } from 'vue';
+import { isDef } from '../libs/helper';
 import useState from './useState';
 
 type IState = string | number | boolean | null | undefined;
 
-interface IActions<T = IState> {
+interface IActions {
   setLeft: () => void;
   setRight: () => void;
-  toggle: (value?: T) => void;
+  toggle: (value?: any) => void;
 }
 
-function useToggle<D = boolean | undefined>(): [
-  ComputedRef<boolean>,
-  IActions<D>,
-];
+function useToggle<D = boolean | undefined>(): [ComputedRef<boolean>, IActions];
 
-function useToggle<D = IState>(defaultValue: D): [ComputedRef<D>, IActions<D>];
+function useToggle<D = IState>(defaultValue: D): [ComputedRef<D>, IActions];
 
 function useToggle<D = IState, R = IState>(
   defaultValue: D,
   reverseValue: R,
-): [ComputedRef<D | R>, IActions<D | R>];
+): [ComputedRef<D | R>, IActions];
 
 /**
  * useToggle function
@@ -39,7 +37,7 @@ function useToggle<D extends IState = IState, R extends IState = IState>(
   const actions: IActions = {
     toggle: (value?: any) =>
       setStatus(
-        value !== void 0
+        isDef(value)
           ? value
           : status.value !== defaultValue
           ? defaultValue

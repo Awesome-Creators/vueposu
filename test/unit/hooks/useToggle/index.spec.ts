@@ -1,54 +1,74 @@
 import { mount } from '@vue/test-utils';
-import WithoutParams from './test.withoutParams.comp.vue';
-import DefaultValue from './test.defaultValue.comp.vue';
+import useToggle from '@hooks/useToggle';
+import { defineComponent } from 'vue';
 
 describe('hooks/useToggle', () => {
   it('simple toggle test', async () => {
-    const component = mount(WithoutParams);
-    const getToggleStatusText = () => component.find('span').text();
-    const click = selector => component.find(selector).trigger('click');
+    const component = mount(
+      defineComponent({
+        setup() {
+          const [status, toggles] = useToggle();
 
-    expect(getToggleStatusText()).toBe('true');
+          return {
+            status,
+            ...toggles,
+          };
+        },
+        template: `<template />`,
+      }),
+    );
 
-    await click('#toggle');
-    expect(getToggleStatusText()).toBe('false');
+    expect(component.vm.status).toBe(true);
 
-    await click('#boy');
-    expect(getToggleStatusText()).toBe('boy next door');
+    component.vm.toggle();
+    expect(component.vm.status).toBe(false);
 
-    await click('#toggle');
-    expect(getToggleStatusText()).toBe('true');
+    component.vm.toggle('boy next door');
+    expect(component.vm.status).toBe('boy next door');
 
-    await click('#right');
-    expect(getToggleStatusText()).toBe('false');
+    component.vm.toggle();
+    expect(component.vm.status).toBe(true);
 
-    await click('#left');
-    expect(getToggleStatusText()).toBe('true');
+    component.vm.setRight();
+    expect(component.vm.status).toBe(false);
+
+    component.vm.setLeft();
+    expect(component.vm.status).toBe(true);
 
     component.unmount();
   });
 
   it('defaultValue toggle test', async () => {
-    const component = mount(DefaultValue);
-    const getToggleStatusText = () => component.find('span').text();
-    const click = selector => component.find(selector).trigger('click');
+    const component = mount(
+      defineComponent({
+        setup() {
+          const [status, toggles] = useToggle('open', 'close');
 
-    expect(getToggleStatusText()).toBe('open');
+          return {
+            status,
+            ...toggles,
+          };
+        },
+        template: `<template />`,
+      }),
+    );
 
-    await click('#toggle');
-    expect(getToggleStatusText()).toBe('close');
+    expect(component.vm.status).toBe('open');
 
-    await click('#boy');
-    expect(getToggleStatusText()).toBe('boy next door');
+    component.vm.toggle();
+    expect(component.vm.status).toBe('close');
 
-    await click('#toggle');
-    expect(getToggleStatusText()).toBe('open');
+    component.vm.toggle('boy next door');
+    expect(component.vm.status).toBe('boy next door');
 
-    await click('#right');
-    expect(getToggleStatusText()).toBe('close');
+    component.vm.toggle();
+    expect(component.vm.status).toBe('open');
 
-    await click('#left');
-    expect(getToggleStatusText()).toBe('open');
+    component.vm.setRight();
+    expect(component.vm.status).toBe('close');
+
+    component.vm.setLeft();
+    expect(component.vm.status).toBe('open');
 
     component.unmount();
   });
