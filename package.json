@@ -4,10 +4,10 @@
   "repository": "git@github.com:Awesome-Creators/euv.git",
   "author": "yuxino <nbsawz@gmail.com>",
   "license": "MIT",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "main": "./index.js",
+  "types": "./index.d.ts",
   "scripts": {
-    "build": "rimraf dist && tsc --build tsconfig.build.json && yarn format:dist && copy package.json dist && copy README.md dist",
+    "build": "rimraf dist && tsc --build tsconfig.build.json && yarn format:dist && cp package.json dist && cp README.md dist",
     "format": "prettier --write \"src/**/*.{ts,vue,tsx}\" \"test/**/*.{ts,vue,tsx}\" --vue-indent-script-and-styl",
     "format:dist": "prettier --write \"dist/**/*.{js,d.ts}\"",
     "test": "jest",
