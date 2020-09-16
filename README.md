@@ -30,6 +30,9 @@ yarn add euv
 
 - [x] useState
 - [x] useReducer
+- [ ] useTrace
+- [ ] useSet
+- [ ] useQueue
 - [ ] useTimeout
 - [ ] useInterval
 - [ ] useRaf
@@ -39,8 +42,12 @@ yarn add euv
 - [ ] useCalculator
 - [ ] useDynamicList
 - [x] useEffect
-- [x] useDebounce
+- [ ] useDebounce
+- [x] useDebounceFn
+- [ ] useDebounceEffect
 - [x] useThrottle
+- [ ] useThrottleFn
+- [ ] useThrottleEffect
 - [x] useToggle
 - [ ] useSwr
 - [ ] etc..
