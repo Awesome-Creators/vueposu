@@ -45,8 +45,8 @@ yarn add euv
 - [ ] useDebounce
 - [x] useDebounceFn
 - [ ] useDebounceEffect
-- [x] useThrottle
-- [ ] useThrottleFn
+- [ ] useThrottle
+- [x] useThrottleFn
 - [ ] useThrottleEffect
 - [x] useToggle
 - [ ] useSwr
