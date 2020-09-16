@@ -32,7 +32,7 @@ yarn add euv
 - [x] useReducer
 - [ ] useTrace
 - [ ] useSet
-- [ ] useQueue
+- [x] useQueue
 - [ ] useTimeout
 - [ ] useInterval
 - [ ] useRaf
