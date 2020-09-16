@@ -22,27 +22,27 @@ describe('hooks/useBrowserTabChange', () => {
     const component = mount(
       defineComponent({
         setup() {
-          const $leave = ref(false);
-          const $back = ref(true);
-          const [$leaveRef, $backRef] = useBrowserTabChange({
+          const leave = ref(false);
+          const back = ref(true);
+          const [leaveRef, backRef] = useBrowserTabChange({
             leave: () => {
-              $leave.value = true;
-              $back.value = false;
+              leave.value = true;
+              back.value = false;
             },
             back: () => {
-              $leave.value = false;
-              $back.value = true;
+              leave.value = false;
+              back.value = true;
             },
           });
-          return { $leave, $back, $leaveRef, $backRef };
+          return { leave, back, leaveRef, backRef };
         },
         template: `<template />`,
       }),
     );
-    expect(component.vm.$leave).toBe(false);
-    expect(component.vm.$back).toBe(true);
-    expect(component.vm.$leaveRef).toBe(false);
-    expect(component.vm.$backRef).toBe(true);
+    expect(component.vm.leave).toBe(false);
+    expect(component.vm.back).toBe(true);
+    expect(component.vm.leaveRef).toBe(false);
+    expect(component.vm.backRef).toBe(true);
 
     // leave
     triggerDomEvent('visibilitychange');
@@ -50,10 +50,10 @@ describe('hooks/useBrowserTabChange', () => {
 
     // wait dom change
     await wait();
-    expect(component.vm.$leave).toBe(true);
-    expect(component.vm.$back).toBe(false);
-    expect(component.vm.$leaveRef).toBe(true);
-    expect(component.vm.$backRef).toBe(false);
+    expect(component.vm.leave).toBe(true);
+    expect(component.vm.back).toBe(false);
+    expect(component.vm.leaveRef).toBe(true);
+    expect(component.vm.backRef).toBe(false);
 
     // back
     triggerDomEvent('visibilitychange');
@@ -61,10 +61,10 @@ describe('hooks/useBrowserTabChange', () => {
 
     // wait dom change
     await wait();
-    expect(component.vm.$leave).toBe(false);
-    expect(component.vm.$back).toBe(true);
-    expect(component.vm.$leaveRef).toBe(false);
-    expect(component.vm.$backRef).toBe(true);
+    expect(component.vm.leave).toBe(false);
+    expect(component.vm.back).toBe(true);
+    expect(component.vm.leaveRef).toBe(false);
+    expect(component.vm.backRef).toBe(true);
 
     component.unmount();
   });
@@ -74,22 +74,22 @@ describe('hooks/useBrowserTabChange', () => {
       defineComponent({
         template: `<template />`,
         setup() {
-          const $leave = ref(false);
-          const $back = ref(true);
-          const [$leaveRef, $backRef] = useBrowserTabChange(
-            ({ leave, back }) => {
-              $leave.value = leave;
-              $back.value = back;
+          const leave = ref(false);
+          const back = ref(true);
+          const [leaveRef, backRef] = useBrowserTabChange(
+            ({ leave: L, back: B }) => {
+              leave.value = L;
+              back.value = B;
             },
           );
-          return { $leave, $back, $leaveRef, $backRef };
+          return { leave, back, leaveRef, backRef };
         },
       }),
     );
-    expect(component.vm.$leave).toBe(false);
-    expect(component.vm.$back).toBe(true);
-    expect(component.vm.$leaveRef).toBe(false);
-    expect(component.vm.$backRef).toBe(true);
+    expect(component.vm.leave).toBe(false);
+    expect(component.vm.back).toBe(true);
+    expect(component.vm.leaveRef).toBe(false);
+    expect(component.vm.backRef).toBe(true);
 
     // leave
     triggerDomEvent('visibilitychange');
@@ -97,10 +97,10 @@ describe('hooks/useBrowserTabChange', () => {
 
     // wait dom change
     await wait();
-    expect(component.vm.$leave).toBe(true);
-    expect(component.vm.$back).toBe(false);
-    expect(component.vm.$leaveRef).toBe(true);
-    expect(component.vm.$backRef).toBe(false);
+    expect(component.vm.leave).toBe(true);
+    expect(component.vm.back).toBe(false);
+    expect(component.vm.leaveRef).toBe(true);
+    expect(component.vm.backRef).toBe(false);
 
     // back
     triggerDomEvent('visibilitychange');
@@ -108,10 +108,10 @@ describe('hooks/useBrowserTabChange', () => {
 
     // wait dom change
     await wait();
-    expect(component.vm.$leave).toBe(false);
-    expect(component.vm.$back).toBe(true);
-    expect(component.vm.$leaveRef).toBe(false);
-    expect(component.vm.$backRef).toBe(true);
+    expect(component.vm.leave).toBe(false);
+    expect(component.vm.back).toBe(true);
+    expect(component.vm.leaveRef).toBe(false);
+    expect(component.vm.backRef).toBe(true);
 
     component.unmount();
   });
@@ -121,17 +121,17 @@ describe('hooks/useBrowserTabChange', () => {
       defineComponent({
         template: `<template />`,
         setup() {
-          const $leave = ref(false);
-          const $back = ref(true);
-          const [$leaveRef, $backRef] = useBrowserTabChange();
-          return { $leave, $back, $leaveRef, $backRef };
+          const leave = ref(false);
+          const back = ref(true);
+          const [leaveRef, backRef] = useBrowserTabChange();
+          return { leave, back, leaveRef, backRef };
         },
       }),
     );
-    expect(component.vm.$leave).toBe(false);
-    expect(component.vm.$back).toBe(true);
-    expect(component.vm.$leaveRef).toBe(false);
-    expect(component.vm.$backRef).toBe(true);
+    expect(component.vm.leave).toBe(false);
+    expect(component.vm.back).toBe(true);
+    expect(component.vm.leaveRef).toBe(false);
+    expect(component.vm.backRef).toBe(true);
 
     component.unmount();
   });
@@ -142,18 +142,18 @@ describe('hooks/useBrowserTabChange', () => {
         template: `<template />`,
         setup() {
           const count = ref(0);
-          const [$leaveRef, $backRef] = useBrowserTabChange({
+          const [leaveRef, backRef] = useBrowserTabChange({
             leave: () => {
               count.value += 1;
             },
           });
-          return { count, $leaveRef, $backRef };
+          return { count, leaveRef, backRef };
         },
       }),
     );
     expect(component.vm.count).toBe(0);
-    expect(component.vm.$leaveRef).toBe(false);
-    expect(component.vm.$backRef).toBe(true);
+    expect(component.vm.leaveRef).toBe(false);
+    expect(component.vm.backRef).toBe(true);
 
     // leave
     triggerDomEvent('visibilitychange');
@@ -161,8 +161,8 @@ describe('hooks/useBrowserTabChange', () => {
 
     await wait();
     expect(component.vm.count).toBe(1);
-    expect(component.vm.$leaveRef).toBe(true);
-    expect(component.vm.$backRef).toBe(false);
+    expect(component.vm.leaveRef).toBe(true);
+    expect(component.vm.backRef).toBe(false);
 
     // back
     triggerDomEvent('visibilitychange');
@@ -170,8 +170,8 @@ describe('hooks/useBrowserTabChange', () => {
 
     await wait();
     expect(component.vm.count).toBe(1);
-    expect(component.vm.$leaveRef).toBe(false);
-    expect(component.vm.$backRef).toBe(true);
+    expect(component.vm.leaveRef).toBe(false);
+    expect(component.vm.backRef).toBe(true);
 
     // leave
     triggerDomEvent('visibilitychange');
@@ -179,8 +179,8 @@ describe('hooks/useBrowserTabChange', () => {
 
     await wait();
     expect(component.vm.count).toBe(2);
-    expect(component.vm.$leaveRef).toBe(true);
-    expect(component.vm.$backRef).toBe(false);
+    expect(component.vm.leaveRef).toBe(true);
+    expect(component.vm.backRef).toBe(false);
 
     component.unmount();
   });
@@ -190,39 +190,37 @@ describe('hooks/useBrowserTabChange', () => {
       defineComponent({
         template: `<template />`,
         setup() {
-          const [$leaveRef, $backRef] = useBrowserTabChange(
-            '屁股我们能' as any,
-          );
-          return { $leaveRef, $backRef };
+          const [leaveRef, backRef] = useBrowserTabChange('屁股我们能' as any);
+          return { leaveRef, backRef };
         },
       }),
     );
-    expect(component.vm.$leaveRef).toBe(false);
-    expect(component.vm.$backRef).toBe(true);
+    expect(component.vm.leaveRef).toBe(false);
+    expect(component.vm.backRef).toBe(true);
 
     // leave
     triggerDomEvent('visibilitychange');
     (document as any).hidden = true;
 
     await wait();
-    expect(component.vm.$leaveRef).toBe(true);
-    expect(component.vm.$backRef).toBe(false);
+    expect(component.vm.leaveRef).toBe(true);
+    expect(component.vm.backRef).toBe(false);
 
     // back
     triggerDomEvent('visibilitychange');
     (document as any).hidden = false;
 
     await wait();
-    expect(component.vm.$leaveRef).toBe(false);
-    expect(component.vm.$backRef).toBe(true);
+    expect(component.vm.leaveRef).toBe(false);
+    expect(component.vm.backRef).toBe(true);
 
     // leave
     triggerDomEvent('visibilitychange');
     (document as any).hidden = true;
 
     await wait();
-    expect(component.vm.$leaveRef).toBe(true);
-    expect(component.vm.$backRef).toBe(false);
+    expect(component.vm.leaveRef).toBe(true);
+    expect(component.vm.backRef).toBe(false);
     component.unmount();
   });
 
@@ -237,19 +235,19 @@ describe('hooks/useBrowserTabChange', () => {
     const component = mount(
       defineComponent({
         setup() {
-          const $leave = ref(false);
-          const $back = ref(true);
-          const [$leaveRef, $backRef] = useBrowserTabChange({
+          const leave = ref(false);
+          const back = ref(true);
+          const [leaveRef, backRef] = useBrowserTabChange({
             leave: () => {
-              $leave.value = true;
-              $back.value = false;
+              leave.value = true;
+              back.value = false;
             },
             back: () => {
-              $leave.value = false;
-              $back.value = true;
+              leave.value = false;
+              back.value = true;
             },
           });
-          return { $leave, $back, $leaveRef, $backRef };
+          return { leave, back, leaveRef, backRef };
         },
         template: `<template />`,
       }),
