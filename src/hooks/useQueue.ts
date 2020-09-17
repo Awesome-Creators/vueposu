@@ -1,4 +1,4 @@
-import useState from '../hooks/useState';
+import { reactive } from 'vue';
 
 export interface QueueMethods<T> {
   add: (item: T) => void;
@@ -9,27 +9,18 @@ export interface QueueMethods<T> {
 }
 
 const useQueue = <T>(initialValue: T[] = []): QueueMethods<T> => {
-  const [state, set] = useState(initialValue);
+  const state = reactive(initialValue);
   return {
-    add: value => {
-      set(queue => [...queue, value]);
-    },
-    remove: () => {
-      let result;
-      set(([first, ...rest]) => {
-        result = first;
-        return rest;
-      });
-      return result;
-    },
+    add: value => state.push(value as any),
+    remove: () => state.shift() as any,
     get first() {
-      return state.value[0] as T;
+      return state[0] as any;
     },
     get last() {
-      return state.value[state.value.length - 1] as T;
+      return state[state.length - 1] as any;
     },
     get size() {
-      return state.value.length;
+      return state.length;
     },
   };
 };

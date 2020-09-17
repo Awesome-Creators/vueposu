@@ -10,6 +10,7 @@ import useState from './hooks/useState';
 import useThrottle from './hooks/useThrottle';
 import useTitle from './hooks/useTitle';
 import useToggle from './hooks/useToggle';
+import useQueue from './hooks/useQueue';
 
 export {
   useBrowserTabChange,
@@ -24,4 +25,5 @@ export {
   useThrottle,
   useTitle,
   useToggle,
+  useQueue,
 };
