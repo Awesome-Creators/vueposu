@@ -22,11 +22,20 @@ const initState: IMouseCursorState = {
 const MOUSE_MOVE = 'mousemove';
 
 export default function useMouse() {
-  const [state, setState] = useState(initState);
+  const [pageX, setPageX] = useState(initState.pageX);
+  const [pageY, setPageY] = useState(initState.pageY);
+  const [screenX, setScreenX] = useState(initState.screenX);
+  const [screenY, setScreenY] = useState(initState.screenY);
+  const [clientX, setClientX] = useState(initState.clientX);
+  const [clientY, setClientY] = useState(initState.clientY);
 
   const moveHandler = (event: MouseEvent) => {
-    const { pageX, pageY, screenX, screenY, clientX, clientY } = event;
-    setState({ pageX, pageY, screenX, screenY, clientX, clientY });
+    setPageX(event.pageX);
+    setPageY(event.pageY);
+    setScreenX(event.screenX);
+    setScreenY(event.screenY);
+    setClientX(event.clientX);
+    setClientY(event.clientY);
   };
 
   useEffect(() => {
@@ -37,5 +46,12 @@ export default function useMouse() {
     };
   }, []);
 
-  return state;
+  return {
+    pageX,
+    pageY,
+    screenX,
+    screenY,
+    clientX,
+    clientY,
+  };
 }
