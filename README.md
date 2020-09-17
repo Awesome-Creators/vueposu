@@ -31,7 +31,7 @@ yarn add euv
 - [x] useState
 - [x] useReducer
 - [ ] useTrace
-- [ ] useSet
+- [x] useSet
 - [x] useQueue
 - [ ] useTimeout
 - [ ] useInterval
