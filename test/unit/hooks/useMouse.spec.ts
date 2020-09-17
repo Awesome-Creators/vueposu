@@ -8,19 +8,10 @@ describe('hooks/useMouse', () => {
       defineComponent({
         template: `<template />`,
         setup: () => ({
-          state: useMouse(),
+          ...useMouse(),
         }),
       }),
     );
-
-    expect(component.vm.state).toEqual({
-      pageX: 0,
-      pageY: 0,
-      screenX: 0,
-      screenY: 0,
-      clientX: 0,
-      clientY: 0,
-    });
 
     const move = (x: number, y: number) => {
       document.dispatchEvent(
@@ -33,17 +24,22 @@ describe('hooks/useMouse', () => {
       );
     };
 
+    expect(component.vm.pageX).toEqual(0);
+    expect(component.vm.pageY).toEqual(0);
+    expect(component.vm.screenX).toEqual(0);
+    expect(component.vm.screenY).toEqual(0);
+    expect(component.vm.clientX).toEqual(0);
+    expect(component.vm.clientY).toEqual(0);
+
     move(100, 100);
 
-    expect(component.vm.state).toEqual({
-      pageX: undefined,
-      pageY: undefined,
-      screenX: 100,
-      screenY: 100,
-      clientX: 100,
-      clientY: 100,
-    });
-
+    expect(component.vm.pageX).toEqual(undefined);
+    expect(component.vm.pageY).toEqual(undefined);
+    expect(component.vm.screenX).toEqual(100);
+    expect(component.vm.screenY).toEqual(100);
+    expect(component.vm.clientX).toEqual(100);
+    expect(component.vm.clientY).toEqual(100);
+    
     component.unmount();
   });
 
