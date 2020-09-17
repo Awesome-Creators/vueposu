@@ -14,133 +14,115 @@ function setUp<K>(initialSet?: Set<K>) {
   return component;
 }
 
-it('should init set and utils', () => {
-  const { vm } = setUp(new Set([1, 2]));
-  const [set, utils] = vm.set;
+describe('hooks/useSet', () => {
+  it('should init set and utils', () => {
+    const { vm } = setUp(new Set([1, 2]));
+    const [set, utils] = vm.set;
 
-  expect(set).toEqual(new Set([1, 2]));
-  expect(utils).toStrictEqual({
-    has: expect.any(Function),
-    add: expect.any(Function),
-    remove: expect.any(Function),
-    toggle: expect.any(Function),
-    reset: expect.any(Function),
+    expect(set.value).toEqual(new Set([1, 2]));
+    expect(utils).toStrictEqual({
+      has: expect.any(Function),
+      add: expect.any(Function),
+      remove: expect.any(Function),
+      reset: expect.any(Function),
+    });
   });
-});
 
-it('should init empty set if no initial set provided', () => {
-  const { vm } = setUp();
+  it('should init empty set if no initial set provided', () => {
+    const { vm } = setUp();
 
-  expect(vm.set[0]).toEqual(new Set());
-});
+    expect(vm.set[0].value).toEqual(new Set());
+  });
 
-it('should have an initially provided key', () => {
-  const { vm } = setUp(new Set(['a']));
-  const [, utils] = vm.set;
+  it('should have an initially provided key', () => {
+    const { vm } = setUp(new Set(['a']));
+    const [, utils] = vm.set;
 
-  let value;
-  value = utils.has('a');
+    let value;
+    value = utils.has('a');
 
-  expect(value).toBe(true);
-});
+    expect(value).toBe(true);
+  });
 
-it('should have an added key', () => {
-  const { vm } = setUp(new Set());
+  it('should have an added key', () => {
+    const { vm } = setUp(new Set());
 
-  vm.set[1].add('newKey');
+    vm.set[1].add('newKey');
 
-  let value;
-  value = vm.set[1].has('newKey');
+    let value;
+    value = vm.set[1].has('newKey');
 
-  expect(value).toBe(true);
-});
+    expect(value).toBe(true);
+  });
 
-it('should get false for non-existing key', () => {
-  const { vm } = setUp(new Set(['a']));
-  const [, utils] = vm.set;
+  it('should get false for non-existing key', () => {
+    const { vm } = setUp(new Set(['a']));
+    const [, utils] = vm.set;
 
-  let value;
-  value = utils.has('nonExisting');
+    let value;
+    value = utils.has('nonExisting');
 
-  expect(value).toBe(false);
-});
+    expect(value).toBe(false);
+  });
 
-it('should add a new key', () => {
-  const { vm } = setUp(new Set(['oldKey']));
-  const [, utils] = vm.set;
+  it('should add a new key', () => {
+    const { vm } = setUp(new Set(['oldKey']));
+    const [, utils] = vm.set;
 
-  utils.add('newKey');
+    utils.add('newKey');
 
-  expect(vm.set[0]).toEqual(new Set(['oldKey', 'newKey']));
-});
+    expect(vm.set[0].value).toEqual(new Set(['oldKey', 'newKey']));
+  });
 
-it('should work if setting existing key', () => {
-  const { vm } = setUp(new Set(['oldKey']));
-  const [, utils] = vm.set;
+  it('should work if setting existing key', () => {
+    const { vm } = setUp(new Set(['oldKey']));
+    const [, utils] = vm.set;
 
-  utils.add('oldKey');
+    utils.add('oldKey');
 
-  expect(vm.set[0]).toEqual(new Set(['oldKey']));
-});
+    expect(vm.set[0].value).toEqual(new Set(['oldKey']));
+  });
 
-it('should remove existing key', () => {
-  const { vm } = setUp(new Set([1, 2]));
-  const [, utils] = vm.set;
+  it('should remove existing key', () => {
+    const { vm } = setUp(new Set([1, 2]));
+    const [, utils] = vm.set;
 
-  utils.remove(2);
+    utils.remove(2);
 
-  expect(vm.set[0]).toEqual(new Set([1]));
-});
+    expect(vm.set[0].value).toEqual(new Set([1]));
+  });
 
-// it('should remove an existing key on toggle', () => {
-//   const { vm } = setUp(new Set([1, 2]));
-//   const [, utils] = vm.set;
+  it('should do nothing if removing non-existing key', () => {
+    const { vm } = setUp(new Set(['a', 'b']));
+    const [, utils] = vm.set;
 
-//   utils.toggle(2);
+    utils.remove('nonExisting');
 
-//   expect(vm.set[0]).toEqual(new Set([1]));
-// });
+    expect(vm.set[0].value).toEqual(new Set(['a', 'b']));
+  });
 
-it('should add a new key on toggle', () => {
-  const { vm } = setUp(new Set([1]));
-  const [, utils] = vm.set;
+  it('should reset to initial set provided', () => {
+    const { vm } = setUp(new Set([1]));
+    const [, utils] = vm.set;
 
-  utils.toggle(2);
+    utils.add(2);
 
-  expect(vm.set[0]).toEqual(new Set([1, 2]));
-});
+    expect(vm.set[0].value).toEqual(new Set([1, 2]));
 
-it('should do nothing if removing non-existing key', () => {
-  const { vm } = setUp(new Set(['a', 'b']));
-  const [, utils] = vm.set;
+    utils.reset();
 
-  utils.remove('nonExisting');
+    expect(vm.set[0].value).toEqual(new Set([1]));
+  });
 
-  expect(vm.set[0]).toEqual(new Set(['a', 'b']));
-});
+  it('should memoized its utils methods', () => {
+    const { vm } = setUp(new Set(['a', 'b']));
+    const [, utils] = vm.set;
+    const { add, remove, reset } = utils;
 
-// it('should reset to initial set provided', () => {
-//   const { vm } = setUp(new Set([1]));
-//   const [, utils] = vm.set;
+    add('foo');
 
-//   utils.add(2);
-
-//   expect(vm.set[0]).toEqual(new Set([1, 2]));
-
-//   utils.reset();
-
-//   expect(vm.set[0]).toEqual(new Set([1]));
-// });
-
-it('should memoized its utils methods', () => {
-  const { vm } = setUp(new Set(['a', 'b']));
-  const [, utils] = vm.set;
-  const { add, remove, reset, toggle } = utils;
-
-  add('foo');
-
-  expect(vm.set[1].add).toBe(add);
-  expect(vm.set[1].remove).toBe(remove);
-  expect(vm.set[1].toggle).toBe(toggle);
-  expect(vm.set[1].reset).toBe(reset);
+    expect(vm.set[1].add).toBe(add);
+    expect(vm.set[1].remove).toBe(remove);
+    expect(vm.set[1].reset).toBe(reset);
+  });
 });
