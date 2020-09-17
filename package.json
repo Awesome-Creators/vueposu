@@ -11,7 +11,7 @@
     "format": "prettier --write \"src/**/*.{ts,vue,tsx}\" \"test/**/*.{ts,vue,tsx}\" --vue-indent-script-and-styl",
     "format:dist": "prettier --write \"dist/**/*.{js,d.ts}\"",
     "test": "jest",
-    "test:ci": "jest --coverage --collectCoverage=true --verbose --collectCoverageFrom='<rootDir>/src/**/*.{ts}'"
+    "test:ci": "jest --coverage --collectCoverage=true --verbose --collectCoverageFrom='<rootDir>/src/**/*.{js,ts}'"
   },
   "dependencies": {
     "@types/lodash-es": "^4.17.3",
