@@ -1,54 +1,28 @@
 import { mount } from '@vue/test-utils';
 import useCounter from '@hooks/useCounter';
-import { defineComponent } from 'vue-demi';
+import { defineComponent, ref } from 'vue-demi';
 
 describe('hooks/useCounter', () => {
-  it('test useCounter', async () => {
+  it('should be work when initialValue, min, max, x is RefTyped.', async () => {
     const component = mount(
       defineComponent({
         template: '<template />',
         setup() {
-          const [count, actions] = useCounter(0.2);
-
-          return {
-            count,
-            ...actions,
-          };
-        },
-      }),
-    );
-
-    expect(component.vm.count).toBe(0.2);
-
-    component.vm.inc(0.1);
-    expect(component.vm.count).toBe(0.3);
-
-    component.vm.dec();
-    expect(component.vm.count).toBe(-0.7);
-
-    component.vm.set(8);
-    expect(component.vm.count).toBe(8);
-
-    component.vm.set(v => v + 2);
-    expect(component.vm.count).toBe(10);
-
-    component.vm.reset();
-    expect(component.vm.count).toBe(0.2);
-
-    component.unmount();
-  });
-
-  it('test useCounter min limit and max limit', async () => {
-    const component = mount(
-      defineComponent({
-        template: '<template />',
-        setup() {
-          const [count, actions] = useCounter(-10, {
-            min: 0,
-            max: 10,
+          const initial = ref(0.2);
+          const min = ref(0);
+          const max = ref(10);
+          const x = ref(0.1);
+          const [count, actions] = useCounter(initial, {
+            min,
+            max,
+            x,
           });
 
           return {
+            initial,
+            min,
+            max,
+            x,
             count,
             ...actions,
           };
@@ -56,94 +30,52 @@ describe('hooks/useCounter', () => {
       }),
     );
 
-    expect(component.vm.count).toBe(0);
-
-    component.vm.inc(2);
-    expect(component.vm.count).toBe(2);
-
-    component.vm.dec();
-    expect(component.vm.count).toBe(1);
-
-    component.vm.reset();
-    expect(component.vm.count).toBe(0);
-
-    component.vm.set(2);
-    expect(component.vm.count).toBe(2);
-
-    component.unmount();
-  });
-
-  it('test useCounter granularity', async () => {
-    const component = mount(
-      defineComponent({
-        template: '<template />',
-        setup() {
-          const [count, actions] = useCounter(0.2, {
-            min: 0,
-            granularity: 0.1,
-          });
-
-          return {
-            count,
-            ...actions,
-          };
-        },
-      }),
-    );
-
-    expect(component.vm.count).toBe(0.2);
+    expect(component.vm.count).toEqual(0.2);
 
     component.vm.inc();
-    expect(component.vm.count).toBe(0.3);
+    expect(component.vm.count).toEqual(0.3);
 
-    component.vm.set(v => v + 0.1);
-    expect(component.vm.count).toBe(0.4);
-
-    component.vm.dec();
-    expect(component.vm.count).toBe(0.3);
-
-    component.vm.dec(99);
-    expect(component.vm.count).toBe(0);
-
-    component.vm.reset();
-    expect(component.vm.count).toBe(0.2);
-
-    component.unmount();
-  });
-
-  it('mock js user', async () => {
-    const component = mount(
-      defineComponent({
-        template: '<template />',
-        setup() {
-          const [count, actions] = useCounter('屁股我们能' as any, {
-            granularity: '男孩下个门' as any,
-          });
-
-          return {
-            count,
-            ...actions,
-          };
-        },
-      }),
-    );
-
-    expect(component.vm.count).toBe(0);
-
-    component.vm.inc(0.1);
-    expect(component.vm.count).toBe(0.1);
-
-    component.vm.dec();
-    expect(component.vm.count).toBe(-0.9);
+    component.vm.dec(0.2);
+    expect(component.vm.count).toEqual(0.1);
 
     component.vm.set(8);
-    expect(component.vm.count).toBe(8);
+    expect(component.vm.count).toEqual(8);
 
-    component.vm.set(v => v + 2);
-    expect(component.vm.count).toBe(10);
+    component.vm.set(v => v + 3);
+    expect(component.vm.count).toEqual(10);
 
     component.vm.reset();
-    expect(component.vm.count).toBe(0);
+    expect(component.vm.count).toEqual(0.2);
+
+    component.vm.initial = 2;
+    component.vm.reset();
+    expect(component.vm.count).toEqual(2);
+
+    component.vm.min = 3;
+    component.vm.reset();
+    expect(component.vm.count).toEqual(3);
+
+    component.vm.max = 4;
+    component.vm.x = 2;
+    component.vm.inc();
+    expect(component.vm.count).toEqual(4);
+    
+    component.vm.dec(4);
+    expect(component.vm.count).toEqual(3);
+
+    component.vm.min = 0;
+    component.vm.reset();
+    expect(component.vm.count).toEqual(2);
+
+    // Mock for js users.
+    component.vm.initial = 'boy next door' as any;
+    component.vm.reset();
+    expect(component.vm.count).toEqual(0);
+
+    component.vm.x = 'thank you sir' as any;
+    component.vm.inc();
+    expect(component.vm.count).toEqual(1);
+
     component.unmount();
   });
 });
