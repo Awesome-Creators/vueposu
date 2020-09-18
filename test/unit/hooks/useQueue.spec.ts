@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue-demi';
 import useQueue from '@hooks/useQueue';
 
 function setUp<T>(initialQueue?: T[]) {

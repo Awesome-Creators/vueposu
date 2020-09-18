@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import useState from '@hooks/useState';
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue-demi';
 
 describe('hooks/useState', () => {
   it('test useState', async () => {

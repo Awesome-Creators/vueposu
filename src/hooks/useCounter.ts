@@ -1,4 +1,4 @@
-import { ref, computed, ComputedRef } from 'vue';
+import { ref, computed, ComputedRef } from 'vue-demi';
 import * as math from 'mathjs';
 import { isFunction } from '../libs/helper';
 

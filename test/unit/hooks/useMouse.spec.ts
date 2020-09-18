@@ -1,4 +1,4 @@
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue-demi';
 import useMouse from '@hooks/useMouse';
 import { mount } from '@vue/test-utils';
 
@@ -39,7 +39,7 @@ describe('hooks/useMouse', () => {
     expect(component.vm.screenY).toEqual(100);
     expect(component.vm.clientX).toEqual(100);
     expect(component.vm.clientY).toEqual(100);
-    
+
     component.unmount();
   });
 

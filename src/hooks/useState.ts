@@ -1,4 +1,4 @@
-import { ComputedRef, UnwrapRef } from 'vue';
+import { ComputedRef, UnwrapRef } from 'vue-demi';
 import { isFunction } from '../libs/helper';
 import useReducer, { Dispatch } from './useReducer';
 

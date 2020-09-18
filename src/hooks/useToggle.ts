@@ -1,4 +1,4 @@
-import { ComputedRef } from 'vue';
+import { ComputedRef } from 'vue-demi';
 import { isDef } from '../libs/helper';
 import useState from './useState';
 

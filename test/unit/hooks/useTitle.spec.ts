@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref } from 'vue-demi';
 import useTitle from '@hooks/useTitle';
 
 // TODO: remove warn

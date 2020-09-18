@@ -1,8 +1,8 @@
 import { mount } from '@vue/test-utils';
-import { ref } from 'vue';
+import { ref } from 'vue-demi';
 import useThrottle from '@hooks/useThrottle';
 import { wait } from '@test/utils/helper';
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue-demi';
 
 describe('hooks/useThrottle', () => {
   it('test default case', async () => {

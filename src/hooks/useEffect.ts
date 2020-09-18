@@ -6,7 +6,7 @@ import {
   isProxy,
   isRef,
   isReactive,
-} from 'vue';
+} from 'vue-demi';
 
 type EffectCallback = () => void | (() => void | undefined);
 

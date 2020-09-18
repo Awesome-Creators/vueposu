@@ -1,4 +1,4 @@
-import { computed, ref, ComputedRef, UnwrapRef } from 'vue';
+import { computed, ref, ComputedRef, UnwrapRef } from 'vue-demi';
 
 export type Dispatch<A> = (value: A) => void;
 type Reducer<S, A> = (prevState: S, action: A) => S;

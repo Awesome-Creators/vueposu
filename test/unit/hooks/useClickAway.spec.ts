@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import useClickAway from '@hooks/useClickAway';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref } from 'vue-demi';
 
 describe('hooks/useClickAway', () => {
   it('test single', async () => {

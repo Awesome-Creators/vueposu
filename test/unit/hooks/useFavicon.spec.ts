@@ -1,6 +1,6 @@
 import useFavicon from '@hooks/useFavicon';
 import { mount } from '@vue/test-utils';
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue-demi';
 
 describe('hooks/useFavicon', () => {
   it('test useFavicon', async () => {

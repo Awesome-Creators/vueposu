@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue-demi';
 import useReducer from '@hooks/useReducer';
 
 describe('hooks/useState', () => {

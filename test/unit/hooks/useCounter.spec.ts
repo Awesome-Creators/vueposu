@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import useCounter from '@hooks/useCounter';
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue-demi';
 
 describe('hooks/useCounter', () => {
   it('test useCounter', async () => {

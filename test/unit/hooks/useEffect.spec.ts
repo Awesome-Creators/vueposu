@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { defineComponent, onMounted, ref } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue-demi';
 import useEffect from '@hooks/useEffect';
 
 describe('hooks/useEffect', () => {

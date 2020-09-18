@@ -1,5 +1,5 @@
-import { computed, ref } from 'vue';
-import { Ref } from 'vue';
+import { computed, ref } from 'vue-demi';
+import { Ref } from 'vue-demi';
 
 export interface StableActions<K> {
   add: (key: K) => void;

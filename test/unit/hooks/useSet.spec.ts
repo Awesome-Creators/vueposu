@@ -1,6 +1,6 @@
 import useSet from '@hooks/useSet';
 import { mount } from '@vue/test-utils';
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue-demi';
 
 function setUp<K>(initialSet?: Set<K>) {
   const component = mount(

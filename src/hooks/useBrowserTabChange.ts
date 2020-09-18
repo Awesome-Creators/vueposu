@@ -1,7 +1,7 @@
 import useEffect from './useEffect';
 import { isDef, isFunction, isObject } from '../libs/helper';
-import type { Ref } from 'vue';
-import { ref } from 'vue';
+import type { Ref } from 'vue-demi';
+import { ref } from 'vue-demi';
 
 // return type of useBrowserTabChange
 type useBrowserTabChangeReturnType = [leave: Ref<boolean>, back: Ref<boolean>];

@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import { Ref } from 'vue';
+import { Ref } from 'vue-demi';
 
 export type Target<T = HTMLElement> =
   | T

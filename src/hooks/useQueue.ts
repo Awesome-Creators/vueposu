@@ -1,4 +1,4 @@
-import { reactive } from 'vue';
+import { reactive } from 'vue-demi';
 
 export interface QueueMethods<T> {
   add: (item: T) => void;

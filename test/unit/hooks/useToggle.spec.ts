@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import useToggle from '@hooks/useToggle';
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue-demi';
 
 describe('hooks/useToggle', () => {
   it('simple toggle test', async () => {
