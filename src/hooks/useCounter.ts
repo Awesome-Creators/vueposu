@@ -1,93 +1,79 @@
-import { ref, computed, ComputedRef } from 'vue-demi';
-import * as math from 'mathjs';
-import { isFunction } from '../libs/helper';
+import { readonly, ref, unref } from 'vue-demi';
+import { add, subtract, bignumber } from 'mathjs';
+import { isDef, isFunction } from '../libs/helper';
+
+import type { Ref } from 'vue-demi';
+import type { RefTyped } from 'typings/global';
 
 type NumberType = number | string;
 
-interface ICounterOptions<T = number> {
-  min?: T;
-  max?: T;
-  granularity?: T;
+interface ICounterOptions {
+  min?: RefTyped<NumberType>;
+  max?: RefTyped<NumberType>;
+  x?: RefTyped<NumberType>;
 }
 
-interface ICounterActions<T = number> {
-  inc: (n?: T) => void;
-  dec: (n?: T) => void;
-  set: (value: T | ((currentValue: T) => T)) => void;
+interface ICounterActions {
+  inc: (n?: RefTyped<NumberType>) => void;
+  dec: (n?: RefTyped<NumberType>) => void;
+  set: (
+    value: RefTyped<NumberType> | ((currentValue: number) => number),
+  ) => void;
   reset: () => void;
 }
 
-const isNumberType = (n: any) => !isNaN(Number(n));
+const isNumber = (n: any) => !isNaN(unref(n));
 
 function useCounter(
-  initialValue?: number,
-  options?: ICounterOptions<number>,
-): [ComputedRef<number>, ICounterActions<number>];
+  initialValue: RefTyped<NumberType>,
+  options: ICounterOptions = {},
+): [Ref<number>, ICounterActions] {
+  const { min, max, x } = options;
+  const initial = () =>
+    isNumber(initialValue) ? Number(unref(initialValue)) : 0;
+  const _x = () => (isNumber(x) ? Number(unref(x)) : 1);
 
-function useCounter(
-  initialValue?: string,
-  options?: ICounterOptions<number>,
-): [ComputedRef<number>, ICounterActions<number>];
-
-function useCounter(
-  initialValue: NumberType,
-  options: ICounterOptions<NumberType> = {},
-): [ComputedRef<NumberType>, ICounterActions<NumberType>] {
-  const counterType = Number;
-
-  let { min, max, granularity = 1 } = options;
-
-  granularity = isNumberType(granularity) ? Number(granularity) : 1;
-  initialValue = isNumberType(initialValue) ? Number(initialValue) : 0;
-
-  if (isNumberType(max)) {
-    initialValue = Math.min(Number(max), initialValue);
-  }
-  if (isNumberType(min)) {
-    initialValue = Math.max(Number(min), initialValue);
-  }
-
-  const current = ref(initialValue);
-
-  const set: ICounterActions['set'] = v => {
-    let result = isFunction(v) ? v(current.value) : v;
-    if (isNumberType(max)) {
-      result = Math.min(Number(max), result);
+  const fix = (num: RefTyped<number>) => {
+    const result = ref(unref(num));
+    if (isNumber(max)) {
+      result.value = Math.min(Number(unref(max)), result.value);
     }
-    if (isNumberType(min)) {
-      result = Math.max(Number(min), result);
+    if (isNumber(min)) {
+      result.value = Math.max(Number(unref(min)), result.value);
     }
-    current.value = result;
+    return result.value;
   };
 
-  const inc: ICounterActions['inc'] = n => {
+  const current = ref(fix(initial()));
+
+  const set = v => {
+    current.value = fix(isFunction(v) ? v(current.value) : v);
+  };
+
+  const inc = v => {
     set(
-      Number(
-        math.add(
-          math.bignumber(current.value),
-          math.bignumber(isNumberType(n) ? Number(n) : (granularity as number)),
-        ),
+      add(
+        bignumber(current.value),
+        bignumber(isDef(v) && isNumber(v) ? unref(v) : _x()),
       ),
     );
   };
 
-  const dec: ICounterActions['dec'] = n => {
+  const dec = v => {
     set(
-      Number(
-        math.subtract(
-          math.bignumber(current.value),
-          math.bignumber(isNumberType(n) ? Number(n) : (granularity as number)),
-        ),
+      subtract(
+        bignumber(current.value),
+        bignumber(isDef(v) && isNumber(v) ? unref(v) : _x()),
       ),
     );
   };
 
-  const reset: ICounterActions['reset'] = () => {
-    current.value = initialValue as number;
+  const reset = () => {
+    set(fix(initial()));
   };
 
   return [
-    computed(() => counterType(current.value)),
+    readonly(current),
     {
       inc,
       dec,
