@@ -1,5 +1,5 @@
 import { readonly, ref, unref } from 'vue-demi';
-import { add, subtract, bignumber } from 'mathjs';
+import { add, subtract, bignumber, format } from 'mathjs';
 import { isDef, isFunction } from '../libs/helper';
 
 import type { Ref } from 'vue-demi';
@@ -52,18 +52,26 @@ function useCounter(
 
   const inc = v => {
     set(
-      add(
-        bignumber(current.value),
-        bignumber(isDef(v) && isNumber(v) ? unref(v) : _x()),
+      Number(
+        format(
+          add(
+            bignumber(current.value),
+            bignumber(isDef(v) && isNumber(v) ? unref(v) : _x()),
+          ),
+        ),
       ),
     );
   };
 
   const dec = v => {
     set(
-      subtract(
-        bignumber(current.value),
-        bignumber(isDef(v) && isNumber(v) ? unref(v) : _x()),
+      Number(
+        format(
+          subtract(
+            bignumber(current.value),
+            bignumber(isDef(v) && isNumber(v) ? unref(v) : _x()),
+          ),
+        ),
       ),
     );
   };
