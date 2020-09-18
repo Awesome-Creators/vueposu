@@ -1,5 +1,7 @@
-import useEffect from './useEffect';
+import { watch, unref, isReactive, isRef } from 'vue-demi';
 import { getTargetElement, Target } from '../libs/dom';
+
+import type { RefTyped } from 'typings/global';
 
 const defaultEvent = 'click';
 
@@ -13,9 +15,9 @@ type EventType = MouseEvent | TouchEvent;
  * @param eventName Event trigger.
  */
 function useClickAway(
-  eventHandler: (event: EventType) => void,
+  eventHandler: RefTyped<(event: EventType) => void>,
   target: Target | Target[],
-  eventName: string | string[] = defaultEvent,
+  eventName: RefTyped<string | string[]> = defaultEvent,
 ) {
   const handler = event => {
     const targets = Array.isArray(target) ? target : [target];
@@ -29,17 +31,38 @@ function useClickAway(
       return;
     }
 
-    eventHandler(event);
+    unref(eventHandler)(event);
   };
 
-  useEffect(() => {
-    const evts = Array.isArray(eventName) ? eventName : [eventName];
-    evts.map(evt => document.addEventListener(evt, handler));
+  const watchSource = [];
+  if (isRef(eventHandler) || isReactive(eventHandler)) {
+    watchSource.push(eventHandler);
+  }
+  if (isRef(target) || isReactive(target)) {
+    watchSource.push(target);
+  }
+  if (isRef(eventName) || isReactive(eventName)) {
+    watchSource.push(eventName);
+  }
 
-    return () => {
-      evts.map(evt => document.removeEventListener(evt, handler));
-    };
-  }, [eventHandler, target, eventName]);
+  watch(
+    watchSource,
+    (_, __, onInvalidate) => {
+      const eventNames = Array.isArray(unref(eventName))
+        ? (unref(eventName) as RefTyped<string>[])
+        : [eventName as RefTyped<string>];
+      eventNames.map(name => document.addEventListener(unref(name), handler));
+
+      onInvalidate(() => {
+        eventNames.map(name =>
+          document.removeEventListener(unref(name), handler),
+        );
+      });
+    },
+    {
+      immediate: true,
+    },
+  );
 }
 
 export default useClickAway;
