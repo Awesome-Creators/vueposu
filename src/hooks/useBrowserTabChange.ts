@@ -1,7 +1,7 @@
-import useEffect from './useEffect';
+import { ref, onMounted, onBeforeUnmount } from 'vue-demi';
 import { isDef, isFunction, isObject } from '../libs/helper';
+
 import type { Ref } from 'vue-demi';
-import { ref } from 'vue-demi';
 
 // return type of useBrowserTabChange
 type useBrowserTabChangeReturnType = [leave: Ref<boolean>, back: Ref<boolean>];
@@ -78,9 +78,9 @@ export default function useBrowserTabChange(
   const back = ref(document.hidden);
 
   if (isDef(options)) {
-    useEffect(() => {
-      let listener;
+    let listener;
 
+    onMounted(() => {
       const getListener = cb => () => {
         setTimeout(() => {
           cb();
@@ -106,12 +106,13 @@ export default function useBrowserTabChange(
       DIFFERENCE_PLATFORM_EVT.forEach(evt => {
         document.addEventListener(evt, listener);
       });
+    });
 
-      return () =>
-        DIFFERENCE_PLATFORM_EVT.forEach(evt => {
-          document.removeEventListener(evt, listener);
-        });
-    }, []);
+    onBeforeUnmount(() => {
+      DIFFERENCE_PLATFORM_EVT.forEach(evt => {
+        document.removeEventListener(evt, listener);
+      });
+    });
   }
 
   return [leave, back];
