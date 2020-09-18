@@ -1,6 +1,8 @@
-import { ComputedRef } from 'vue-demi';
+import { ref, unref, readonly } from 'vue-demi';
 import { isDef } from '../libs/helper';
-import useState from './useState';
+
+import type { Ref, UnwrapRef, DeepReadonly } from 'vue-demi';
+import type { RefTyped } from 'typings/global';
 
 type IState = string | number | boolean | null | undefined;
 
@@ -10,44 +12,41 @@ interface IActions {
   toggle: (value?: any) => void;
 }
 
-function useToggle<D = boolean | undefined>(): [ComputedRef<boolean>, IActions];
-
-function useToggle<D = IState>(defaultValue: D): [ComputedRef<D>, IActions];
-
-function useToggle<D = IState, R = IState>(
-  defaultValue: D,
-  reverseValue: R,
-): [ComputedRef<D | R>, IActions];
-
 /**
  * useToggle function
  *
- * @param defaultValue Truth value, default is true  - an optional parameter
- * @param reverseValue False value, default is false - an optional parameter
+ * @param defaultValue Truth value, default is `true`  - an optional parameter
+ * @param reverseValue False value, default is `false` - an optional parameter
  * @returns [ status, { toggle, setLeft, setRight } ]
  */
-function useToggle<D extends IState = IState, R extends IState = IState>(
-  defaultValue: D = true as D,
-  reverseValue?: R,
-) {
-  reverseValue = (reverseValue ?? !defaultValue) as R;
+function useToggle<
+  D extends RefTyped<IState>,
+  R extends RefTyped<IState>
+>(defaultValue?: D, reverseValue?: R): [DeepReadonly<Ref<UnwrapRef<D> | UnwrapRef<R>>>, IActions] {
+  const getDefault = () =>
+    (isDef(unref(defaultValue)) ? unref(defaultValue) : true) as D;
+  const getReverse = () =>
+    (isDef(unref(reverseValue)) ? unref(reverseValue) : !getDefault()) as R;
 
-  const [status, setStatus] = useState<D | R>(defaultValue);
+  const status = ref<D | R>(getDefault());
 
-  const actions: IActions = {
-    toggle: (value?: any) =>
-      setStatus(
-        isDef(value)
-          ? value
-          : status.value !== defaultValue
-          ? defaultValue
-          : reverseValue,
-      ),
-    setLeft: () => setStatus(defaultValue),
-    setRight: () => setStatus(reverseValue),
+  const actions = {
+    toggle: value => {
+      status.value = isDef(unref(value))
+        ? unref(value)
+        : status.value !== getDefault()
+        ? getDefault()
+        : getReverse();
+    },
+    setLeft: () => {
+      status.value = getDefault() as UnwrapRef<D>;
+    },
+    setRight: () => {
+      status.value = getReverse() as UnwrapRef<R>;
+    },
   };
 
-  return [status, actions];
+  return [readonly(status), actions];
 }
 
 export default useToggle;
