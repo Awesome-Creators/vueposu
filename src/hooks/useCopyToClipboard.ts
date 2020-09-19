@@ -18,9 +18,5 @@ export function useClipboard() {
     return window.navigator.clipboard.writeText(txt);
   }
 
-  return {
-    text,
-    copy,
-    supportCopy,
-  };
+  return [copy, text, supportCopy];
 }
