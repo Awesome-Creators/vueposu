@@ -8,5 +8,6 @@ import {
 
 const isDef = val => !isUndefined(val) && val !== null;
 const isUndef = val => isUndefined(val) || val === null;
+const isClient = typeof window !== 'undefined';
 
-export { isObject, isFunction, debounce, throttle, isDef, isUndef };
+export { isObject, isFunction, debounce, throttle, isDef, isUndef, isClient };
