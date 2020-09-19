@@ -19,10 +19,10 @@ interface IActions {
  * @param reverseValue False value, default is `false` - an optional parameter
  * @returns [ status, { toggle, setLeft, setRight } ]
  */
-function useToggle<
-  D extends RefTyped<IState>,
-  R extends RefTyped<IState>
->(defaultValue?: D, reverseValue?: R): [DeepReadonly<Ref<UnwrapRef<D> | UnwrapRef<R>>>, IActions] {
+function useToggle<D extends RefTyped<IState>, R extends RefTyped<IState>>(
+  defaultValue?: D,
+  reverseValue?: R,
+): [DeepReadonly<Ref<UnwrapRef<D> | UnwrapRef<R>>>, IActions] {
   const getDefault = () =>
     (isDef(unref(defaultValue)) ? unref(defaultValue) : true) as D;
   const getReverse = () =>
