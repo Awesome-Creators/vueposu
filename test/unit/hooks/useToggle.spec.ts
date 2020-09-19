@@ -95,7 +95,7 @@ describe('hooks/useToggle', () => {
 
     component.vm.toggle('boy next door');
     expect(component.vm.status).toBe('boy next door');
-    
+
     component.vm.toggle();
     expect(component.vm.status).toBe('hello');
 

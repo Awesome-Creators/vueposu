@@ -12,7 +12,7 @@ function setUp<T>(initialQueue?: T[]) {
   return component;
 }
 
-describe('useQueue', () => {
+describe('hooks/useQueue', () => {
   it('test not parameter', () => {
     const component = setUp();
     const { first, last, size } = component.vm;
@@ -44,5 +44,27 @@ describe('useQueue', () => {
     const { first, size } = component.vm;
     expect(first).toEqual(2);
     expect(size).toEqual(1);
+  });
+
+  it('test empty', () => {
+    const component = setUp([1, 2]);
+    component.vm.empty();
+    const { first, last, size } = component.vm;
+    expect(first).toBeUndefined();
+    expect(last).toBeUndefined();
+    expect(size).toBe(0);
+  });
+
+  it('test reset', () => {
+    const component = setUp([1, 2]);
+    component.vm.add(3);
+    expect(component.vm.first).toEqual(1);
+    expect(component.vm.last).toEqual(3);
+    expect(component.vm.size).toEqual(3);
+
+    component.vm.reset();
+    expect(component.vm.first).toEqual(1);
+    expect(component.vm.last).toEqual(2);
+    expect(component.vm.size).toEqual(2);
   });
 });
