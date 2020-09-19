@@ -2,8 +2,8 @@ import { readonly, ref, unref } from 'vue-demi';
 import { add, subtract, bignumber, format } from 'mathjs';
 import { isDef, isFunction } from '../libs/helper';
 
+import type { RefTyped } from '../types/global';
 import type { Ref } from 'vue-demi';
-import type { RefTyped } from 'typings/global';
 
 type NumberType = number | string;
 

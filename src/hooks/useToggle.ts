@@ -2,7 +2,7 @@ import { ref, unref, readonly } from 'vue-demi';
 import { isDef } from '../libs/helper';
 
 import type { Ref, UnwrapRef, DeepReadonly } from 'vue-demi';
-import type { RefTyped } from 'typings/global';
+import type { RefTyped } from '../types/global';
 
 type IState = string | number | boolean | null | undefined;
 
