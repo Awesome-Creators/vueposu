@@ -24,7 +24,7 @@ yarn add euv
 - [ ] useLocalStorage
 - [x] useMouse
 - [ ] useScrollTo
-- [ ] useCopyToClipboard
+- [x] useCopyToClipboard
 
 ### FUNCTIONALITY
 
