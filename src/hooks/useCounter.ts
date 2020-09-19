@@ -1,9 +1,9 @@
-import { readonly, ref, unref } from 'vue-demi';
+import { ref, unref, computed } from 'vue-demi';
 import { add, subtract, bignumber, format } from 'mathjs';
 import { isDef, isFunction } from '../libs/helper';
 
-import type { RefTyped } from '../types/global';
 import type { Ref } from 'vue-demi';
+import type { RefTyped } from '../types/global';
 
 type NumberType = number | string;
 
@@ -81,7 +81,12 @@ function useCounter(
   };
 
   return [
-    readonly(current),
+    computed({
+      get: () => current.value,
+      set: value => {
+        set(value);
+      },
+    }),
     {
       inc,
       dec,

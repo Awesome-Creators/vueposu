@@ -39,7 +39,56 @@ describe('hooks/useCounter', () => {
     expect(component.vm.count).toBe(0);
   });
 
-  
+  it('should be work when count++', async () => {
+    const component = mount(
+      defineComponent({
+        template: `
+          <template>
+            <span id="inc" @click="count++" />
+            <span id="dec" @click="count--" />
+            <span id="count">{{ count }}</span>
+          </template>
+        `,
+        setup() {
+          const [count] = useCounter(0, {
+            min: -1,
+            max: 2,
+          });
+
+          return {
+            count,
+          };
+        },
+      }),
+    );
+
+    expect(component.vm.count).toBe(0);
+    expect(component.find('#count').text()).toBe('0');
+
+    // test inc
+    const testInc = async val => {
+      await component.find('#inc').trigger('click');
+      expect(component.vm.count).toBe(val);
+      expect(component.find('#count').text()).toBe(String(val));
+    };
+
+    // test dec
+    const testDec = async val => {
+      await component.find('#dec').trigger('click');
+      expect(component.vm.count).toBe(val);
+      expect(component.find('#count').text()).toBe(String(val));
+    };
+
+    await testInc(1);
+    await testInc(2);
+    await testInc(2);
+
+    await testDec(1);
+    await testDec(0);
+    await testDec(-1);
+    await testDec(-1);
+  });
+
   it('should be work when it is set options', () => {
     const component = mount(
       defineComponent({
