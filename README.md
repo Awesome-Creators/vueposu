@@ -24,7 +24,7 @@ yarn add euv
 - [ ] useLocalStorage
 - [x] useMouse
 - [ ] useScrollTo
-- [ ] [wip] useCopyToClipboard
+- [x] useCopyToClipboard
 
 ### FUNCTIONALITY
 
@@ -44,10 +44,10 @@ yarn add euv
 - [x] useEffect
 - [x] useDebounce
 - [x] useDebounceFn
-- [ ] [wip] useDebounceEffect
+- [x] useDebounceEffect
 - [x] useThrottle
 - [x] useThrottleFn
-- [ ] [wip] useThrottleEffect
+- [x] useThrottleEffect
 - [x] useToggle
 - [ ] useSwr
 - [ ] etc..

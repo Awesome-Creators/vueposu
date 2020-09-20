@@ -1,13 +1,13 @@
 import { onBeforeUnmount, ref } from 'vue-demi';
 import type { Ref } from 'vue-demi';
 
-export type UseClipboard = [
+export type useCopyToClipboard = [
   copy: (txt: string) => Promise<void>,
   text: Ref<string>,
   supportCopy: boolean,
 ];
 
-export function useClipboard(): UseClipboard {
+export default function useCopyToClipboard(): useCopyToClipboard {
   const text = ref('');
   const supportCopy = 'clipboard' in window.navigator;
   const copyToClipboard = async () => {
