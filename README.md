@@ -28,8 +28,6 @@ yarn add euv
 
 ### FUNCTIONALITY
 
-- [x] useState
-- [x] useReducer
 - [ ] useTrace
 - [x] useSet
 - [x] useQueue
@@ -41,7 +39,6 @@ yarn add euv
 - [ ] useCounterInterval
 - [ ] useCalculator
 - [ ] useDynamicList
-- [x] useEffect
 - [x] useDebounce
 - [x] useDebounceFn
 - [x] useDebounceEffect

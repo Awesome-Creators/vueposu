@@ -1,4 +1,4 @@
-import useEffect from './useEffect';
+import { watch } from 'vue-demi';
 
 let someUsedIsUnmounted = false;
 
@@ -12,7 +12,7 @@ export default function useTitle(title: string, callback?: () => void) {
   title = String(title);
   let used = false;
 
-  useEffect(() => {
+  watch([], () => {
     if (someUsedIsUnmounted) {
       someUsedIsUnmounted = false;
       used = false;

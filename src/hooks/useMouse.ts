@@ -1,5 +1,4 @@
-import useEffect from './useEffect';
-import useState from './useState';
+import { reactive, watchEffect, toRefs } from 'vue-demi';
 
 interface IMouseCursorState {
   pageX: number;
@@ -10,7 +9,7 @@ interface IMouseCursorState {
   clientY: number;
 }
 
-const initState: IMouseCursorState = {
+const initialState: IMouseCursorState = {
   pageX: 0,
   pageY: 0,
   screenX: 0,
@@ -22,36 +21,25 @@ const initState: IMouseCursorState = {
 const MOUSE_MOVE = 'mousemove';
 
 export default function useMouse() {
-  const [pageX, setPageX] = useState(initState.pageX);
-  const [pageY, setPageY] = useState(initState.pageY);
-  const [screenX, setScreenX] = useState(initState.screenX);
-  const [screenY, setScreenY] = useState(initState.screenY);
-  const [clientX, setClientX] = useState(initState.clientX);
-  const [clientY, setClientY] = useState(initState.clientY);
+  const state = reactive(initialState);
 
   const moveHandler = (event: MouseEvent) => {
-    setPageX(event.pageX);
-    setPageY(event.pageY);
-    setScreenX(event.screenX);
-    setScreenY(event.screenY);
-    setClientX(event.clientX);
-    setClientY(event.clientY);
+    const { pageX, pageY, screenX, screenY, clientX, clientY } = event;
+    state.pageX = pageX;
+    state.pageY = pageY;
+    state.screenX = screenX;
+    state.screenY = screenY;
+    state.clientX = clientX;
+    state.clientY = clientY;
   };
 
-  useEffect(() => {
+  watchEffect(onInvalidate => {
     document.addEventListener(MOUSE_MOVE, moveHandler);
 
-    return () => {
+    onInvalidate(() => {
       document.removeEventListener(MOUSE_MOVE, moveHandler);
-    };
-  }, []);
+    });
+  });
 
-  return {
-    pageX,
-    pageY,
-    screenX,
-    screenY,
-    clientX,
-    clientY,
-  };
+  return toRefs(state);
 }
