@@ -42,10 +42,10 @@ yarn add euv
 - [ ] useCalculator
 - [ ] useDynamicList
 - [x] useEffect
-- [ ] [wip] useDebounce
+- [x] useDebounce
 - [x] useDebounceFn
 - [ ] [wip] useDebounceEffect
-- [ ] [wip] useThrottle
+- [x] useThrottle
 - [x] useThrottleFn
 - [ ] [wip] useThrottleEffect
 - [x] useToggle
