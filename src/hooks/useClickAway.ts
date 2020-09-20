@@ -17,7 +17,7 @@ function useClickAway(
   eventHandler: RefTyped<(event: EventType) => void>,
   target: Target | Target[],
   eventName: RefTyped<string | string[]> = defaultEvent,
-) {
+): void {
   const handler = event => {
     const targets = Array.isArray(target) ? target : [target];
 
