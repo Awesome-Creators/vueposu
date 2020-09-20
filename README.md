@@ -39,7 +39,7 @@ yarn add euv
 - [ ] useEventEmitter
 - [x] useCounter
 - [ ] useCounterInterval
-- [x] useCalculator
+- [ ] useCalculator
 - [ ] useDynamicList
 - [x] useEffect
 - [ ] [wip] useDebounce
