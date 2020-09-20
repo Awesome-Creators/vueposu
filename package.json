@@ -12,7 +12,7 @@
     "format:dist": "prettier --write \"dist/**/*.{js,d.ts}\"",
     "test": "jest",
     "test:ci": "jest --coverage --collectCoverage=true --verbose --collectCoverageFrom='<rootDir>/src/**/*.{js,ts}'",
-    "test:open-report": "yarn test:ci && open ./coverage/lcov-report/index.html"
+    "test:ci-open": "yarn test:ci && open ./coverage/lcov-report/index.html"
   },
   "dependencies": {
     "@types/lodash-es": "^4.17.3",
