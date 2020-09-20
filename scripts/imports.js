@@ -7,11 +7,5 @@ const hooks = fs
 
 fs.writeFileSync(
   __dirname + '/../src/index.ts',
-  `
-${hooks.map(hook => `import ${hook} from './hooks/${hook}';`).join('\r\n')}
-
-export {
-  ${hooks.map(hook => hook + ',').join('\r\n  ')}
-}
-`,
+  hooks.map(hook => `export * from './hooks/${hook}';`).join('\r\n'),
 );
