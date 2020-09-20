@@ -1,17 +1,17 @@
 import { mount } from '@vue/test-utils';
 import { ref } from 'vue-demi';
-import useThrottle from '@hooks/useThrottle';
+import useThrottleFn from '@hooks/useThrottleFn';
 import { wait } from '@test/utils/helper';
 import { defineComponent } from 'vue-demi';
 
-describe('hooks/useThrottle', () => {
+describe('hooks/useThrottleFn', () => {
   it('test default case', async () => {
     const component = mount(
       defineComponent({
         template: '<template />',
         setup() {
           const count = ref(1);
-          const fn = useThrottle(() => (count.value = count.value + 1));
+          const fn = useThrottleFn(() => (count.value = count.value + 1));
           return {
             count,
             fn,
@@ -53,7 +53,7 @@ describe('hooks/useThrottle', () => {
         template: '<template />',
         setup() {
           const count = ref(1);
-          const fn = useThrottle(() => (count.value = count.value + 1), 300);
+          const fn = useThrottleFn(() => (count.value = count.value + 1), 300);
           return {
             count,
             fn,

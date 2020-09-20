@@ -1,15 +1,15 @@
 import { mount } from '@vue/test-utils';
 import { defineComponent, ref } from 'vue-demi';
 import { wait } from '@test/utils/helper';
-import useDebounce from '@hooks/useDebounce';
+import useDebounceFn from '@hooks/useDebounceFn';
 
-describe('hooks/useDebounce', () => {
+describe('hooks/useDebounceFn', () => {
   it('test default case', async () => {
     const component = mount(
       defineComponent({
         setup() {
           const count = ref(1);
-          const fn = useDebounce(() => (count.value = count.value + 1));
+          const fn = useDebounceFn(() => (count.value = count.value + 1));
           return {
             count,
             fn,
@@ -52,7 +52,7 @@ describe('hooks/useDebounce', () => {
       defineComponent({
         setup() {
           const count = ref(1);
-          const fn = useDebounce(() => (count.value = count.value + 1), 300);
+          const fn = useDebounceFn(() => (count.value = count.value + 1), 300);
           return {
             count,
             fn,
