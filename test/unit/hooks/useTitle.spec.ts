@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { defineComponent, ref } from 'vue-demi';
+import { defineComponent } from 'vue-demi';
 import useTitle from '@hooks/useTitle';
 
 describe('hooks/useTitle', () => {
@@ -23,8 +23,6 @@ describe('hooks/useTitle', () => {
       }),
       { attachTo: document.body },
     );
-    ;
-
     expect(document.title).toBe(defaultTitle);
 
     component.vm.title = 'a';
