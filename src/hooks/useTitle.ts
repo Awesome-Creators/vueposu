@@ -1,30 +1,30 @@
-import { watch } from 'vue-demi';
-
-let someUsedIsUnmounted = false;
+import { ref, watch, getCurrentInstance } from 'vue';
+import { RefTyped } from 'typings/global';
 
 /**
  * set the string to the page title.
  *
  * @param title The string to set to the page title.
- * @param callback callback function when set the page title.
  */
-export default function useTitle(title: string, callback?: () => void) {
-  title = String(title);
-  let used = false;
+export default function useTitle(overridedTitle?: RefTyped<string>) {
+  if (getCurrentInstance()) {
+    const title = ref(overridedTitle || document.title);
 
-  watch([], () => {
-    if (someUsedIsUnmounted) {
-      someUsedIsUnmounted = false;
-      used = false;
-    }
-    if (!used) {
-      used = true;
-      document.title = title;
-      callback && callback();
-    }
+    watch(
+      title,
+      () => {
+        document.title = title.value;
+      },
+      {
+        immediate: true,
+        flush: 'sync',
+      },
+    );
 
-    return () => {
-      someUsedIsUnmounted = true;
-    };
-  });
+    return title;
+  } else {
+    throw new Error(
+      'Invalid hook call. `useTitle` can only be called inside of `setup()`.',
+    );
+  }
 }
