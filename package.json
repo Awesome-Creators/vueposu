@@ -1,7 +1,7 @@
 {
   "name": "vuepose",
   "version": "1.0.0",
-  "repository": "git@github.com:Awesome-Creators/euv.git",
+  "repository": "git@github.com:Awesome-Creators/vuepose.git",
   "author": "yuxino <nbsawz@gmail.com>",
   "license": "MIT",
   "main": "./index.js",

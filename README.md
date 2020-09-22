@@ -1,15 +1,15 @@
-# EUV [![CircleCI](https://circleci.com/gh/Awesome-Creators/euv.svg?style=svg&circle-token=74859479154a741060b1bd036508b21782ae7424)](https://circleci.com/gh/Awesome-Creators/euv) [![codecov](https://codecov.io/gh/Awesome-Creators/euv/branch/master/graph/badge.svg?token=FA4WQGNR20)](https://codecov.io/gh/Awesome-Creators/euv)
+# VUEPOSE [![CircleCI](https://circleci.com/gh/Awesome-Creators/vuepose.svg?style=svg&circle-token=74859479154a741060b1bd036508b21782ae7424)](https://circleci.com/gh/Awesome-Creators/vuepose) [![codecov](https://codecov.io/gh/Awesome-Creators/vuepose/branch/master/graph/badge.svg?token=FA4WQGNR20)](https://codecov.io/gh/Awesome-Creators/vuepose)
 
 A new coding style for vue .
 
 ```js
-euv = ['v', 'u', 'e'].sort().join('');
+vuepose;
 ```
 
 ## INSTALLATION
 
 ```bash
-yarn add euv
+yarn add vuepose
 ```
 
 ## TODO LIST
