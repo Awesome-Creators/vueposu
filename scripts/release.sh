@@ -12,15 +12,13 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 
   echo "$VERSION ?"
 
-  npm version "$VERSION"
-
   git add -A
 
-  git commit -m "chore: release $VERSION"
-
-  git push
+  npm version "$VERSION" -m "chore: release $VERSION"
 
   git tag $VERSION
+
+  git push
 
   git push --tags
 fi
