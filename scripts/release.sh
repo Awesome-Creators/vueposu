@@ -16,7 +16,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 
   npm version "$VERSION" -m "chore: release $VERSION"
 
-  git tag $VERSION
+  # git tag $VERSION
 
   git push
 
