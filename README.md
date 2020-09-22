@@ -1,4 +1,4 @@
-<div align="center">
+<p align="center">
 
 # VUEPOSU
 
@@ -8,7 +8,7 @@ Vue's Eternal Pose (永久指针, 永久指針エターナルポース, Etānaru
 
 [![CircleCI](https://circleci.com/gh/Awesome-Creators/vueposu.svg?style=svg&circle-token=74859479154a741060b1bd036508b21782ae7424)](https://circleci.com/gh/Awesome-Creators/vueposu) [![codecov](https://codecov.io/gh/Awesome-Creators/vueposu/branch/master/graph/badge.svg?token=FA4WQGNR20)](https://codecov.io/gh/Awesome-Creators/vueposu)
 
-</div>
+</p>
 
 ## 📦 INSTALLATION
 
@@ -40,12 +40,12 @@ const Component = defineComponent({
     // create a counter
     const [count, { inc, dec, set, reset }] = useCounter(0);
 
-    return { 
-      count, 
-      inc, 
-      dec, 
-      set, 
-      reset, 
+    return {
+      count,
+      inc,
+      dec,
+      set,
+      reset,
     };
   },
 });
