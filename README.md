@@ -10,11 +10,11 @@ Vue's Eternal Pose (永久指針エターナルポース, Etānaru Pōsu)
 
 </div>
 
-# 📦 INSTALLATION
+## 📦 INSTALLATION
 
 Works for both Vue 3 and 2, but if you are using `vue2` must ensure installed `@vue/composition-api`
 
-## vue 3
+### vue 3
 
 ```bash
 npm install vuepose
@@ -22,7 +22,7 @@ npm install vuepose
 yarn add vuepose
 ```
 
-## vue 2
+### vue 2
 
 ```bash
 npm install vuepose @vue/composition-api
@@ -30,7 +30,7 @@ npm install vuepose @vue/composition-api
 yarn add vuepose @vue/composition-api
 ```
 
-# 🍳 USAGE
+## 🍳 USAGE
 
 ```ts
 import { useCounter, useMouse } from 'vuepose';
@@ -54,7 +54,7 @@ const Component = defineComponent({
 });
 ```
 
-# 🚀 API
+## 🚀 API
 
 Currently supported functions
 
