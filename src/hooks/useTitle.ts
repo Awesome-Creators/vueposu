@@ -1,5 +1,5 @@
 import { ref, watch, getCurrentInstance } from 'vue';
-import { RefTyped } from 'typings/global';
+import type { RefTyped } from '../types/global';
 
 /**
  * set the string to the page title.
