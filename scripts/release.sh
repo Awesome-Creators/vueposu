@@ -10,7 +10,7 @@ read -p "Tag to $VERSION - are you sure? (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 
-  echo "v$VERSION ?"
+  echo "$VERSION ?"
 
   npm version "$VERSION"
 
