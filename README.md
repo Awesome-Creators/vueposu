@@ -2,7 +2,7 @@
 
 # VUEPOSE
 
-Vue's Eternal Pose (永久指針エターナルポース, Etānaru Pōsu)
+Vue's Eternal Pose (永恒指针, 永久指針エターナルポース, Etānaru Pōsu)
 
 (A hook library based on vue composition-api)
 
