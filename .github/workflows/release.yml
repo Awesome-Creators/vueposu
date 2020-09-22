@@ -32,10 +32,8 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Switch to dist folder
-        run: cd dist
-
       - name: Release to npm
         uses: JS-DevTools/npm-publish@v1
         with:
+          package: './dist/package.json'
           token: ${{ secrets.NPM_TOKEN }}
