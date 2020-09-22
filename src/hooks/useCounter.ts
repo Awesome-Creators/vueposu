@@ -22,7 +22,7 @@ interface ICounterActions {
   reset: () => void;
 }
 
-const isNumber = (n: any) => !isNaN(unref(n));
+const isNumber = (n: any) => isDef(n) && !isNaN(unref(n));
 
 function useCounter(
   initialValue: RefTyped<NumberType>,
@@ -83,8 +83,16 @@ function useCounter(
   return [
     computed({
       get: () => current.value,
-      set: value => {
-        set(value);
+      set: v => {
+        if (isNumber(v)) {
+          set(v);
+        } else {
+          throw new Error(
+            `Invalid assignment: expected a number-string or number but got: ${
+              isDef(v) ? typeof v : v
+            }`,
+          );
+        }
       },
     }),
     {
