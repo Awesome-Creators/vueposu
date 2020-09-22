@@ -4,7 +4,7 @@ name: CI
 
 on:
   push:
-    branches: [v*]
+    tags: [v*]
 jobs:
   release:
     runs-on: ubuntu-latest
