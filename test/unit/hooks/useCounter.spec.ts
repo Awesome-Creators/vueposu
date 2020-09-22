@@ -39,7 +39,7 @@ describe('hooks/useCounter', () => {
     expect(component.vm.count).toBe(0);
   });
 
-  it('should be work when count++', async () => {
+  it('should be work when directly modify count', async () => {
     const component = mount(
       defineComponent({
         template: `
@@ -65,14 +65,12 @@ describe('hooks/useCounter', () => {
     expect(component.vm.count).toBe(0);
     expect(component.find('#count').text()).toBe('0');
 
-    // test inc
     const testInc = async val => {
       await component.find('#inc').trigger('click');
       expect(component.vm.count).toBe(val);
       expect(component.find('#count').text()).toBe(String(val));
     };
 
-    // test dec
     const testDec = async val => {
       await component.find('#dec').trigger('click');
       expect(component.vm.count).toBe(val);
@@ -87,6 +85,13 @@ describe('hooks/useCounter', () => {
     await testDec(0);
     await testDec(-1);
     await testDec(-1);
+
+    expect(() => (component.vm.count = 'asdf' as any)).toThrowError(
+      'Invalid assignment: expected a number-string or number but got: string',
+    );
+    expect(() => (component.vm.count = null as any)).toThrowError(
+      'Invalid assignment: expected a number-string or number but got: null',
+    );
   });
 
   it('should be work when it is set options', () => {
