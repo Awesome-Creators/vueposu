@@ -17,7 +17,7 @@ Works for both Vue 3 and 2, but if you are using `vue2` must ensure installed `@
 ### vue 3
 
 ```bash
-npm install vueposu
+npm i vueposu
 # or
 yarn add vueposu
 ```
@@ -25,7 +25,7 @@ yarn add vueposu
 ### vue 2
 
 ```bash
-npm install vueposu @vue/composition-api
+npm i vueposu @vue/composition-api
 # or
 yarn add vueposu @vue/composition-api
 ```
