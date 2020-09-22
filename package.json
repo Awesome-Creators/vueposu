@@ -8,7 +8,7 @@
   "types": "./index.d.ts",
   "scripts": {
     "gen:index": "node ./scripts/imports.js",
-    "build": "rimraf dist && yarn gen:index && tsc --build tsconfig.build.json && yarn format:dist && cp -R types dist/types && cp package.json dist && cp README.md dist",
+    "build": "rimraf dist && yarn gen:index && tsc --build tsconfig.build.json && yarn format:dist && cp -R src/types dist/types && cp package.json dist && cp README.md dist",
     "format": "prettier --write \"src/**/*.{ts,vue,tsx}\" \"test/**/*.{ts,vue,tsx}\" --vue-indent-script-and-styl",
     "format:dist": "prettier --write \"dist/**/*.{js,d.ts}\"",
     "test": "jest",
