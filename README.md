@@ -33,23 +33,20 @@ yarn add vuepose @vue/composition-api
 ## 🍳 USAGE
 
 ```ts
-import { useCounter, useMouse } from 'vuepose';
+import { useCounter } from 'vuepose';
 
 const Component = defineComponent({
   setup() {
-    // tracks mouse position
-    const { pageX, pageY } = useMouse();
-
     // create a counter
-    const [count, ...actions] = useCounter(0);
+    const [count, { inc, dec, set, reset }] = useCounter(0);
 
-    // change title
-    const title = useTitle('hello vuepose');
-
-    // get a queue
-    const [queue, ...queueMethods] = useQueue([1, 2, 3]);
-
-    return { count, pageX, pageY, title, actions, queueMethods };
+    return { 
+      count, 
+      inc, 
+      dec, 
+      set, 
+      reset, 
+    };
   },
 });
 ```
