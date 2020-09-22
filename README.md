@@ -1,12 +1,12 @@
 <div align="center">
 
-# VUEPOSE
+# VUEPOSU
 
 Vue's Eternal Pose (永久指针, 永久指針エターナルポース, Etānaru Pōsu)
 
 (A hooks library based on Vue composition-api)
 
-[![CircleCI](https://circleci.com/gh/Awesome-Creators/vuepose.svg?style=svg&circle-token=74859479154a741060b1bd036508b21782ae7424)](https://circleci.com/gh/Awesome-Creators/vuepose) [![codecov](https://codecov.io/gh/Awesome-Creators/vuepose/branch/master/graph/badge.svg?token=FA4WQGNR20)](https://codecov.io/gh/Awesome-Creators/vuepose)
+[![CircleCI](https://circleci.com/gh/Awesome-Creators/vueposu.svg?style=svg&circle-token=74859479154a741060b1bd036508b21782ae7424)](https://circleci.com/gh/Awesome-Creators/vueposu) [![codecov](https://codecov.io/gh/Awesome-Creators/vueposu/branch/master/graph/badge.svg?token=FA4WQGNR20)](https://codecov.io/gh/Awesome-Creators/vueposu)
 
 </div>
 
@@ -17,23 +17,23 @@ Works for both Vue 3 and 2, but if you are using `vue2` must ensure installed `@
 ### vue 3
 
 ```bash
-npm install vuepose
+npm install vueposu
 # or
-yarn add vuepose
+yarn add vueposu
 ```
 
 ### vue 2
 
 ```bash
-npm install vuepose @vue/composition-api
+npm install vueposu @vue/composition-api
 # or
-yarn add vuepose @vue/composition-api
+yarn add vueposu @vue/composition-api
 ```
 
 ## 🍳 USAGE
 
 ```ts
-import { useCounter } from 'vuepose';
+import { useCounter } from 'vueposu';
 
 const Component = defineComponent({
   setup() {
