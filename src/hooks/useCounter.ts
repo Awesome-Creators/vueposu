@@ -87,7 +87,7 @@ function useCounter(
         if (isNumber(v)) {
           set(v);
         } else {
-          throw new Error(
+          throw new TypeError(
             `Invalid assignment: expected a number-string or number but got: ${
               isDef(v) ? typeof v : v
             }`,
