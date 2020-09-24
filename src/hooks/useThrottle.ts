@@ -1,8 +1,9 @@
 import { ref, watch } from 'vue-demi';
 import type { Ref } from 'vue-demi';
-import useThrottleFn from '../hooks/useDebounceFn';
+import useThrottleFn from '../hooks/useThrottleFn';
 
 export default function useThrottle<T>(value: Ref<T>, wait = 0) {
+  if (wait === 0) return value;
   const delayValue: Ref<T> = ref(value.value) as Ref<T>;
 
   const updater = useThrottleFn(() => {

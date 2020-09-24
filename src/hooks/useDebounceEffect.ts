@@ -1,9 +1,18 @@
-import type { Ref } from 'vue-demi';
+import debounce from '../libs/debounce';
+import { WatchSource, watch } from 'vue-demi';
 
-interface useDebounceEffectOptions<T extends Ref[]> {
-  (listener: (prevDeps: T, currentDeps: T) => void, deps: T, wait: number);
+export declare type WatchCallback<V = any, OV = any> = (
+  value: V,
+  oldValue: OV,
+) => any;
+
+export default function useDebounceEffect<T>(
+  listener: WatchCallback<T, T>,
+  deps: WatchSource<T>,
+  wait: number = 0,
+) {
+  const $listener = (a, b) => listener(a, b);
+  const debounced = debounce($listener, wait);
+
+  watch(deps, wait > 0 ? debounced : $listener);
 }
-
-export default function useDebounceEffect<T extends Ref[]>(
-  options: useDebounceEffectOptions<T>,
-) {}
