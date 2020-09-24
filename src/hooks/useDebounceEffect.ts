@@ -1,14 +1,24 @@
 import debounce from '../libs/debounce';
-import { WatchSource, watch } from 'vue-demi';
+import { watch } from 'vue-demi';
 
-export declare type WatchCallback<V = any, OV = any> = (
-  value: V,
-  oldValue: OV,
-) => any;
+import type { WatchSource } from 'vue-demi';
+
+type MapSources<T> = {
+  [K in keyof T]: T[K] extends WatchSource<infer V>
+    ? V
+    : T[K] extends object
+    ? T[K]
+    : never;
+};
+
+type EffectListener<T> = (
+  value: MapSources<T>,
+  oldValue: MapSources<T>,
+) => void;
 
 export default function useDebounceEffect<T>(
-  listener: WatchCallback<T, T>,
-  deps: WatchSource<T>,
+  listener: EffectListener<T>,
+  deps: T,
   wait: number = 0,
 ) {
   const $listener = (value, oldValue) => listener(value, oldValue);
