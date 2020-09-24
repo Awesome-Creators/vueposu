@@ -1,9 +1,9 @@
 import { mount } from '@vue/test-utils';
 import { defineComponent, ref } from 'vue-demi';
-import useDebounceEffect from '@hooks/useDebounceEffect';
+import useThrottleEffect from '@hooks/useThrottleEffect';
 import { wait } from '../../utils/helper';
 
-describe('hooks/useDebounceEffect.spec', () => {
+describe('hooks/useThrottleEffect', () => {
   it('test without wait', async () => {
     const fn = jest.fn();
     const component = mount(
@@ -14,7 +14,7 @@ describe('hooks/useDebounceEffect.spec', () => {
           const changeVal = () => {
             val.value += 1;
           };
-          useDebounceEffect(fn, val);
+          useThrottleEffect(fn, val);
           return {
             val,
             changeVal,
@@ -49,7 +49,7 @@ describe('hooks/useDebounceEffect.spec', () => {
           const changeVal = () => {
             val.value += 1;
           };
-          useDebounceEffect(fn, val, 300);
+          useThrottleEffect(fn, val, 300);
           return {
             val,
             changeVal,
@@ -60,7 +60,8 @@ describe('hooks/useDebounceEffect.spec', () => {
 
     component.vm.changeVal(); // 11, 1
     await wait();
-    expect(fn).toBeCalledTimes(0);
+    expect(fn).toBeCalledTimes(1);
+    expect(fn.mock.calls).toContainEqual(['11', '1']);
 
     component.vm.changeVal(); // 111, 11
     await wait();
@@ -70,7 +71,7 @@ describe('hooks/useDebounceEffect.spec', () => {
 
     await wait(320);
 
-    expect(fn).toBeCalledTimes(1);
+    expect(fn).toBeCalledTimes(2);
     expect(fn.mock.calls).toContainEqual(['11111', '1111']);
   });
 
@@ -84,7 +85,7 @@ describe('hooks/useDebounceEffect.spec', () => {
           const changeVal = () => {
             val.value += 1;
           };
-          useDebounceEffect(fn, val, 300);
+          useThrottleEffect(fn, val, 300);
           return {
             val,
             changeVal,
@@ -95,7 +96,8 @@ describe('hooks/useDebounceEffect.spec', () => {
 
     component.vm.changeVal(); // 11, 1
     await wait();
-    expect(fn).toBeCalledTimes(0);
+    expect(fn).toBeCalledTimes(1);
+    expect(fn.mock.calls).toContainEqual(['11', '1']);
 
     component.vm.changeVal(); // 111, 11
     await wait(120);
@@ -103,8 +105,11 @@ describe('hooks/useDebounceEffect.spec', () => {
     await wait(280);
     component.vm.changeVal(); // 11111, 1111
 
+    expect(fn).toBeCalledTimes(2);
+    expect(fn.mock.calls).toContainEqual(['1111', '111']);
+
     await wait(320);
-    expect(fn).toBeCalledTimes(1);
+    expect(fn).toBeCalledTimes(3);
     expect(fn.mock.calls).toContainEqual(['11111', '1111']);
   });
 });

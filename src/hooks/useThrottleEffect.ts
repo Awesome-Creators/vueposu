@@ -11,7 +11,7 @@ export default function useThrottleEffect<T>(
   deps: WatchSource<T>,
   wait: number = 0,
 ) {
-  const $listener = (a, b) => listener(a, b);
+  const $listener = (value, oldValue) => listener(value, oldValue);
   const throttled = throttle($listener, wait);
 
   watch(deps, wait > 0 ? throttled : $listener);
