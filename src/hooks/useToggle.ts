@@ -1,7 +1,7 @@
-import { ref, unref, readonly } from 'vue-demi';
+import { ref, unref, computed } from 'vue-demi';
 import { isDef } from '../libs/helper';
 
-import type { Ref, UnwrapRef, DeepReadonly } from 'vue-demi';
+import type { UnwrapRef, WritableComputedRef } from 'vue-demi';
 import type { RefTyped } from '../types/global';
 
 type IState = string | number | boolean | null | undefined;
@@ -22,7 +22,7 @@ interface IActions {
 function useToggle<D extends RefTyped<IState>, R extends RefTyped<IState>>(
   defaultValue?: D,
   reverseValue?: R,
-): [DeepReadonly<Ref<UnwrapRef<D> | UnwrapRef<R>>>, IActions] {
+): [WritableComputedRef<UnwrapRef<D> | UnwrapRef<R>>, IActions] {
   const getDefault = () =>
     (isDef(unref(defaultValue)) ? unref(defaultValue) : true) as D;
   const getReverse = () =>
@@ -46,7 +46,15 @@ function useToggle<D extends RefTyped<IState>, R extends RefTyped<IState>>(
     },
   };
 
-  return [readonly(status), actions];
+  return [
+    computed({
+      get: () => status.value,
+      set: value => {
+        actions.toggle(value);
+      },
+    }),
+    actions,
+  ];
 }
 
 export default useToggle;
