@@ -57,35 +57,37 @@ Currently supported functions
 
 - DOM
 
-  - [x] useTitle
-  - [x] useClickAway
-  - [x] useFavicon
   - [ ] useAudio
   - [x] useBrowserTabChange
-  - [ ] useLocalStorage
+  - [x] useClickAway
+  - [x] useCopyToClipboard
+  - [x] useFavicon
+  - [x] useFullscreen
   - [x] useMouse
   - [ ] useScrollTo
-  - [x] useCopyToClipboard
+  - [x] useTitle
+  - [ ] etc..
 
 - FUNCTIONALITY
 
-  - [ ] useTrace
-  - [x] useSet
-  - [x] useQueue
-  - [x] useTimeout
-  - [x] useInterval
-  - [ ] useRaf
-  - [ ] useEventEmitter
+  - [ ] useCalculator
   - [x] useCounter
   - [ ] useCounterInterval
-  - [ ] useCalculator
-  - [ ] useDynamicList
   - [x] useDebounce
-  - [x] useDebounceFn
   - [x] useDebounceEffect
+  - [x] useDebounceFn
+  - [ ] useDynamicList
+  - [ ] useEventEmitter
+  - [ ] useLocalStorage
+  - [x] useInterval
+  - [x] useQueue
+  - [ ] useRaf
+  - [x] useSet
+  - [ ] useSWR
   - [x] useThrottle
-  - [x] useThrottleFn
   - [x] useThrottleEffect
+  - [x] useThrottleFn
+  - [x] useTimeout
   - [x] useToggle
-  - [ ] useSwr
+  - [ ] useTrace
   - [ ] etc..
