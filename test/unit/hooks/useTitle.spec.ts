@@ -32,7 +32,7 @@ describe('hooks/useTitle', () => {
     expect(document.title).toBe('b');
 
     expect(() => component.vm.useTitle('c')).toThrowError(
-      'Invalid hook call. `useTitle` can only be called inside of `setup()`.',
+      'Invalid hook call: `useTitle` can only be called inside of `setup()`.',
     );
   });
 });
