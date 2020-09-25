@@ -7,6 +7,7 @@ import type { RefTyped } from '../types/global';
 
 type NumberType = number | string;
 
+// TODO: COMMENT NEED
 interface ICounterOptions {
   min?: RefTyped<NumberType>;
   max?: RefTyped<NumberType>;

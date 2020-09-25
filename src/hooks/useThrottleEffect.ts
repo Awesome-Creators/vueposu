@@ -1,6 +1,7 @@
 import throttle from '../libs/throttle';
 import { WatchSource, watch } from 'vue-demi';
 
+// TODO: COMMENT NEED
 type MapSources<T> = {
   [K in keyof T]: T[K] extends WatchSource<infer V>
     ? V

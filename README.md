@@ -73,7 +73,7 @@ Currently supported functions
   - [x] useSet
   - [x] useQueue
   - [ ] useTimeout
-  - [ ] useInterval
+  - [x] useInterval
   - [ ] useRaf
   - [ ] useEventEmitter
   - [x] useCounter

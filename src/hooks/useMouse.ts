@@ -20,6 +20,7 @@ const initialState: IMouseCursorState = {
 
 const MOUSE_MOVE = 'mousemove';
 
+// TODO: COMMENT NEED
 export default function useMouse() {
   const state = reactive(initialState);
 
