@@ -6,7 +6,7 @@ Vue's Eternal Pose (永久指针, 永久指針エターナルポース, Etānaru
 
 (A hooks library based on Vue composition-api)
 
-[![CircleCI](https://circleci.com/gh/Awesome-Creators/vueposu.svg?style=svg&circle-token=74859479154a741060b1bd036508b21782ae7424)](https://circleci.com/gh/Awesome-Creators/vueposu) [![codecov](https://codecov.io/gh/Awesome-Creators/vueposu/branch/master/graph/badge.svg?token=FA4WQGNR20)](https://codecov.io/gh/Awesome-Creators/vueposu)
+[![CircleCI](https://circleci.com/gh/Awesome-Creators/vueposu/tree/develop.svg?style=svg&circle-token=74859479154a741060b1bd036508b21782ae7424)](https://app.circleci.com/pipelines/github/Awesome-Creators/vueposu?branch=develop) [![codecov](https://codecov.io/gh/Awesome-Creators/vueposu/branch/develop/graph/badge.svg?token=FA4WQGNR20)](https://codecov.io/gh/Awesome-Creators/vueposu)
 
 </p>
 
