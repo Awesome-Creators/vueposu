@@ -31,7 +31,7 @@ function useToggle<D extends RefTyped<IState>, R extends RefTyped<IState>>(
   const status = ref<D | R>(getDefault());
 
   const actions = {
-    toggle: value => {
+    toggle: value => { 
       status.value = isDef(unref(value))
         ? unref(value)
         : status.value !== getDefault()
@@ -49,9 +49,7 @@ function useToggle<D extends RefTyped<IState>, R extends RefTyped<IState>>(
   return [
     computed({
       get: () => status.value,
-      set: value => {
-        actions.toggle(value);
-      },
+      set: value => actions.toggle(value),
     }),
     actions,
   ];
