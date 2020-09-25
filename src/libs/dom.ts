@@ -10,7 +10,7 @@ export type Target<T = HTMLElement> =
 type TargetElement = HTMLElement | Document | Window;
 
 export function isHTMLElement(element) {
-  return element.nodeType && element.nodeType === 1;
+  return element?.nodeType === 1;
 }
 
 export function getTargetElement(
