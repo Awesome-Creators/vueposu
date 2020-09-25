@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import { Ref } from 'vue-demi';
+import type { Ref } from 'vue-demi';
 
 export type Target<T = HTMLElement> =
   | T
@@ -8,6 +8,10 @@ export type Target<T = HTMLElement> =
   | Ref<T | null | undefined>;
 
 type TargetElement = HTMLElement | Document | Window;
+
+export function isHTMLElement(element) {
+  return element.nodeType && element.nodeType === 1;
+}
 
 export function getTargetElement(
   target?: Target<TargetElement>,
