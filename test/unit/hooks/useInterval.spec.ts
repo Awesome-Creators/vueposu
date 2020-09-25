@@ -3,6 +3,8 @@ import useInterval from '@hooks/useInterval';
 import { mount } from '@vue/test-utils';
 import { wait } from '../../utils/helper';
 
+jest.setTimeout(100000);
+
 describe('hooks/useInterval', () => {
   it('just callback', async () => {
     const fn = jest.fn();
@@ -17,6 +19,9 @@ describe('hooks/useInterval', () => {
     await wait(2100);
     expect(fn).toBeCalledTimes(2);
     component.unmount();
+
+    await wait(1100);
+    expect(fn).toBeCalledTimes(2);
   });
 
   it('custom time', async () => {
@@ -29,9 +34,13 @@ describe('hooks/useInterval', () => {
         },
       }),
     );
+
     await wait(1000);
     expect(fn).toBeCalledTimes(3);
     component.unmount();
+
+    await wait(1000);
+    expect(fn).toBeCalledTimes(3);
   });
 
   it('test immediateStart = false', async () => {
@@ -60,5 +69,8 @@ describe('hooks/useInterval', () => {
     expect(fn).toBeCalledTimes(2);
 
     component.unmount();
+
+    await wait(1100);
+    expect(fn).toBeCalledTimes(2);
   });
 });

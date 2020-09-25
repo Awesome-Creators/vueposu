@@ -72,7 +72,7 @@ Currently supported functions
   - [ ] useTrace
   - [x] useSet
   - [x] useQueue
-  - [ ] useTimeout
+  - [x] useTimeout
   - [x] useInterval
   - [ ] useRaf
   - [ ] useEventEmitter
