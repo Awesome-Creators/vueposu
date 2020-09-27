@@ -1,13 +1,13 @@
 import { onBeforeUnmount } from 'vue-demi';
 
-interface useIntervalOptions {
+interface UseIntervalOptions {
   cb: Function;
   interval?: number;
   immediateStart?: boolean;
 }
 
 // TODO: COMMENT NEED
-export default function useInterval(options: useIntervalOptions) {
+export default function useInterval(options: UseIntervalOptions) {
   let timer = null;
   const { cb = () => {}, interval = 1000, immediateStart = true } = options;
 

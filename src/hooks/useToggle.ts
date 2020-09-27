@@ -4,9 +4,9 @@ import { isDef } from '../libs/helper';
 import type { UnwrapRef, WritableComputedRef } from 'vue-demi';
 import type { RefTyped } from '../types/global';
 
-type IState = string | number | boolean | null | undefined;
+type UseToggleState = string | number | boolean | null | undefined;
 
-interface IActions {
+interface UseToggleActions {
   setLeft: () => void;
   setRight: () => void;
   toggle: (value?: any) => void;
@@ -19,10 +19,13 @@ interface IActions {
  * @param reverseValue False value, default is `false` - an optional parameter
  * @returns [ status, { toggle, setLeft, setRight } ]
  */
-function useToggle<D extends RefTyped<IState>, R extends RefTyped<IState>>(
+function useToggle<
+  D extends RefTyped<UseToggleState>,
+  R extends RefTyped<UseToggleState>
+>(
   defaultValue?: D,
   reverseValue?: R,
-): [WritableComputedRef<UnwrapRef<D> | UnwrapRef<R>>, IActions] {
+): [WritableComputedRef<UnwrapRef<D> | UnwrapRef<R>>, UseToggleActions] {
   const getDefault = () =>
     (isDef(unref(defaultValue)) ? unref(defaultValue) : true) as D;
   const getReverse = () =>

@@ -8,7 +8,7 @@ import { isHTMLElement } from '../libs/dom';
 import type { WritableComputedRef } from 'vue-demi';
 import type { Target } from '../libs/dom';
 
-interface IActions {
+interface UseFullscreenActions {
   setFullscreen: () => void;
   exitFullscreen: () => void;
   toggleFullscreen: (status?: boolean) => void;
@@ -18,7 +18,7 @@ interface IActions {
 export default function useFullscreen(
   target: Target,
   onFullscreenChange?: () => void,
-): [WritableComputedRef<boolean>, IActions] {
+): [WritableComputedRef<boolean>, UseFullscreenActions] {
   if (getCurrentInstance()) {
     const isFullscreen = ref(false);
 

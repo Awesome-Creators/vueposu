@@ -2,16 +2,16 @@ import { onBeforeUnmount, ref } from 'vue-demi';
 import { isFunction } from '../libs/helper';
 import type { Ref } from 'vue-demi';
 
-interface useTimeoutOptions {
+interface UseTimeoutOptions {
   cb: Function;
   timeout?: number;
   immediateStart?: boolean;
 }
 
-type useTimeoutRet = [Ref<boolean>, () => void, () => void];
+type UseTimeoutRet = [Ref<boolean>, () => void, () => void];
 
 // TODO: COMMENT NEED
-export default function useTimeout(options: useTimeoutOptions): useTimeoutRet {
+export default function useTimeout(options: UseTimeoutOptions): UseTimeoutRet {
   const { cb, timeout = 1000, immediateStart = true } = options;
   let timer = null;
   let active = ref(immediateStart);

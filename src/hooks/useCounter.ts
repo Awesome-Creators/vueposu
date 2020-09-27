@@ -8,13 +8,13 @@ import type { RefTyped } from '../types/global';
 type NumberType = number | string;
 
 // TODO: COMMENT NEED
-interface ICounterOptions {
+interface CounterOptions {
   min?: RefTyped<NumberType>;
   max?: RefTyped<NumberType>;
   x?: RefTyped<NumberType>;
 }
 
-interface ICounterActions {
+interface CounterActions {
   inc: (n?: RefTyped<NumberType>) => void;
   dec: (n?: RefTyped<NumberType>) => void;
   set: (
@@ -27,8 +27,8 @@ const isNumber = (n: any) => isDef(n) && !isNaN(unref(n));
 
 function useCounter(
   initialValue: RefTyped<NumberType>,
-  options: ICounterOptions = {},
-): [Ref<number>, ICounterActions] {
+  options: CounterOptions = {},
+): [Ref<number>, CounterActions] {
   const { min, max, x } = options;
   const initial = () =>
     isNumber(initialValue) ? Number(unref(initialValue)) : 0;

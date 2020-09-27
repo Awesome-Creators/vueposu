@@ -4,7 +4,7 @@ import { isDef, isFunction, isObject } from '../libs/helper';
 import type { Ref } from 'vue-demi';
 
 // return type of useBrowserTabChange
-type useBrowserTabChangeReturnType = [leave: Ref<boolean>, back: Ref<boolean>];
+type UseBrowserTabChangeReturnType = [leave: Ref<boolean>, back: Ref<boolean>];
 
 // the difference platfrom listen
 const DIFFERENCE_PLATFORM_EVT = [
@@ -19,7 +19,7 @@ const DIFFERENCE_PLATFORM_EVT = [
  * @property `leave` when user leave tab will call it callback function
  * @property `back` when user back tab will call it callback function
  */
-interface useBrowserTabChangeOptions {
+interface UseBrowserTabChangeOptions {
   leave?: Function;
   back?: Function;
 }
@@ -29,7 +29,7 @@ interface useBrowserTabChangeOptions {
  * @property `leave` when user leave tab will be `true`, otherwise `false`
  * @property `back` when user back tab will be `true`, otherwise `false`
  */
-type useBrowserTabChangeCallbackOptions = {
+type UseBrowserTabChangeCallbackOptions = {
   leave: boolean;
   back: boolean;
 };
@@ -39,8 +39,8 @@ type useBrowserTabChangeCallbackOptions = {
  * @property `options.leave` when user leave tab will be `true`, otherwise `false`
  * @property `options.back` when user back tab will be `true`, otherwise `false`
  */
-interface useBrowserTabChangeCallback {
-  (options?: useBrowserTabChangeCallbackOptions): useBrowserTabChangeReturnType;
+interface UseBrowserTabChangeCallback {
+  (options?: UseBrowserTabChangeCallbackOptions): UseBrowserTabChangeReturnType;
 }
 
 /**
@@ -55,8 +55,8 @@ interface useBrowserTabChangeCallback {
  * @returns `[leave: Ref<boolean>, back: Ref<boolean>]`
  */
 export default function useBrowserTabChange(
-  callback?: (options: useBrowserTabChangeCallbackOptions) => void,
-): useBrowserTabChangeReturnType;
+  callback?: (options: UseBrowserTabChangeCallbackOptions) => void,
+): UseBrowserTabChangeReturnType;
 
 /**
  * useBrowserTabChange function
@@ -68,12 +68,12 @@ export default function useBrowserTabChange(
  * @returns `[leave: Ref<boolean>, back: Ref<boolean>]`
  */
 export default function useBrowserTabChange(
-  options?: useBrowserTabChangeOptions,
+  options?: UseBrowserTabChangeOptions,
 );
 
 export default function useBrowserTabChange(
   options,
-): useBrowserTabChangeReturnType {
+): UseBrowserTabChangeReturnType {
   const leave = ref(!document.hidden);
   const back = ref(document.hidden);
 
@@ -90,12 +90,12 @@ export default function useBrowserTabChange(
       };
 
       if (isFunction(options)) {
-        const $listener = options as useBrowserTabChangeCallback;
+        const $listener = options as UseBrowserTabChangeCallback;
         listener = getListener(() =>
           $listener({ leave: document.hidden, back: !document.hidden }),
         );
       } else if (isObject(options)) {
-        const $options = options as useBrowserTabChangeOptions;
+        const $options = options as UseBrowserTabChangeOptions;
         listener = getListener(() =>
           document.hidden ? $options?.leave() : $options.back?.(),
         );

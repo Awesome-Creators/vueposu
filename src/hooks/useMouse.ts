@@ -1,6 +1,6 @@
 import { reactive, watchEffect, toRefs } from 'vue-demi';
 
-interface IMouseCursorState {
+interface MouseCursorState {
   pageX: number;
   pageY: number;
   screenX: number;
@@ -9,7 +9,7 @@ interface IMouseCursorState {
   clientY: number;
 }
 
-const initialState: IMouseCursorState = {
+const initialState: MouseCursorState = {
   pageX: 0,
   pageY: 0,
   screenX: 0,
