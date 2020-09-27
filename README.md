@@ -66,7 +66,6 @@ Currently supported functions
   - [x] useMouse
   - [ ] useScrollTo
   - [x] useTitle
-  - [ ] etc..
 
 - FUNCTIONALITY
 
@@ -78,13 +77,13 @@ Currently supported functions
   - [ ] useDynamicList
   - [ ] useEventEmitter
   - [x] useQueue
-  - [ ] useRaf
+  <!-- - [ ] useRaf -->
   - [x] useSet
   - [ ] useSWR
   - [x] useThrottle
   - [x] useThrottleFn
   - [x] useToggle
-  - [ ] useTrace
+  <!-- - [ ] useTrace -->
   - [ ] etc..
 
 - CACHE
