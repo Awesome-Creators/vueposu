@@ -74,20 +74,27 @@ Currently supported functions
   - [x] useCounter
   - [ ] useCounterInterval
   - [x] useDebounce
-  - [x] useDebounceEffect
   - [x] useDebounceFn
   - [ ] useDynamicList
   - [ ] useEventEmitter
-  - [ ] useLocalStorage
-  - [x] useInterval
   - [x] useQueue
   - [ ] useRaf
   - [x] useSet
   - [ ] useSWR
   - [x] useThrottle
-  - [x] useThrottleEffect
   - [x] useThrottleFn
-  - [x] useTimeout
   - [x] useToggle
   - [ ] useTrace
   - [ ] etc..
+
+- CACHE
+
+  - [ ] useCookie
+  - [ ] useLocalStorage
+
+- SIDE EFFECT
+
+  - [x] useDebounceEffect
+  - [x] useInterval
+  - [x] useThrottleEffect
+  - [x] useTimeout
