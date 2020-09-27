@@ -8,6 +8,8 @@ coverage/
 npm-debug.log*
 yarn-error.log
 
+.vscode
+
 dist
 
 *.zip

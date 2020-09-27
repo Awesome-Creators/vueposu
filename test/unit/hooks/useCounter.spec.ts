@@ -90,7 +90,9 @@ describe('hooks/useCounter', () => {
       'Invalid assignment: expected a number-string or number but got: string',
     );
     expect(() => (component.vm.count = null as any)).toThrowError(
-      new TypeError('Invalid assignment: expected a number-string or number but got: null'),
+      new TypeError(
+        'Invalid assignment: expected a number-string or number but got: null',
+      ),
     );
   });
 
