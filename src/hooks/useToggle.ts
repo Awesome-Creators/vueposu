@@ -12,6 +12,11 @@ interface UseToggleActions {
   toggle: (value?: any) => void;
 }
 
+type UseToggleRet<D, R> = [
+  WritableComputedRef<UnwrapRef<D> | UnwrapRef<R>>,
+  UseToggleActions,
+];
+
 /**
  * useToggle function
  *
@@ -22,10 +27,7 @@ interface UseToggleActions {
 function useToggle<
   D extends RefTyped<UseToggleState>,
   R extends RefTyped<UseToggleState>
->(
-  defaultValue?: D,
-  reverseValue?: R,
-): [WritableComputedRef<UnwrapRef<D> | UnwrapRef<R>>, UseToggleActions] {
+>(defaultValue?: D, reverseValue?: R): UseToggleRet<D, R> {
   const getDefault = () =>
     (isDef(unref(defaultValue)) ? unref(defaultValue) : true) as D;
   const getReverse = () =>

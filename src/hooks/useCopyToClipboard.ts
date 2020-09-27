@@ -2,13 +2,13 @@ import { ref } from 'vue-demi';
 import type { Ref } from 'vue-demi';
 
 // TODO: COMMENT NEED
-export type UseCopyToClipboard = [
+export type UseCopyToClipboardReturnType = [
   copy: (txt: string) => Promise<void>,
   text: Ref<string>,
   supportCopy: boolean,
 ];
 
-export default function useCopyToClipboard(): UseCopyToClipboard {
+export default function useCopyToClipboard(): UseCopyToClipboardReturnType {
   const text = ref('');
   const supportCopy = 'clipboard' in window.navigator;
 

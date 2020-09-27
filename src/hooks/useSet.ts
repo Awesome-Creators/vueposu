@@ -9,9 +9,9 @@ export interface StableActions<K> {
   has: (key: K) => boolean;
 }
 
-const useSet = <K>(
-  initialSet = new Set<K>(),
-): [Ref<Set<K>>, StableActions<K>] => {
+type UseSetReturnType<K> = [Ref<Set<K>>, StableActions<K>];
+
+const useSet = <K>(initialSet = new Set<K>()): UseSetReturnType<K> => {
   let set = ref<Set<K>>(new Set(initialSet));
   const stableActions = {
     add: (item: K) => {

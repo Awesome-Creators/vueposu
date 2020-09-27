@@ -14,11 +14,16 @@ interface UseFullscreenActions {
   toggleFullscreen: (status?: boolean) => void;
 }
 
+type UseFullscreenReturnType = [
+  WritableComputedRef<boolean>,
+  UseFullscreenActions,
+];
+
 // TODO: COMMENT NEED
 export default function useFullscreen(
   target: Target,
   onFullscreenChange?: () => void,
-): [WritableComputedRef<boolean>, UseFullscreenActions] {
+): UseFullscreenReturnType {
   if (getCurrentInstance()) {
     const isFullscreen = ref(false);
 

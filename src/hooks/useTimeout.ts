@@ -8,10 +8,12 @@ interface UseTimeoutOptions {
   immediateStart?: boolean;
 }
 
-type UseTimeoutRet = [Ref<boolean>, () => void, () => void];
+type UseTimeoutReturnType = [Ref<boolean>, () => void, () => void];
 
 // TODO: COMMENT NEED
-export default function useTimeout(options: UseTimeoutOptions): UseTimeoutRet {
+export default function useTimeout(
+  options: UseTimeoutOptions,
+): UseTimeoutReturnType {
   const { cb, timeout = 1000, immediateStart = true } = options;
   let timer = null;
   let active = ref(immediateStart);

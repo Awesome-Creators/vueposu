@@ -1,7 +1,7 @@
 import { ref } from 'vue-demi';
 
 // TODO: COMMENT NEED
-export interface QueueMethods<T> {
+export interface QueueMethodsReturnType<T> {
   add: (item: T) => void;
   remove: () => T;
   first: T;
@@ -11,7 +11,7 @@ export interface QueueMethods<T> {
   size: number;
 }
 
-const useQueue = <T>(initialValue: T[] = []): QueueMethods<T> => {
+const useQueue = <T>(initialValue: T[] = []): QueueMethodsReturnType<T> => {
   const state = ref(Array.from(initialValue));
   return {
     add: value => state.value.push(value as any),

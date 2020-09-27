@@ -6,20 +6,20 @@ import type { Ref } from 'vue-demi';
 import type { RefTyped } from '../types/global';
 
 type NumberType = number | string;
+type UseCounterReturnType = [Ref<number>, CounterActions];
+export type CounterNumber = RefTyped<NumberType>;
 
 // TODO: COMMENT NEED
 interface CounterOptions {
-  min?: RefTyped<NumberType>;
-  max?: RefTyped<NumberType>;
-  x?: RefTyped<NumberType>;
+  min?: CounterNumber;
+  max?: CounterNumber;
+  x?: CounterNumber;
 }
 
-interface CounterActions {
-  inc: (n?: RefTyped<NumberType>) => void;
-  dec: (n?: RefTyped<NumberType>) => void;
-  set: (
-    value: RefTyped<NumberType> | ((currentValue: number) => number),
-  ) => void;
+export interface CounterActions {
+  inc: (n?: CounterNumber) => void;
+  dec: (n?: CounterNumber) => void;
+  set: (value: CounterNumber | ((currentValue: number) => number)) => void;
   reset: () => void;
 }
 
@@ -28,7 +28,7 @@ const isNumber = (n: any) => isDef(n) && !isNaN(unref(n));
 function useCounter(
   initialValue: RefTyped<NumberType>,
   options: CounterOptions = {},
-): [Ref<number>, CounterActions] {
+): UseCounterReturnType {
   const { min, max, x } = options;
   const initial = () =>
     isNumber(initialValue) ? Number(unref(initialValue)) : 0;

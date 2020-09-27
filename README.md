@@ -72,7 +72,7 @@ Currently supported functions
 
   - [ ] useCalculator
   - [x] useCounter
-  - [ ] useCounterInterval
+  - [x] useCounterInterval
   - [x] useDebounce
   - [x] useDebounceFn
   - [ ] useDynamicList
