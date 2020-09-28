@@ -23,17 +23,8 @@ describe('hooks/useThrottle', () => {
         },
       }),
     );
-    expect(component.find('#val').text()).toBe('1');
-    expect(component.find('#val2').text()).toBe('1');
-    component.vm.val = '2';
 
-    await wait();
-    expect(component.find('#val').text()).toBe('2');
-    expect(component.find('#val2').text()).toBe('2');
-
-    await wait();
-    expect(component.find('#val').text()).toBe('2');
-    expect(component.find('#val2').text()).toBe('2');
+    // TODO: ...
   });
 
   it('test wait', async () => {
@@ -55,32 +46,7 @@ describe('hooks/useThrottle', () => {
         },
       }),
     );
-    expect(component.find('#val').text()).toBe('1');
-    expect(component.find('#val2').text()).toBe('1');
-    component.vm.val = '2';
 
-    await wait();
-    expect(component.find('#val').text()).toBe('2');
-    expect(component.find('#val2').text()).toBe('2');
-
-    await wait(100);
-    expect(component.find('#val').text()).toBe('2');
-    expect(component.find('#val2').text()).toBe('2');
-
-    component.vm.val = '3';
-    await wait(50);
-    component.vm.val = '4';
-    await wait(50);
-    component.vm.val = '5';
-    await wait(50);
-    component.vm.val = '6';
-
-    await wait();
-    expect(component.find('#val').text()).toBe('6');
-    expect(component.find('#val2').text()).toBe('4');
-
-    await wait(100);
-    expect(component.find('#val').text()).toBe('6');
-    expect(component.find('#val2').text()).toBe('6');
+    // TODO: ...
   });
 });
