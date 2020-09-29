@@ -35,6 +35,8 @@ export default function useCounterInterval(
 
   const [counter, { inc, dec }] = useCounter(initialValue);
 
+  // TODO: check total is gt or lt than initialValue
+
   const [$active, $start, $stop] = useInterval({
     cb: () => {
       if (type === 'dec' && counter.value > total) {
