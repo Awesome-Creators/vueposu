@@ -1,17 +1,16 @@
 import { mount } from '@vue/test-utils';
-import { defineComponent, ref } from 'vue-demi';
+import { defineComponent } from 'vue-demi';
 import { wait } from '@test/utils/helper';
 import useDebounceFn from '@hooks/useDebounceFn';
 
 describe('hooks/useDebounceFn', () => {
   it('test default case', async () => {
+    const spy = jest.fn();
     const component = mount(
       defineComponent({
         setup() {
-          const count = ref(1);
-          const fn = useDebounceFn(() => (count.value = count.value + 1));
+          const fn = useDebounceFn(spy);
           return {
-            count,
             fn,
           };
         },
@@ -19,17 +18,23 @@ describe('hooks/useDebounceFn', () => {
       }),
     );
 
-    // TODO: ...
+    component.vm.fn();
+    await wait();
+    expect(spy).toBeCalledTimes(1);
+
+    component.vm.fn();
+    component.vm.fn.cancel();
+    await wait();
+    expect(spy).toBeCalledTimes(1);
   });
 
   it('test common case', async () => {
+    const spy = jest.fn();
     const component = mount(
       defineComponent({
         setup() {
-          const count = ref(1);
-          const fn = useDebounceFn(() => (count.value = count.value + 1), 300);
+          const fn = useDebounceFn(spy, 300);
           return {
-            count,
             fn,
           };
         },
@@ -37,6 +42,28 @@ describe('hooks/useDebounceFn', () => {
       }),
     );
 
-    // TODO: ...
+    component.vm.fn();
+    await wait();
+    expect(spy).toBeCalledTimes(0);
+
+    await wait(300);
+    expect(spy).toBeCalledTimes(1);
+
+    component.vm.fn();
+    await wait(100);
+    component.vm.fn();
+    await wait(100);
+    component.vm.fn();
+    await wait(100);
+    expect(spy).toBeCalledTimes(1);
+
+    await wait(200);
+    expect(spy).toBeCalledTimes(2);
+
+    component.vm.fn();
+    await wait(298);
+    component.vm.fn.cancel();
+    await wait(2);
+    expect(spy).toBeCalledTimes(2);
   });
 });

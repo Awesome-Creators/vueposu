@@ -14,7 +14,7 @@ describe('hooks/useThrottle', () => {
           </template>
         `,
         setup() {
-          const val = ref('1');
+          const val = ref(1);
           const val2 = useThrottle(val);
           return {
             val,
@@ -24,7 +24,11 @@ describe('hooks/useThrottle', () => {
       }),
     );
 
-    // TODO: ...
+    component.vm.val = 2;
+    await wait();
+
+    expect(component.find('#val').text()).toBe('2');
+    expect(component.find('#val2').text()).toBe('2');
   });
 
   it('test wait', async () => {
@@ -37,7 +41,7 @@ describe('hooks/useThrottle', () => {
           </template>
         `,
         setup() {
-          const val = ref('1');
+          const val = ref(1);
           const val2 = useThrottle(val, 100);
           return {
             val,
@@ -47,6 +51,25 @@ describe('hooks/useThrottle', () => {
       }),
     );
 
-    // TODO: ...
+    component.vm.val = 2;
+    await wait();
+
+    expect(component.find('#val').text()).toBe('2');
+    expect(component.find('#val2').text()).toBe('2');
+
+    component.vm.val = 3;
+    await wait();
+    expect(component.find('#val').text()).toBe('3');
+
+    component.vm.val = 4;
+    await wait();
+    expect(component.find('#val').text()).toBe('4');
+
+    component.vm.val = 5;
+    await wait();
+    expect(component.find('#val').text()).toBe('5');
+
+    await wait(300);
+    expect(component.find('#val2').text()).toBe('5');
   });
 });

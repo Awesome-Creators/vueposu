@@ -10,7 +10,7 @@ describe('hooks/useDebounceEffect.spec', () => {
       defineComponent({
         template: `<template />`,
         setup() {
-          const val = ref('1');
+          const val = ref(1);
           const changeVal = () => {
             val.value += 1;
           };
@@ -26,17 +26,17 @@ describe('hooks/useDebounceEffect.spec', () => {
     component.vm.changeVal();
     await wait();
     expect(fn).toBeCalledTimes(1);
-    expect(fn.mock.calls).toContainEqual(['11', '1']);
+    expect(fn.mock.calls).toContainEqual([2, 1]);
 
     component.vm.changeVal();
     await wait();
     expect(fn).toBeCalledTimes(2);
-    expect(fn.mock.calls).toContainEqual(['111', '11']);
+    expect(fn.mock.calls).toContainEqual([3, 2]);
 
     component.vm.changeVal();
     await wait();
     expect(fn).toBeCalledTimes(3);
-    expect(fn.mock.calls).toContainEqual(['1111', '111']);
+    expect(fn.mock.calls).toContainEqual([4, 3]);
   });
 
   it('test wait', async () => {
@@ -45,7 +45,7 @@ describe('hooks/useDebounceEffect.spec', () => {
       defineComponent({
         template: `<template />`,
         setup() {
-          const val = ref('1');
+          const val = ref(1);
           const changeVal = () => {
             val.value += 1;
           };
@@ -58,7 +58,13 @@ describe('hooks/useDebounceEffect.spec', () => {
       }),
     );
 
-    // TODO: ...
+    component.vm.changeVal();
+    await wait();
+    expect(fn).toBeCalledTimes(0);
+
+    await wait(300);
+    expect(fn).toBeCalledTimes(1);
+    expect(fn.mock.calls).toContainEqual([2, 1]);
   });
 
   it('test wait interrupt', async () => {
@@ -67,7 +73,7 @@ describe('hooks/useDebounceEffect.spec', () => {
       defineComponent({
         template: `<template />`,
         setup() {
-          const val = ref('1');
+          const val = ref(1);
           const changeVal = () => {
             val.value += 1;
           };
@@ -80,6 +86,21 @@ describe('hooks/useDebounceEffect.spec', () => {
       }),
     );
 
-    // TODO: ...
+    component.vm.changeVal();
+    await wait();
+    expect(fn).toBeCalledTimes(0);
+
+    await wait(300);
+    expect(fn).toBeCalledTimes(1);
+    expect(fn.mock.calls).toContainEqual([2, 1]);
+
+    component.vm.changeVal();
+    await wait(150);
+    component.vm.changeVal();
+    await wait(150);
+    expect(fn.mock.calls).toContainEqual([2, 1]);
+
+    await wait(300);
+    expect(fn.mock.calls).toContainEqual([4, 3]);
   });
 });

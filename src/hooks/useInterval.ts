@@ -1,4 +1,6 @@
-import { onBeforeUnmount } from 'vue-demi';
+import { onBeforeUnmount, ref } from 'vue-demi';
+import { isFunction } from '../libs/helper';
+import type { Ref } from 'vue-demi';
 
 interface UseIntervalOptions {
   cb: Function;
@@ -6,22 +8,30 @@ interface UseIntervalOptions {
   immediateStart?: boolean;
 }
 
+type UseIntervalReturnType = [Ref<boolean>, () => void, () => void];
+
 // TODO: COMMENT NEED
-export default function useInterval(options: UseIntervalOptions) {
+export default function useInterval(
+  options: UseIntervalOptions,
+): UseIntervalReturnType {
+  const { cb, interval = 1000, immediateStart = true } = options;
   let timer = null;
-  const { cb = () => {}, interval = 1000, immediateStart = true } = options;
+  let active = ref(immediateStart);
 
   const stop = () => {
     if (timer) {
       clearInterval(timer);
       timer = null;
+      active.value = false;
     }
   };
 
   const start = () => {
     stop();
+    active.value = true;
+
     timer = setInterval(() => {
-      cb();
+      isFunction(cb) && cb();
     }, interval);
   };
 
@@ -29,5 +39,5 @@ export default function useInterval(options: UseIntervalOptions) {
 
   immediateStart && start();
 
-  return [start, stop];
+  return [active, start, stop];
 }

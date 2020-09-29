@@ -12,11 +12,26 @@ describe('hooks/useInterval', () => {
       defineComponent({
         template: '<template />',
         setup() {
-          useInterval({ cb: fn });
+          const [active] = useInterval({ cb: fn });
+          return {
+            active,
+          };
         },
       }),
     );
-    // TODO: ...
+
+    expect(component.vm.active).toBe(true);
+
+    await wait(2100);
+    expect(fn).toBeCalledTimes(2);
+    expect(component.vm.active).toBe(true);
+
+    component.unmount();
+    expect(component.vm.active).toBe(false);
+
+    await wait(1100);
+    expect(fn).toBeCalledTimes(2);
+    expect(component.vm.active).toBe(false);
   });
 
   it('custom time', async () => {
@@ -25,12 +40,23 @@ describe('hooks/useInterval', () => {
       defineComponent({
         template: '<template />',
         setup() {
-          useInterval({ cb: fn, interval: 300 });
+          const [active] = useInterval({ cb: fn, interval: 300 });
+          return {
+            active,
+          };
         },
       }),
     );
 
-    // TODO: ...
+    expect(component.vm.active).toBe(true);
+    await wait(1000);
+    expect(fn).toBeCalledTimes(3);
+    component.unmount();
+    expect(component.vm.active).toBe(false);
+
+    await wait(1000);
+    expect(fn).toBeCalledTimes(3);
+    expect(component.vm.active).toBe(false);
   });
 
   it('test immediateStart = false', async () => {
@@ -39,14 +65,41 @@ describe('hooks/useInterval', () => {
       defineComponent({
         template: '<template />',
         setup() {
-          const [start, stop] = useInterval({ cb: fn, immediateStart: false });
+          const [active, start, stop] = useInterval({
+            cb: fn,
+            immediateStart: false,
+          });
           return {
+            active,
             start,
             stop,
           };
         },
       }),
     );
-    // TODO: ...
+
+    expect(component.vm.active).toBe(false);
+    await wait(1100);
+    expect(fn).toBeCalledTimes(0);
+    expect(component.vm.active).toBe(false);
+
+    component.vm.start();
+    expect(component.vm.active).toBe(true);
+    await wait(2100);
+    expect(fn).toBeCalledTimes(2);
+    expect(component.vm.active).toBe(true);
+
+    component.vm.stop();
+    expect(component.vm.active).toBe(false);
+    await wait(1100);
+    expect(component.vm.active).toBe(false);
+    expect(fn).toBeCalledTimes(2);
+
+    component.unmount();
+    expect(component.vm.active).toBe(false);
+
+    await wait(1100);
+    expect(fn).toBeCalledTimes(2);
+    expect(component.vm.active).toBe(false);
   });
 });

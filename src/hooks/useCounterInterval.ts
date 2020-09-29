@@ -1,6 +1,8 @@
 import useCounter from '../hooks/useCounter';
 import type { CounterNumber } from '../hooks/useCounter';
-import { useInterval } from '..';
+import useInterval from '../hooks/useInterval';
+import { ref, watch } from 'vue-demi';
+import type { Ref } from 'vue-demi';
 
 interface UseCounterIntervalOptions {
   initialValue?: CounterNumber;
@@ -8,11 +10,12 @@ interface UseCounterIntervalOptions {
   step?: number;
   total?: number;
   interval?: number;
+  immediateStart?: boolean;
 }
 
 type UseCounterIntervalReturnType = [
   conter: CounterNumber,
-  active: boolean,
+  active: Ref<boolean>,
   start: () => void,
   stop: () => void,
 ];
@@ -27,21 +30,38 @@ export default function useCounterInterval(
     step = 1,
     total = 0,
     interval = 1000,
+    immediateStart = false,
   } = options;
 
   const [counter, { inc, dec }] = useCounter(initialValue);
-  const [, stop] = useInterval({
+
+  const [$active, $start, $stop] = useInterval({
     cb: () => {
       if (type === 'dec' && counter.value > total) {
         dec(step);
       } else if (type === 'inc' && counter.value < total) {
         inc(step);
-      } else {
-        stop();
       }
     },
     interval,
+    immediateStart,
   });
 
-  return [counter, true, () => {}, () => {}];
+  const active = ref($active);
+
+  watch(counter, ct => {
+    if (ct === total) active.value = false;
+  });
+
+  const start = () => {
+    $start();
+    active.value = true;
+  };
+
+  const stop = () => {
+    $stop();
+    active.value = false;
+  };
+
+  return [counter, active, start, stop];
 }

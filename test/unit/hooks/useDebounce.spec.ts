@@ -15,7 +15,7 @@ describe('hooks/useDebounce', () => {
         `,
         setup() {
           1;
-          const val = ref('1');
+          const val = ref(1);
           const val2 = useDebounce(val);
           return {
             val,
@@ -24,7 +24,12 @@ describe('hooks/useDebounce', () => {
         },
       }),
     );
-    // TODO: ...
+
+    component.vm.val = 2;
+    await wait();
+
+    expect(component.find('#val').text()).toBe('2');
+    expect(component.find('#val2').text()).toBe('2');
   });
 
   it('test wait', async () => {
@@ -37,8 +42,8 @@ describe('hooks/useDebounce', () => {
           </template>
         `,
         setup() {
-          const val = ref('1');
-          const val2 = useDebounce(val, 100);
+          const val = ref(1);
+          const val2 = useDebounce(val, 300);
           return {
             val,
             val2,
@@ -46,6 +51,26 @@ describe('hooks/useDebounce', () => {
         },
       }),
     );
-    // TODO: ...
+
+    component.vm.val = 2;
+    await wait();
+
+    expect(component.find('#val').text()).toBe('2');
+    expect(component.find('#val2').text()).toBe('1');
+
+    await wait(300);
+    expect(component.find('#val2').text()).toBe('2');
+
+    component.vm.val = 3;
+    await wait(200);
+
+    component.vm.val = 4;
+    await wait(200);
+
+    expect(component.find('#val').text()).toBe('4');
+    expect(component.find('#val2').text()).toBe('2');
+
+    await wait(300);
+    expect(component.find('#val2').text()).toBe('4');
   });
 });

@@ -6,7 +6,7 @@ const clock = fakeTimers.install();
 // wait time
 export const wait = (time = 0) => {
   return new Promise(res => {
-    setTimeout(res, time)
+    setTimeout(res, time);
     clock.tick(time);
   });
 };

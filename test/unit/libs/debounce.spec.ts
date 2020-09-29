@@ -6,7 +6,13 @@ describe('libs/debounce', () => {
     const callback = jest.fn();
     const fn = debounce(callback, 300);
 
-    // TODO: ...
+    times(30, fn);
+    await wait(0);
+    expect(callback).toHaveBeenCalledTimes(0);
+
+    fn();
+    await wait(300);
+    expect(callback).toHaveBeenCalledTimes(1);
   });
 
   it('should be call zero', async () => {
@@ -19,7 +25,7 @@ describe('libs/debounce', () => {
     expect(callback).toHaveBeenCalledTimes(0);
     fn.cancel();
 
-    await wait(310);
+    await wait(300);
     expect(callback).toHaveBeenCalledTimes(0);
   });
 
@@ -27,6 +33,10 @@ describe('libs/debounce', () => {
     const callback = jest.fn();
     const fn = debounce(callback);
 
-    // TODO: ...
+    times(30, fn);
+    expect(callback).toHaveBeenCalledTimes(0);
+
+    await wait(0);
+    expect(callback).toHaveBeenCalledTimes(1);
   });
 });
