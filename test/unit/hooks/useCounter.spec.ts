@@ -86,7 +86,7 @@ describe('hooks/useCounter', () => {
     await testDec(-1);
     await testDec(-1);
 
-    expect(() => (component.vm.count = 'asdf' as any)).toThrowError(
+    expect(() => (component.vm.count = 'boy next door' as any)).toThrowError(
       'Invalid assignment: expected a number-string or number but got: string',
     );
     expect(() => (component.vm.count = null as any)).toThrowError(
@@ -132,7 +132,7 @@ describe('hooks/useCounter', () => {
     expect(component.vm.count).toBe(2);
   });
 
-  it('should be work when `initialValue`, `min`, `max`, `x` is RefTyped', () => {
+  it('should be work when `initialValue`, `min`, `max`, `step` is RefTyped', () => {
     const component = mount(
       defineComponent({
         template: '<template />',
@@ -140,18 +140,18 @@ describe('hooks/useCounter', () => {
           const initial = ref(0.2);
           const min = ref(0);
           const max = ref(10);
-          const x = ref(0.1);
+          const step = ref(0.1);
           const [count, actions] = useCounter(initial, {
             min,
             max,
-            x,
+            step,
           });
 
           return {
             initial,
             min,
             max,
-            x,
+            step,
             count,
             ...actions,
           };
@@ -185,7 +185,7 @@ describe('hooks/useCounter', () => {
     expect(component.vm.count).toBe(3);
 
     component.vm.max = 4;
-    component.vm.x = 2;
+    component.vm.step = 2;
     component.vm.inc();
     expect(component.vm.count).toBe(4);
 
@@ -201,7 +201,7 @@ describe('hooks/useCounter', () => {
     component.vm.reset();
     expect(component.vm.count).toBe(0);
 
-    component.vm.x = 'thank you sir' as any;
+    component.vm.step = 'thank you sir' as any;
     component.vm.inc();
     expect(component.vm.count).toBe(1);
 
