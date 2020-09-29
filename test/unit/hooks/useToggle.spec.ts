@@ -34,6 +34,9 @@ describe('hooks/useToggle', () => {
 
     component.vm.toggle();
     expect(component.vm.status).toBe(true);
+
+    component.vm.status = 'boy next door';
+    expect(component.vm.status).toBe('boy next door');
   });
 
   it('should be work when `reverseValue` is undef', async () => {

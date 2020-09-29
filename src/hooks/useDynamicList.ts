@@ -27,6 +27,5 @@ export interface UseDynamicListOptions {
 // move
 // insert
 // TODO: COMMENT NEED
-export default function useDynamicList(): UseDynamicList {
-  return [1];
-}
+
+export default function useDynamicList() {}

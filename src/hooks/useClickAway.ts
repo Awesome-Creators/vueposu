@@ -34,12 +34,14 @@ function useClickAway(
   };
 
   const watchSource = [];
+  /* istanbul ignore if */
   if (isRef(eventHandler) || isReactive(eventHandler)) {
     watchSource.push(eventHandler);
   }
   if (isRef(target) || isReactive(target)) {
     watchSource.push(target);
   }
+  /* istanbul ignore if */
   if (isRef(eventName) || isReactive(eventName)) {
     watchSource.push(eventName);
   }
