@@ -13,7 +13,7 @@ export type CounterNumber = RefTyped<NumberType>;
 interface CounterOptions {
   min?: CounterNumber;
   max?: CounterNumber;
-  x?: CounterNumber;
+  step?: CounterNumber;
 }
 
 export interface CounterActions {
@@ -29,10 +29,10 @@ function useCounter(
   initialValue: RefTyped<NumberType>,
   options: CounterOptions = {},
 ): UseCounterReturnType {
-  const { min, max, x } = options;
+  const { min, max, step } = options;
   const initial = () =>
     isNumber(initialValue) ? Number(unref(initialValue)) : 0;
-  const _x = () => (isNumber(x) ? Number(unref(x)) : 1);
+  const $step = () => (isNumber(step) ? Number(unref(step)) : 1);
 
   const fix = (num: RefTyped<number>) => {
     let result = unref(num);
@@ -57,7 +57,7 @@ function useCounter(
         format(
           add(
             bignumber(current.value),
-            bignumber(isDef(v) && isNumber(v) ? unref(v) : _x()),
+            bignumber(isDef(v) && isNumber(v) ? unref(v) : $step()),
           ),
         ),
       ),
@@ -70,7 +70,7 @@ function useCounter(
         format(
           subtract(
             bignumber(current.value),
-            bignumber(isDef(v) && isNumber(v) ? unref(v) : _x()),
+            bignumber(isDef(v) && isNumber(v) ? unref(v) : $step()),
           ),
         ),
       ),
