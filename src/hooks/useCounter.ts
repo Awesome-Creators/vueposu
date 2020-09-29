@@ -35,14 +35,14 @@ function useCounter(
   const _x = () => (isNumber(x) ? Number(unref(x)) : 1);
 
   const fix = (num: RefTyped<number>) => {
-    const result = ref(unref(num));
+    let result = unref(num);
     if (isNumber(max)) {
-      result.value = Math.min(Number(unref(max)), result.value);
+      result = Math.min(Number(unref(max)), result);
     }
     if (isNumber(min)) {
-      result.value = Math.max(Number(unref(min)), result.value);
+      result = Math.max(Number(unref(min)), result);
     }
-    return result.value;
+    return result;
   };
 
   const current = ref(fix(initial()));
