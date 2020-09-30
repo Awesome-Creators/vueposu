@@ -5,6 +5,7 @@
   "author": "yuxino <nbsawz@gmail.com>",
   "license": "MIT",
   "main": "./index.js",
+  "modules": "./index.js",
   "types": "./index.d.ts",
   "scripts": {
     "gen:index": "node ./scripts/imports.js",
