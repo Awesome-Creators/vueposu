@@ -74,7 +74,7 @@ Currently supported functions
   - [x] useCounterInterval
   - [x] useDebounce
   - [x] useDebounceFn
-  - [ ] useDynamicList
+  - [x] useDynamicList
   - [ ] useEventEmitter
   - [x] useQueue
   <!-- - [ ] useRaf -->

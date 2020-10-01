@@ -1,24 +1,24 @@
 import { ref } from 'vue-demi';
 import type { Ref } from 'vue-demi';
-import { isArray, isUndef } from '../libs/helper';
+import { isArray } from '../libs/helper';
 
 export interface UseDynamicListActions<T extends Array<S>, S> {
-  move(idx: number, idx2: number);
-  insert(idx: number);
-  insertBefore(idx: number);
-  insertAfter(idx: number);
+  move(to: number, from: number);
+  insert(idx: number, val: S);
+  insertBefore(idx: number, val: S);
+  insertAfter(idx: number, val: S);
   getKey(idx: number);
   deleteByIdx(idx: number);
-  replace(idx: number, idx2: number);
-  sortList();
-  filterList();
-  resetList();
-  unshift(item: T);
-  map();
+  replace(to: number, from: number);
+  unshift(...items: S[]);
   shift();
   pop();
-  reduce();
   push(val: S);
+  map();
+  reduce();
+  filterList();
+  resetList();
+  sortList();
 }
 
 export type UseDynamicListReturnType<T extends Array<S>, S> = [
@@ -31,12 +31,7 @@ export interface UseDynamicListOptions {
   builder(fn: Function | object, times: number);
 }
 
-// TODO:
-// getKey ..
-// move
-// insert
 // TODO: COMMENT NEED
-
 export default function useDynamicList<T extends Array<S>, S>(
   initValue: T | undefined[] = [],
 ): UseDynamicListReturnType<T, S> {
@@ -45,31 +40,43 @@ export default function useDynamicList<T extends Array<S>, S>(
   }
   const state = ref(initValue) as Ref<T>;
   const actions: UseDynamicListActions<T, S> = {
-    move(idx: number, idx2: number) {},
-    insert(idx: number) {},
-    insertBefore(idx: number) {},
-    insertAfter(idx: number) {},
+    move(to: number, from: number) {
+      state.value.splice(to, 0, state.value.splice(from, 1)[0]);
+    },
+    insert(idx: number, val: S) {
+      state.value.splice(idx, 0, val);
+    },
+    insertBefore(idx: number, val: S) {
+      state.value.splice(idx, -1, val);
+    },
+    insertAfter(idx: number, val: S) {
+      state.value.splice(idx + 1, 0, val);
+    },
     getKey(idx: number) {},
     deleteByIdx(idx: number) {
       state.value.splice(idx, 1);
     },
-    replace(idx: number, idx2: number) {},
-    sortList() {
-      return state.value.sort((a, b) => Number(a) - Number(b));
+    replace(to: number, from: number) {
+      actions.move(to, from);
     },
-    filterList() {},
-    resetList() {},
-    unshift() {},
-    map() {},
+    unshift(...items: S[]) {
+      state.value.unshift(...items);
+    },
     shift() {
       state.value.shift();
     },
     pop() {
       state.value.pop();
     },
-    reduce() {},
     push(val: S) {
       state.value.push(val);
+    },
+    map() {},
+    reduce() {},
+    filterList() {},
+    resetList() {},
+    sortList() {
+      return state.value.sort((a, b) => Number(a) - Number(b));
     },
   };
   return [state, actions];
