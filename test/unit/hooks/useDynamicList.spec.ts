@@ -9,11 +9,11 @@ describe('hooks/useDynamicList', () => {
       defineComponent({
         template: `<template>{{ JSON.stringify(state) }}</template>`,
         setup() {
-          const [
+          const [state, actions] = useDynamicList([1, 2, 3]);
+          return {
             state,
-            { push, pop, shift, deleteByIdx, sortList },
-          ] = useDynamicList([1, 2, 3]);
-          return { state, push, pop, shift, deleteByIdx, sortList };
+            ...actions,
+          };
         },
       }),
     );
@@ -42,6 +42,24 @@ describe('hooks/useDynamicList', () => {
 
     component.vm.push(2);
     expect(component.vm.sortList()).toEqual([2, 3]);
+
+    component.vm.move(0, 1);
+    await checkState([3, 2]);
+
+    component.vm.insert(0, 1);
+    await checkState([1, 3, 2]);
+
+    component.vm.insertBefore(0, 0);
+    await checkState([0, 1, 3, 2]);
+
+    component.vm.insertAfter(3, 5);
+    await checkState([0, 1, 3, 2, 5]);
+
+    component.vm.unshift(-1);
+    await checkState([-1, 0, 1, 3, 2, 5]);
+
+    component.vm.replace(3, 4);
+    await checkState([-1, 0, 1, 2, 3, 5]);
   });
 
   it('test initValue not array', () => {
