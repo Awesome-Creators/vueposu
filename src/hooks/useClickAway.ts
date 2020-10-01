@@ -1,4 +1,4 @@
-import { watchEffect, unref, isReactive, isRef } from 'vue-demi';
+import { watchEffect, unref } from 'vue-demi';
 import { getTargetElement, Target } from '../libs/dom';
 import type { RefTyped } from '../types/global';
 
