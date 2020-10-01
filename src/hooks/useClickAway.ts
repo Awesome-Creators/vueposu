@@ -1,4 +1,4 @@
-import { watch, unref, isReactive, isRef } from 'vue-demi';
+import { watchEffect, unref, isReactive, isRef } from 'vue-demi';
 import { getTargetElement, Target } from '../libs/dom';
 import type { RefTyped } from '../types/global';
 
@@ -33,37 +33,18 @@ function useClickAway(
     unref(eventHandler)(event);
   };
 
-  const watchSource = [];
-  /* istanbul ignore if */
-  if (isRef(eventHandler) || isReactive(eventHandler)) {
-    watchSource.push(eventHandler);
-  }
-  if (isRef(target) || isReactive(target)) {
-    watchSource.push(target);
-  }
-  /* istanbul ignore if */
-  if (isRef(eventName) || isReactive(eventName)) {
-    watchSource.push(eventName);
-  }
+  watchEffect(onInvalidate => {
+    const eventNames = Array.isArray(unref(eventName))
+      ? (unref(eventName) as RefTyped<string>[])
+      : [eventName as RefTyped<string>];
+    eventNames.map(name => document.addEventListener(unref(name), handler));
 
-  watch(
-    watchSource,
-    (_, __, onInvalidate) => {
-      const eventNames = Array.isArray(unref(eventName))
-        ? (unref(eventName) as RefTyped<string>[])
-        : [eventName as RefTyped<string>];
-      eventNames.map(name => document.addEventListener(unref(name), handler));
-
-      onInvalidate(() => {
-        eventNames.map(name =>
-          document.removeEventListener(unref(name), handler),
-        );
-      });
-    },
-    {
-      immediate: true,
-    },
-  );
+    onInvalidate(() => {
+      eventNames.map(name =>
+        document.removeEventListener(unref(name), handler),
+      );
+    });
+  });
 }
 
 export default useClickAway;
