@@ -1,9 +1,8 @@
 /* istanbul ignore file */
-export default function isDocumentVisible(): boolean {
-  if (
-    typeof document !== 'undefined' &&
-    typeof document.visibilityState !== 'undefined'
-  ) {
+import { isUndefined } from './helper';
+
+export default function isDocumentVisible() {
+  if (!isUndefined(document) && !isUndefined(document.visibilityState)) {
     return document.visibilityState !== 'hidden';
   }
   // always assume it's visible.
