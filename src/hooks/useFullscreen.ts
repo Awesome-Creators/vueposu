@@ -7,11 +7,12 @@ import { isHTMLElement } from '../libs/dom';
 
 import type { WritableComputedRef } from 'vue-demi';
 import type { Target } from '../libs/dom';
+import type { RefTyped } from '../types/global';
 
 interface UseFullscreenActions {
   setFullscreen: () => void;
   exitFullscreen: () => void;
-  toggleFullscreen: (status?: boolean) => void;
+  toggleFullscreen: (status?: RefTyped<boolean>) => void;
 }
 
 type UseFullscreenReturnType = [
@@ -22,7 +23,7 @@ type UseFullscreenReturnType = [
 // TODO: COMMENT NEED
 export default function useFullscreen(
   target: Target,
-  onFullscreenChange?: () => void,
+  onFullscreenStatusChange?: () => void,
 ): UseFullscreenReturnType {
   if (getCurrentInstance()) {
     const isFullscreen = ref(false);
@@ -32,7 +33,7 @@ export default function useFullscreen(
       element = unref(isFunction(target) ? target() : target);
       const eventListener = () => {
         isFullscreen.value = fullscreen.getFullscreenElement() === element;
-        onFullscreenChange && onFullscreenChange();
+        onFullscreenStatusChange && onFullscreenStatusChange();
       };
       fullscreen.on('change', eventListener);
       onInvalidate(() => {
@@ -40,7 +41,7 @@ export default function useFullscreen(
       });
     });
 
-    const toggleFullscreen = (status?: boolean) => {
+    const toggleFullscreen: UseFullscreenActions['toggleFullscreen'] = status => {
       isFullscreen.value = isDef(status)
         ? Boolean(unref(status))
         : !isFullscreen.value;

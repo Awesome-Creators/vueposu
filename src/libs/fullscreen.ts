@@ -3,6 +3,7 @@
 // Based on Fullscreen API.
 // https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API
 
+import { isUndefined, isFunction } from './helper';
 import { isHTMLElement } from './dom';
 
 const eventsMap = <const>{
@@ -13,9 +14,7 @@ const eventsMap = <const>{
 const getFullscreenElement = () => document.fullscreenElement;
 
 export const request = (element: HTMLElement = document.body) => {
-  const { fullscreenEnabled } = document;
-
-  if (fullscreenEnabled) {
+  if (!isUndefined(document) && document.fullscreenEnabled) {
     if (isHTMLElement(element) && element.requestFullscreen) {
       element.requestFullscreen();
     } else {
@@ -31,9 +30,12 @@ export const request = (element: HTMLElement = document.body) => {
 };
 
 export const exit = (element: HTMLElement = document.body) => {
-  const { exitFullscreen } = document;
-  if (exitFullscreen && getFullscreenElement() === element) {
-    exitFullscreen();
+  if (
+    !isUndefined(document) &&
+    isFunction(document.exitFullscreen) &&
+    getFullscreenElement() === element
+  ) {
+    document.exitFullscreen();
   }
 };
 
