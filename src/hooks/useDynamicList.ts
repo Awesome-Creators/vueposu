@@ -2,7 +2,7 @@ import { ref } from 'vue-demi';
 import type { Ref } from 'vue-demi';
 import { isArray } from '../libs/helper';
 
-export interface UseDynamicListActions<T extends Array<S>, S> {
+export interface UseDynamicListActions<S> {
   move(to: number, from: number);
   insert(idx: number, val: S);
   insertBefore(idx: number, val: S);
@@ -14,32 +14,25 @@ export interface UseDynamicListActions<T extends Array<S>, S> {
   shift();
   pop();
   push(val: S);
-  map();
-  reduce();
-  filterList();
-  resetList();
-  sortList();
 }
 
-export type UseDynamicListReturnType<T extends Array<S>, S> = [
-  Ref<T>,
-  UseDynamicListActions<T, S>,
-];
+export type UseDynamicListReturnType<T, S> = [Ref<T>, UseDynamicListActions<S>];
 
-export interface UseDynamicListOptions {
-  sort();
-  builder(fn: Function | object, times: number);
-}
+// TODO: ...
+// export interface UseDynamicListOptions {
+//   sort();
+//   builder(fn: Function | object, times: number);
+// }
 
 // TODO: COMMENT NEED
-export default function useDynamicList<T extends Array<S>, S>(
+export default function useDynamicList<T extends Array<unknown>, S = T[number]>(
   initValue: T | undefined[] = [],
 ): UseDynamicListReturnType<T, S> {
   if (isArray(initValue) === false) {
     throw new Error('initValue should be a array');
   }
   const state = ref(initValue) as Ref<T>;
-  const actions: UseDynamicListActions<T, S> = {
+  const actions: UseDynamicListActions<S> = {
     move(to: number, from: number) {
       state.value.splice(to, 0, state.value.splice(from, 1)[0]);
     },
@@ -52,6 +45,7 @@ export default function useDynamicList<T extends Array<S>, S>(
     insertAfter(idx: number, val: S) {
       state.value.splice(idx + 1, 0, val);
     },
+    // TODO: ...
     getKey(idx: number) {},
     deleteByIdx(idx: number) {
       state.value.splice(idx, 1);
@@ -70,13 +64,6 @@ export default function useDynamicList<T extends Array<S>, S>(
     },
     push(val: S) {
       state.value.push(val);
-    },
-    map() {},
-    reduce() {},
-    filterList() {},
-    resetList() {},
-    sortList() {
-      return state.value.sort((a, b) => Number(a) - Number(b));
     },
   };
   return [state, actions];

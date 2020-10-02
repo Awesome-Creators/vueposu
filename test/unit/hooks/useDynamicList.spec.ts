@@ -4,7 +4,7 @@ import useDynamicList from '@hooks/useDynamicList';
 import { wait } from '../../utils/helper';
 
 describe('hooks/useDynamicList', () => {
-  it('test', async () => {
+  it('test actions', async () => {
     const component = mount(
       defineComponent({
         template: `<template>{{ JSON.stringify(state) }}</template>`,
@@ -20,7 +20,6 @@ describe('hooks/useDynamicList', () => {
 
     const checkState = async array => {
       await wait();
-      console.log(component.text());
       expect(component.text()).toBe(JSON.stringify(array));
     };
 
@@ -40,9 +39,7 @@ describe('hooks/useDynamicList', () => {
     component.vm.deleteByIdx(0);
     await checkState([3]);
 
-    component.vm.push(2);
-    expect(component.vm.sortList()).toEqual([2, 3]);
-
+    component.vm.unshift(2);
     component.vm.move(0, 1);
     await checkState([3, 2]);
 
