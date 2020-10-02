@@ -4,7 +4,8 @@
 // learn at: https://github.com/chenbin92/swr-source-code
 
 import { reactive, unref, watchEffect, toRefs, getCurrentInstance } from 'vue-demi';
-import defaultConfig, { cache } from './config';
+import cache from './cache';
+import defaultConfig from './config';
 import isDocumentVisible from '../../libs/isDocumentVisible';
 import isOnline from '../../libs/isOnline';
 import {

@@ -41,15 +41,4 @@ export type BroadcastStateInterface<D = any, E = any> = (
   isValidating?: boolean,
 ) => void;
 
-export interface CacheInterface {
-  get(key: KeyInterface): any;
-  set(key: KeyInterface, value: any): any;
-  keys(): string[];
-  has(key: KeyInterface): boolean;
-  delete(key: KeyInterface): void;
-  clear(): void;
-  serializeKey(key: KeyInterface): [string, any, string, string];
-  subscribe(listener: CacheListener): () => void;
-}
-
 export type CacheListener = () => void;

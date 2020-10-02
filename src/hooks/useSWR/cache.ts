@@ -7,37 +7,37 @@ import { KeyInterface, CacheListener } from './types';
 import hash from '../../libs/hash';
 import { isFunction, isDef } from '../../libs/helper';
 
-const $cache = new Map();
-const $listeners: CacheListener[] = [];
+const cache = new Map();
+const listeners: CacheListener[] = [];
 
 const get = (key: KeyInterface) => {
   const [_key] = serializeKey(key);
-  return $cache.get(_key);
+  return cache.get(_key);
 };
 
 const set = (key: KeyInterface, value: any) => {
   const [_key] = serializeKey(key);
-  $cache.set(_key, value);
+  cache.set(_key, value);
   notify();
 };
 
 const del = (key: KeyInterface) => {
   const [_key] = serializeKey(key);
-  $cache.delete(_key);
+  cache.delete(_key);
   notify();
 };
 
 const has = (key: KeyInterface) => {
   const [_key] = serializeKey(key);
-  return $cache.has(_key);
+  return cache.has(_key);
 };
 
 const clear = () => {
-  $cache.clear();
+  cache.clear();
   notify();
 };
 
-const keys = () => Array.from($cache.keys());
+const keys = () => Array.from(cache.keys());
 
 const serializeKey = (key: KeyInterface): [string, any, string, string] => {
   let args = null;
@@ -75,29 +75,26 @@ const subscribe = (listener: CacheListener) => {
   }
 
   let isSubscribed = true;
-  $listeners.push(listener);
+  listeners.push(listener);
 
   return () => {
     if (!isSubscribed) return;
     isSubscribed = false;
-    const index = $listeners.indexOf(listener);
+    const index = listeners.indexOf(listener);
     if (index > -1) {
-      $listeners[index] = $listeners[$listeners.length - 1];
-      $listeners.length--;
+      listeners.splice(index, 1);
     }
   };
 };
 
 // Notify Cache subscribers about a change in the cache.
 const notify = () => {
-  for (let listener of $listeners) {
+  for (let listener of listeners) {
     listener();
   }
 };
 
 export default {
-  $cache,
-  $listeners,
   get,
   set,
   del,
