@@ -2,10 +2,6 @@
 import { shallowRef } from 'vue-demi';
 import useRequest from '../useRequest';
 import { ConfigInterface } from './types';
-import Cache from './cache';
-
-// cache
-const cache = new Cache();
 
 // slow connection (<= 70Kbps)
 const slowConnection =
@@ -33,5 +29,5 @@ const useSWRGlobalConfig = (overridedConfig: ConfigInterface) => {
   };
 };
 
-export { cache, useSWRGlobalConfig };
+export { useSWRGlobalConfig };
 export default config;
