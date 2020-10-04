@@ -3,31 +3,32 @@
 
 // inspired by vercel swr: https://github.com/vercel/swr
 
-import { KeyInterface, CacheListener } from './types';
 import hash from '../../libs/hash';
 import { isFunction, isDef } from '../../libs/helper';
+
+import type { SWRKey, CacheListener } from './types';
 
 const cache = new Map();
 const listeners: CacheListener[] = [];
 
-const get = (key: KeyInterface) => {
+const get = (key: SWRKey) => {
   const [_key] = serializeKey(key);
   return cache.get(_key);
 };
 
-const set = (key: KeyInterface, value: any) => {
+const set = (key: SWRKey, value: any) => {
   const [_key] = serializeKey(key);
   cache.set(_key, value);
   notify();
 };
 
-const del = (key: KeyInterface) => {
+const del = (key: SWRKey) => {
   const [_key] = serializeKey(key);
   cache.delete(_key);
   notify();
 };
 
-const has = (key: KeyInterface) => {
+const has = (key: SWRKey) => {
   const [_key] = serializeKey(key);
   return cache.has(_key);
 };
@@ -39,7 +40,9 @@ const clear = () => {
 
 const keys = () => Array.from(cache.keys());
 
-const serializeKey = (key: KeyInterface): [string, any, string, string] => {
+const serializeKey = (
+  key: SWRKey,
+): [string, any, string, string] => {
   let args = null;
   if (isFunction(key)) {
     try {
@@ -59,10 +62,10 @@ const serializeKey = (key: KeyInterface): [string, any, string, string] => {
     key = String(key || '');
   }
 
-  const errorKey = key ? 'err@' + key : '';
-  const isValidatingKey = key ? 'validating@' + key : '';
+  const keyError = key ? 'err@' + key : '';
+  const keyValidating = key ? 'validating@' + key : '';
 
-  return [key, args, errorKey, isValidatingKey];
+  return [key, args, keyError, keyValidating];
 };
 
 const subscribe = (listener: CacheListener) => {

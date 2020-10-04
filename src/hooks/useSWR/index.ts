@@ -1,7 +1,7 @@
 import useSWR from './useSWR';
 import { useSWRGlobalConfig } from './config';
-import type { ConfigInterface, KeyInterface } from './types';
+import type { SWRConfig, SWRKey } from './types';
 
 export { useSWRGlobalConfig };
-export { ConfigInterface, KeyInterface };
+export { SWRConfig, SWRKey };
 export default useSWR;

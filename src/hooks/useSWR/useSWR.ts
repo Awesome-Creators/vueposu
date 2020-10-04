@@ -3,7 +3,7 @@
 // inspired by vercel swr: https://github.com/vercel/swr
 // learn at: https://github.com/chenbin92/swr-source-code
 
-import { reactive, unref, watchEffect, toRefs, getCurrentInstance } from 'vue-demi';
+import { ref, unref, watchEffect, getCurrentInstance } from 'vue-demi';
 import cache from './cache';
 import defaultConfig from './config';
 import isDocumentVisible from '../../libs/isDocumentVisible';
@@ -13,16 +13,17 @@ import {
   isObject,
   isUndefined,
   isDef,
+  isUndef,
   isEqual,
 } from '../../libs/helper';
 
 import type {
-  ActionType,
   Fetcher,
-  KeyInterface,
-  ConfigInterface,
+  SWRKey,
+  SWRConfig,
   UseSWRReturnType,
-  BroadcastStateInterface,
+  BroadcastState,
+  RevalidateOptions,
 } from './types';
 
 const isServer = isUndefined(window);
@@ -89,12 +90,7 @@ const trigger = ($key, shouldRevalidate = true) => {
   return Promise.resolve(cache.get(key));
 };
 
-const broadcastState: BroadcastStateInterface = (
-  key,
-  data,
-  error,
-  isValidating,
-) => {
+const broadcastState: BroadcastState = (key, data, error, isValidating) => {
   const updaters = cacheRevalidators[key];
   if (key && updaters) {
     for (let i = 0; i < updaters.length; ++i) {
@@ -165,29 +161,28 @@ const mutate = async ($key, $data, shouldRevalidate = true) => {
   return data;
 };
 
-function useSWR<D = any, E = any>(key: KeyInterface): UseSWRReturnType<D, E>;
+function useSWR<D = any, E = any>(key: SWRKey): UseSWRReturnType<D, E>;
 
 function useSWR<D = any, E = any>(
-  key: KeyInterface,
-  config?: ConfigInterface<D, E>,
+  key: SWRKey,
+  config?: SWRConfig<D, E>,
 ): UseSWRReturnType<D, E>;
 
 function useSWR<D = any, E = any>(
-  key: KeyInterface,
+  key: SWRKey,
   fetcher?: Fetcher<D>,
-  config?: ConfigInterface<D, E>,
+  config?: SWRConfig<D, E>,
 ): UseSWRReturnType<D, E>;
 
 // WIP
 // TODO: COMMENT NEED
-// function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
-function useSWR<D = any, E = any>(...args): any {
+function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
   if (getCurrentInstance()) {
-    let $key: KeyInterface,
+    let $key: SWRKey,
       fetcher: Fetcher<D> | undefined,
-      config: ConfigInterface<D, E> = {};
+      config: SWRConfig<D, E> = {};
 
-    if (args.length >= 1) {
+    if (args.length > 0) {
       $key = unref(args[0]);
     }
     if (args.length > 2) {
@@ -205,30 +200,28 @@ function useSWR<D = any, E = any>(...args): any {
       }
     }
 
-    // if `key` is the identifier of the request,
-    // `key` can be changed but fetcher cant,
-    // `keyErr` is the cache key for error objects
-    const [key, fetcherArgs, keyErr, keyValidating] = cache.serializeKey($key);
-
     config = {
       ...defaultConfig.value,
       ...config,
     };
 
-    if (isUndefined(fetcher)) {
+    if (isUndef(fetcher)) {
       fetcher = config.fetcher;
     }
+
+    // if `key` is the identifier of the request,
+    // `key` can be changed but fetcher cant,
+    // `keyErr` is the cache key for error objects
+    const [key, fetcherArgs, keyErr, keyValidating] = cache.serializeKey($key);
 
     const resolveData = () => {
       const cachedData = cache.get(key);
       return isUndefined(cachedData) ? config.initialData : cachedData;
     };
 
-    const state = reactive({
-      data: resolveData(),
-      error: cache.get(keyErr),
-      isValidating: !!cache.get(keyValidating),
-    });
+    const data = ref(resolveData());
+    const error = ref(cache.get(keyErr));
+    const isValidating = ref(!!cache.get(keyValidating));
 
     let unmounted = false;
 
@@ -254,16 +247,17 @@ function useSWR<D = any, E = any>(...args): any {
       }
     };
 
-    const revalidate = async () => {
-      if (!key || !fetcher) return false;
-      if (unmounted) return false;
+    const revalidate = async (options: RevalidateOptions = {}) => {
+      if (!key || !fetcher || unmounted) return false;
+      options = { dedupe: false, ...options };
 
       let loading = true;
-      let shouldDeduping = !isUndefined(concurrentPromises[key]);
+      let shouldDeduping =
+        !isUndefined(concurrentPromises[key]) && options.dedupe;
 
       try {
-        state.isValidating = true;
-        cache.set(keyValidating, true);
+        isValidating.value = true;
+        cache.set(unref(keyValidating), true);
         if (!shouldDeduping) {
           // also update other hooks
           broadcastState(key, undefined, undefined, true);
@@ -276,10 +270,11 @@ function useSWR<D = any, E = any>(...args): any {
           startAt = concurrentPromisesTS[key];
           newData = await concurrentPromises[key];
         } else {
-          if (isDef(config.loadingTimeout) && config.loadingTimeout > 0) {
+          const loadingTimeout = unref(config.loadingTimeout);
+          if (isDef(loadingTimeout) && loadingTimeout > 0) {
             setTimeout(() => {
               if (loading) config.onLoadingSlow(key, config);
-            }, config.loadingTimeout);
+            }, loadingTimeout);
           }
 
           concurrentPromises[key] =
@@ -292,7 +287,7 @@ function useSWR<D = any, E = any>(...args): any {
           setTimeout(() => {
             delete concurrentPromises[key];
             delete concurrentPromisesTS[key];
-          }, config.dedupingInterval);
+          }, unref(config.dedupingInterval));
 
           config.onSuccess(newData, key, config);
         }
@@ -305,7 +300,7 @@ function useSWR<D = any, E = any>(...args): any {
               mutationEndTS[key] === 0));
 
         if (shouldIgnoreRequest) {
-          state.isValidating = false;
+          isValidating.value = false;
           return false;
         }
 
@@ -313,8 +308,8 @@ function useSWR<D = any, E = any>(...args): any {
         cache.set(keyErr, undefined);
         cache.set(keyValidating, false);
 
-        if (!isEqual(state.data, newData)) {
-          state.data = newData;
+        if (!isEqual(data.value, newData)) {
+          data.value = newData;
         }
 
         if (!shouldDeduping) {
@@ -327,9 +322,9 @@ function useSWR<D = any, E = any>(...args): any {
 
         cache.set(keyErr, err);
 
-        if (state.error !== err) {
-          state.isValidating = false;
-          state.error = err;
+        if (error.value !== err) {
+          isValidating.value = false;
+          error.value = err;
 
           if (!shouldDeduping) {
             // also broadcast to update other hooks
@@ -338,21 +333,123 @@ function useSWR<D = any, E = any>(...args): any {
         }
 
         config.onError(err, key, config);
-        // if(config.shouldRetryOnError) {
-          
-        // }
-
+        if (config.shouldRetryOnError) {
+          const retryCount = (options.retryCount || 0) + 1;
+          config.onErrorRetry(err, key, config, revalidate, {
+            dedupe: true,
+            ...options,
+            retryCount,
+          });
+        }
       }
 
       loading = false;
       return true;
     };
 
-    watchEffect(() => {
+    watchEffect(onInvalidate => {
+      if (!key) return;
 
+      unmounted = false;
+
+      const latestKeyedData = resolveData();
+
+      if (!isEqual(data.value, latestKeyedData)) {
+        data.value = latestKeyedData;
+      }
+
+      const softRevalidate = () => revalidate({ dedupe: true });
+
+      const revalidateOnMount = unref(config.revalidateOnMount);
+      if (
+        revalidateOnMount ||
+        (!config.initialData && revalidateOnMount === undefined)
+      ) {
+        if (!isUndefined(latestKeyedData)) {
+          rIC(softRevalidate);
+        } else {
+          softRevalidate();
+        }
+      }
+
+      let pending = false;
+      const onFocus = () => {
+        if (pending || !unref(config.revalidateOnFocus)) return;
+        pending = true;
+        softRevalidate();
+        setTimeout(
+          () => (pending = false),
+          unref(config.focusThrottleInterval),
+        );
+      };
+
+      const onReconnect = () => {
+        if (unref(config.revalidateOnReconnect)) softRevalidate();
+      };
+
+      const onUpdate = (
+        shouldRevalidate = true,
+        updatedData,
+        updatedError,
+        updatedIsValidating,
+        dedupe = true,
+      ) => {
+        if (!isUndefined(updatedData) && !isEqual(data.value, updatedData)) {
+          data.value = updatedData;
+        }
+
+        if (error.value !== updatedError) {
+          error.value = updatedError;
+        }
+
+        if (
+          !isUndefined(updatedIsValidating) &&
+          isValidating.value !== !!updatedIsValidating
+        ) {
+          isValidating.value = !!updatedIsValidating;
+        }
+
+        if (shouldRevalidate) {
+          return dedupe ? softRevalidate() : revalidate();
+        }
+
+        return false;
+      };
+
+      addRevalidator(focusRevalidators, onFocus);
+      addRevalidator(reconnectRevalidators, onReconnect);
+      addRevalidator(cacheRevalidators, onUpdate);
+
+      onInvalidate(() => {
+        unmounted = true;
+        removeRevalidator(focusRevalidators, onFocus);
+        removeRevalidator(reconnectRevalidators, onReconnect);
+        removeRevalidator(cacheRevalidators, onUpdate);
+      });
     });
 
-    return { ...toRefs(state), revalidate: () => {}, mutate: boundMutate };
+    watchEffect(onInvalidate => {
+      let timer = null;
+      const tick = async () => {
+        if (
+          !error.value &&
+          (unref(config.refreshWhenHidden) || isDocumentVisible()) &&
+          (unref(config.refreshWhenOffline) || isOnline())
+        ) {
+          await revalidate({ dedupe: true });
+        }
+        const refreshInterval = unref(config.refreshInterval) || 0;
+        if (refreshInterval && !error.value) {
+          timer = setTimeout(tick, refreshInterval);
+        }
+      };
+
+      onInvalidate(() => {
+        if (timer) clearTimeout(timer);
+      });
+    });
+
+    return { data, error, isValidating, revalidate, mutate: boundMutate };
   } else {
     throw new Error(
       'Invalid hook call: `useSWR` can only be called inside of `setup()`.',
