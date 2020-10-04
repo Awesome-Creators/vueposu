@@ -12,3 +12,6 @@ export type useLocalStorageActions<T> = [
     remove: () => void;
   },
 ];
+
+// WIP
+export default function useLocalStorage() {}

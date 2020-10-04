@@ -17,3 +17,6 @@ export type useCookieActions<T> = [
     remove: () => void;
   },
 ];
+
+// WIP
+export default function useCookie() {}
