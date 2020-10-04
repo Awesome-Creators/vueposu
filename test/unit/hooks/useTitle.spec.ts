@@ -1,6 +1,7 @@
 import { mount } from '@vue/test-utils';
 import { defineComponent } from 'vue-demi';
 import useTitle from '@hooks/useTitle';
+import { wait } from '@test/utils/helper';
 
 describe('hooks/useTitle', () => {
   it('should be set the title', async () => {
@@ -31,7 +32,12 @@ describe('hooks/useTitle', () => {
     await component.find('#change-title').trigger('click');
     expect(document.title).toBe('b');
 
-    expect(() => component.vm.useTitle('c')).toThrowError(
+    // MutationObserver
+    document.title = 'c';
+    await wait();
+    expect(component.vm.title).toBe('c');
+
+    expect(() => component.vm.useTitle('d')).toThrowError(
       'Invalid hook call: `useTitle` can only be called inside of `setup()`.',
     );
   });
