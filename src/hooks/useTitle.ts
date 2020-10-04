@@ -1,4 +1,5 @@
-import { ref, watch, getCurrentInstance } from 'vue';
+import { ref, watch, onBeforeUnmount, getCurrentInstance } from 'vue-demi';
+
 import type { RefTyped } from '../types/global';
 
 /**
@@ -20,6 +21,15 @@ export default function useTitle(overridedTitle?: RefTyped<string>) {
         flush: 'sync',
       },
     );
+
+    const observer = new MutationObserver(
+      m => (title.value = m[0].target.textContent),
+    );
+    observer.observe(document.querySelector('title'), { childList: true });
+
+    onBeforeUnmount(() => {
+      observer.disconnect();
+    });
 
     return title;
   } else {
