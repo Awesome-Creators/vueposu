@@ -90,7 +90,7 @@ Currently supported functions
 
   - [ ] useCookie
   - [ ] useLocalStorage
-  - [ ] usSessionStorage
+  - [ ] useSessionStorage
 
 - SIDE EFFECT
 
