@@ -4,33 +4,33 @@
 // inspired by vercel swr: https://github.com/vercel/swr
 
 import hash from '../../libs/hash';
-import { isFunction, isDef } from '../../libs/helper';
+import { isFunction } from '../../libs/helper';
 
 import type { SWRKey, CacheListener } from './types';
 
 const cache = new Map();
 const listeners: CacheListener[] = [];
 
-const get = (key: SWRKey) => {
-  const [_key] = serializeKey(key);
-  return cache.get(_key);
+const get = ($key: SWRKey) => {
+  const [key] = serializeKey($key);
+  return cache.get(key);
 };
 
-const set = (key: SWRKey, value: any) => {
-  const [_key] = serializeKey(key);
-  cache.set(_key, value);
+const set = ($key: SWRKey, value: any) => {
+  const [key] = serializeKey($key);
+  cache.set(key, value);
   notify();
 };
 
-const del = (key: SWRKey) => {
-  const [_key] = serializeKey(key);
-  cache.delete(_key);
+const del = ($key: SWRKey) => {
+  const [key] = serializeKey($key);
+  cache.delete(key);
   notify();
 };
 
-const has = (key: SWRKey) => {
-  const [_key] = serializeKey(key);
-  return cache.has(_key);
+const has = ($key: SWRKey) => {
+  const [key] = serializeKey($key);
+  return cache.has(key);
 };
 
 const clear = () => {
@@ -68,29 +68,6 @@ const serializeKey = (
   return [key, args, keyError, keyValidating];
 };
 
-const subscribe = (listener: CacheListener) => {
-  if (!isFunction(listener)) {
-    throw new Error(
-      `Invalid assignment: expected the listener to be a function but got: ${
-        isDef(listener) ? typeof listener : listener
-      }`,
-    );
-  }
-
-  let isSubscribed = true;
-  listeners.push(listener);
-
-  return () => {
-    if (!isSubscribed) return;
-    isSubscribed = false;
-    const index = listeners.indexOf(listener);
-    if (index > -1) {
-      listeners.splice(index, 1);
-    }
-  };
-};
-
-// Notify Cache subscribers about a change in the cache.
 const notify = () => {
   for (let listener of listeners) {
     listener();
@@ -105,5 +82,4 @@ export default {
   clear,
   keys,
   serializeKey,
-  subscribe,
 };

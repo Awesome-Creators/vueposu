@@ -69,8 +69,10 @@ if (!isServer && window.addEventListener) {
   );
 }
 
+const serialize = (key) => cache.serializeKey(key);
+
 const trigger = ($key, shouldRevalidate = true) => {
-  const [key, , keyErr, keyValidating] = cache.serializeKey($key);
+  const [key, , keyErr, keyValidating] = serialize($key);
   if (!key) return Promise.resolve();
 
   const updaters = cacheRevalidators[key];
@@ -100,7 +102,7 @@ const broadcastState: BroadcastState = (key, data, error, isValidating) => {
 };
 
 const mutate = async ($key, $data, shouldRevalidate = true) => {
-  const [key, , keyErr] = cache.serializeKey($key);
+  const [key, , keyErr] = serialize($key);
 
   if (isUndefined($data)) return trigger($key, shouldRevalidate);
 
@@ -174,7 +176,6 @@ function useSWR<D = any, E = any>(
   config?: SWRConfig<D, E>,
 ): UseSWRReturnType<D, E>;
 
-// WIP
 // TODO: COMMENT NEED
 function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
   if (getCurrentInstance()) {
@@ -209,12 +210,10 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
       fetcher = config.fetcher;
     }
 
-    // if `key` is the identifier of the request,
-    // `key` can be changed but fetcher cant,
-    // `keyErr` is the cache key for error objects
-    const [key, fetcherArgs, keyErr, keyValidating] = cache.serializeKey($key);
+    let [key, fetcherArgs, keyErr, keyValidating] = serialize($key);
 
     const resolveData = () => {
+      [key] = serialize($key);
       const cachedData = cache.get(key);
       return isUndefined(cachedData) ? config.initialData : cachedData;
     };
@@ -225,10 +224,13 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
 
     let unmounted = false;
 
-    const boundMutate = (data, shouldRevalidate) =>
-      mutate(key, data, shouldRevalidate);
+    const boundMutate = (data, shouldRevalidate) => {
+      [key] = serialize($key);
+      return mutate(key, data, shouldRevalidate);
+    };
 
     const addRevalidator = (revalidators, callback) => {
+      [key] = serialize($key);
       if (!callback) return;
       if (!revalidators[key]) {
         revalidators[key] = [callback];
@@ -238,6 +240,7 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
     };
 
     const removeRevalidator = (revlidators, callback) => {
+      [key] = serialize($key);
       if (revlidators[key]) {
         const revalidators = revlidators[key];
         const index = revalidators.indexOf(callback);
@@ -248,6 +251,7 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
     };
 
     const revalidate = async (options: RevalidateOptions = {}) => {
+      [key, fetcherArgs, keyErr, keyValidating] = serialize($key);
       if (!key || !fetcher || unmounted) return false;
       options = { dedupe: false, ...options };
 
@@ -348,6 +352,7 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
     };
 
     watchEffect(onInvalidate => {
+      [key] = serialize($key);
       if (!key) return;
 
       unmounted = false;
@@ -360,16 +365,10 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
 
       const softRevalidate = () => revalidate({ dedupe: true });
 
-      const revalidateOnMount = unref(config.revalidateOnMount);
-      if (
-        revalidateOnMount ||
-        (!config.initialData && revalidateOnMount === undefined)
-      ) {
-        if (!isUndefined(latestKeyedData)) {
-          rIC(softRevalidate);
-        } else {
-          softRevalidate();
-        }
+      if (!isUndefined(latestKeyedData)) {
+        rIC(softRevalidate);
+      } else {
+        softRevalidate();
       }
 
       let pending = false;

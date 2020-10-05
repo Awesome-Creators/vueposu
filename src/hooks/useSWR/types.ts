@@ -16,7 +16,6 @@ export interface SWRConfig<
   refreshWhenHidden?: RefTyped<boolean>;
   refreshWhenOffline?: RefTyped<boolean>;
   revalidateOnFocus?: RefTyped<boolean>;
-  revalidateOnMount?: RefTyped<boolean>;
   revalidateOnReconnect?: RefTyped<boolean>;
   shouldRetryOnError?: RefTyped<boolean>;
   fetcher?: F;
