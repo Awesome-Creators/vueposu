@@ -4,12 +4,11 @@ import fakeTimers from '@sinonjs/fake-timers';
 const clock = fakeTimers.install();
 
 // wait time
-export const wait = (time = 0) => {
-  return new Promise(res => {
+export const wait = (time = 0) =>
+  new Promise(res => {
     setTimeout(res, time);
     clock.tick(time);
   });
-};
 
 // exec times
 export const times = (times = 0, cb: Function) => {
