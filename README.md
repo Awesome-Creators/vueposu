@@ -57,7 +57,8 @@ Currently supported functions
 
 - DOM
 
-  - [ ] useAudio
+  <!-- - [ ] useAudio -->
+
   - [x] useBrowserTabChange
   - [x] useClickAway
   - [x] useCopyToClipboard
@@ -69,7 +70,8 @@ Currently supported functions
 
 - FUNCTIONALITY
 
-  - [ ] useCalculator
+  <!-- - [ ] useCalculator -->
+
   - [x] useCounter
   - [x] useCounterInterval
   - [x] useDebounce
