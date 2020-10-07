@@ -1,8 +1,7 @@
 import { mount } from '@vue/test-utils';
-import { ref } from 'vue-demi';
+import { ref, defineComponent } from 'vue-demi';
 import useBrowserTabChange from '@hooks/useBrowserTabChange';
 import { triggerDomEvent, wait } from '@test/utils/helper';
-import { defineComponent } from 'vue-demi';
 
 describe('hooks/useBrowserTabChange', () => {
   beforeEach(() => {
