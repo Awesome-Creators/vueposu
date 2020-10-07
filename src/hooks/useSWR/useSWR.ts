@@ -69,7 +69,7 @@ if (!isServer && window.addEventListener) {
   );
 }
 
-const serialize = (key) => cache.serializeKey(key);
+const serialize = key => cache.serializeKey(key);
 
 const trigger = ($key, shouldRevalidate = true) => {
   const [key, , keyErr, keyValidating] = serialize($key);
@@ -218,7 +218,8 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
       return isUndefined(cachedData) ? config.initialData : cachedData;
     };
 
-    const data = ref(resolveData());
+    let $data = resolveData();
+    const data = ref($data);
     const error = ref(cache.get(keyErr));
     const isValidating = ref(!!cache.get(keyValidating));
 
@@ -312,9 +313,14 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
         cache.set(keyErr, undefined);
         cache.set(keyValidating, false);
 
-        if (!isEqual(data.value, newData)) {
-          data.value = newData;
+        if (!isEqual($data, newData)) {
+          $data = newData;
         }
+        if (!isUndefined(error.value)) {
+          error.value = undefined;
+        }
+        data.value = $data;
+        isValidating.value = false;
 
         if (!shouldDeduping) {
           // also update other hooks
@@ -358,9 +364,8 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
       unmounted = false;
 
       const latestKeyedData = resolveData();
-
-      if (!isEqual(data.value, latestKeyedData)) {
-        data.value = latestKeyedData;
+      if (!isEqual($data, latestKeyedData)) {
+        $data = latestKeyedData;
       }
 
       const softRevalidate = () => revalidate({ dedupe: true });
@@ -393,8 +398,8 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
         updatedIsValidating,
         dedupe = true,
       ) => {
-        if (!isUndefined(updatedData) && !isEqual(data.value, updatedData)) {
-          data.value = updatedData;
+        if (!isUndefined(updatedData) && !isEqual($data, updatedData)) {
+          $data = updatedData;
         }
 
         if (error.value !== updatedError) {
