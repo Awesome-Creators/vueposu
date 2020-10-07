@@ -75,7 +75,7 @@ Currently supported functions
   - [x] useDebounce
   - [x] useDebounceFn
   - [x] useDynamicList
-  - [ ] useEventEmitter
+  <!-- - [ ] useEventEmitter -->
   - [x] useQueue
   <!-- - [ ] useRaf -->
   - [x] useSet
