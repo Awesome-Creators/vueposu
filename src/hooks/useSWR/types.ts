@@ -1,7 +1,6 @@
 import type { Ref } from 'vue-demi';
 import type { RefTyped } from '../../types/global';
 
-/* istanbul ignore file */
 export type Fetcher<D> = (...args: any) => D | Promise<D>;
 
 export interface SWRConfig<
@@ -9,9 +8,11 @@ export interface SWRConfig<
   E = any,
   F extends Fetcher<D> = Fetcher<D>
 > {
-  loadingTimeout?: RefTyped<number>;
+  errorRetryInterval?: RefTyped<number>;
+  errorRetryCount?: RefTyped<number>;
   focusThrottleInterval?: RefTyped<number>;
   dedupingInterval?: RefTyped<number>;
+  loadingTimeout?: RefTyped<number>;
   refreshInterval?: RefTyped<number>;
   refreshWhenHidden?: RefTyped<boolean>;
   refreshWhenOffline?: RefTyped<boolean>;

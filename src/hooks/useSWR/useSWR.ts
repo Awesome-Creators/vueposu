@@ -343,7 +343,7 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
         }
 
         config.onError(err, key, config);
-        if (config.shouldRetryOnError) {
+        if (unref(config.shouldRetryOnError)) {
           const retryCount = (options.retryCount || 0) + 1;
           config.onErrorRetry(err, key, config, revalidate, {
             dedupe: true,
@@ -434,6 +434,7 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
 
     watchEffect(onInvalidate => {
       let timer = null;
+      const refreshInterval = ref(config.refreshInterval);
       const tick = async () => {
         if (
           !error.value &&
@@ -442,11 +443,13 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
         ) {
           await revalidate({ dedupe: true });
         }
-        const refreshInterval = unref(config.refreshInterval) || 0;
-        if (refreshInterval && !error.value) {
-          timer = setTimeout(tick, refreshInterval);
+        if (refreshInterval.value && !error.value) {
+          timer = setTimeout(tick, refreshInterval.value);
         }
       };
+      if (refreshInterval.value) {
+        timer = setTimeout(tick, refreshInterval.value);
+      }
 
       onInvalidate(() => {
         if (timer) clearTimeout(timer);

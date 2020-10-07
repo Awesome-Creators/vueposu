@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 // TODO: MIT license
 
 // inspired by vercel swr: https://github.com/vercel/swr
