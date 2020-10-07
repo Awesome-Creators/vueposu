@@ -88,7 +88,8 @@ Currently supported functions
 
 - CACHE
 
-  - [ ] useCookie
+  <!-- - [ ] useCookie -->
+
   - [ ] useLocalStorage
   - [ ] useSessionStorage
 

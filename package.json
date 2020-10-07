@@ -21,7 +21,6 @@
   "dependencies": {
     "@types/lodash-es": "^4.17.3",
     "@types/mathjs": "^6.0.5",
-    "js-cookie": "^2.2.1",
     "lodash-es": "^4.17.15",
     "mathjs": "^7.2.0",
     "vue-demi": "latest"
