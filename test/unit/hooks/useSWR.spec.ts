@@ -693,4 +693,429 @@ describe('useSWR - refresh', () => {
   });
 });
 
-// 'useSWR - revalidate'
+describe('useSWR - revalidate', () => {
+  it('should rerender after triggering revalidation', async () => {
+    let value = 0;
+
+    const component = mount(
+      defineComponent({
+        template: `<button @click="revalidate">data: {{ data }}</button>`,
+        setup() {
+          const { data, revalidate } = useSWR('dynamic-3', () => value++);
+
+          return { data, revalidate };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`"data:"`);
+
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 0"`);
+
+    await component.find('button').trigger('click');
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 1"`);
+  });
+
+  it('should revalidate all the hooks with the same key', async () => {
+    let value = 0;
+
+    const component = mount(
+      defineComponent({
+        template: `<button @click="revalidate">{{ a }}, {{ b }}</button>`,
+        setup() {
+          const { data: a, revalidate } = useSWR('dynamic-4', () => value++);
+          const { data: b } = useSWR('dynamic-4', () => value++);
+
+          return { a, b, revalidate };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`","`);
+
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"0, 0"`);
+
+    await component.find('button').trigger('click');
+    await wait(1);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"1, 1"`);
+  });
+
+  it('should respect sequences of revalidation calls (cope with race condition)', async () => {
+    let faster = false;
+
+    const component = mount(
+      defineComponent({
+        template: `<button @click="revalidate">{{ data }}</button>`,
+        setup() {
+          const { data, revalidate } = useSWR(
+            'race',
+            () =>
+              new Promise(res => {
+                const value = faster ? 1 : 0;
+                setTimeout(() => res(value), faster ? 100 : 200);
+              }),
+          );
+
+          return { data, revalidate };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`""`);
+
+    await wait(200);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"0"`);
+
+    faster = false;
+    await component.find('button').trigger('click');
+    await wait(10);
+    faster = true;
+    await component.find('button').trigger('click');
+    await wait(210);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"1"`);
+  });
+});
+
+describe('useSWR - error', () => {
+  it('should handle erros', async () => {
+    const component = mount(
+      defineComponent({
+        template: `hello, {{ error ? error.message : data }}`,
+        setup() {
+          const { data, error } = useSWR(
+            'error-1',
+            () =>
+              new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('error!')), 200),
+              ),
+          );
+
+          return { data, error };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`"hello,"`);
+
+    await wait(200);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, error!"`);
+  });
+
+  it('should trigger the onError event', async () => {
+    let errored = null;
+
+    const component = mount(
+      defineComponent({
+        template: `hello, {{ error ? error.message : data }}`,
+        setup() {
+          const { data, error } = useSWR(
+            'error-2',
+            () =>
+              new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('error!')), 200),
+              ),
+            { onError: (_, key) => (errored = key) },
+          );
+
+          return { data, error };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`"hello,"`);
+
+    await wait(200);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, error!"`);
+    expect(errored).toBe('error-2');
+  });
+
+  it('should trigger error retry', async () => {
+    let count = 0;
+
+    const component = mount(
+      defineComponent({
+        template: `hello, {{ error ? error.message : data }}`,
+        setup() {
+          const { data, error } = useSWR(
+            'error-3',
+            () =>
+              new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('error: ' + count++)), 100),
+              ),
+            {
+              onErrorRetry: (_, __, ___, revalidate, revalidateOpts) => {
+                setTimeout(() => revalidate(revalidateOpts), 100);
+              },
+              dedupingInterval: 0,
+            },
+          );
+
+          return { data, error };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`"hello,"`);
+
+    await wait(100);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, error: 0"`);
+
+    await wait(210);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, error: 1"`);
+
+    await wait(210);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, error: 2"`);
+  });
+
+  it('should trigger the onLoadingSlow and onSuccess event', async () => {
+    let loadingSlow = null,
+      success = null;
+
+    const component = mount(
+      defineComponent({
+        template: `hello, {{ data }}`,
+        setup() {
+          const { data } = useSWR(
+            'error-4',
+            () => new Promise(resolve => setTimeout(() => resolve('SWR'), 200)),
+            {
+              onLoadingSlow: key => (loadingSlow = key),
+              onSuccess: (_, key) => (success = key),
+              loadingTimeout: 100,
+            },
+          );
+
+          return { data };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`"hello,"`);
+    expect(loadingSlow).toBe(null);
+
+    await wait(110);
+    expect(loadingSlow).toBe('error-4');
+    expect(success).toBe(null);
+
+    await wait(100);
+    expect(success).toBe('error-4');
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, SWR"`);
+  });
+
+  it('should trigger limited error retries if errorRetryCount exists', async () => {
+    let count = 0;
+
+    const component = mount(
+      defineComponent({
+        template: `hello, {{ error ? error.message : data }}`,
+        setup() {
+          const { data, error } = useSWR(
+            'error-5',
+            () => {
+              return new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('error: ' + count++)), 100),
+              );
+            },
+            {
+              errorRetryCount: 1,
+              errorRetryInterval: 50,
+              dedupingInterval: 0,
+            },
+          );
+
+          return { data, error };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`"hello,"`);
+
+    await wait(100);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, error: 0"`);
+
+    await wait(210);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, error: 1"`);
+
+    await wait(210);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, error: 1"`);
+  });
+
+  it('should not trigger the onLoadingSlow and onSuccess event after component unmount', async () => {
+    let loadingSlow = null,
+      success = null;
+
+    const Block = defineComponent({
+      template: `hello, {{ data }}`,
+      setup() {
+        const { data } = useSWR(
+          'error-6',
+          () => new Promise(resolve => setTimeout(() => resolve('SWR'), 200)),
+          {
+            onLoadingSlow: key => {
+              loadingSlow = key;
+            },
+            onSuccess: (_, key) => {
+              success = key;
+            },
+            loadingTimeout: 100,
+          },
+        );
+
+        return { data };
+      },
+    });
+
+    const component = mount(
+      defineComponent({
+        components: { Block },
+        template: `<Block v-if="on" /> <button @click="on = !on"></button>`,
+        setup() {
+          const on = ref(true);
+
+          return { on };
+        },
+      }),
+    );
+
+    expect(loadingSlow).toBe(null);
+    expect(success).toBe(null);
+
+    await wait(10);
+    await component.find('button').trigger('click');
+    await wait(200);
+    expect(loadingSlow).toBe(null);
+    expect(success).toBe(null);
+  });
+
+  it('should not trigger the onError and onErrorRetry event after component unmount', async () => {
+    let retry = null,
+      failed = null;
+
+    const Block = defineComponent({
+      template: `{{ data }}`,
+      setup() {
+        const { data } = useSWR(
+          'error-7',
+          () =>
+            new Promise((_, reject) =>
+              setTimeout(() => reject(new Error('error!')), 200),
+            ),
+          {
+            onError: (_, key) => {
+              failed = key;
+            },
+            onErrorRetry: (_, key) => {
+              retry = key;
+            },
+            dedupingInterval: 0,
+          },
+        );
+
+        return { data };
+      },
+    });
+
+    const component = mount(
+      defineComponent({
+        components: { Block },
+        template: `<Block v-if="on" /> <button @click="on = !on"></button>`,
+        setup() {
+          const on = ref(true);
+
+          return { on };
+        },
+      }),
+    );
+
+    expect(retry).toBe(null);
+    expect(failed).toBe(null);
+
+    await wait(10);
+    await component.find('button').trigger('click');
+    await wait(200);
+    expect(retry).toBe(null);
+    expect(failed).toBe(null);
+  });
+
+  it('should not trigger error retries if errorRetryCount is set to 0', async () => {
+    let count = 0;
+
+    const component = mount(
+      defineComponent({
+        template: `hello, {{ error ? error.message : data }}`,
+        setup() {
+          const { data, error } = useSWR(
+            'error-8',
+            () =>
+              new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('error: ' + count++)), 100),
+              ),
+            {
+              errorRetryCount: 0,
+              errorRetryInterval: 50,
+              dedupingInterval: 0,
+            },
+          );
+
+          return { data, error };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`"hello,"`);
+
+    await wait(100);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, error: 0"`);
+
+    await wait(210);
+    await component.vm.$nextTick(); // retry
+    expect(component.text()).toMatchInlineSnapshot(`"hello, error: 0"`);
+  });
+});
+
+describe('useSWR - focus', () => {
+  it('should revalidate on focus by default', async () => {
+    let value = 0;
+
+    const component = mount(
+      defineComponent({
+        template: `<div>data: {{ data }}</div>`,
+        setup() {
+          const { data } = useSWR('dynamic-5', () => value++, {
+            dedupingInterval: 0,
+          });
+
+          return { data };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`"data:"`);
+
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 0"`);
+
+    // TODO
+    // await component.trigger('blur');
+    // await component.trigger('focus');
+    // await wait(1);
+    // await component.vm.$nextTick();
+    // expect(component.text()).toMatchInlineSnapshot(`"data: 1"`);
+  });
+});
