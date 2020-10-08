@@ -225,6 +225,11 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
 
     let unmounted = false;
 
+    const emit = (event, ...params) => {
+      if(unmounted) return;
+      config[event](...params);
+    }
+
     const boundMutate = (data, shouldRevalidate) => {
       [key] = serialize($key);
       return mutate(key, data, shouldRevalidate);
@@ -278,7 +283,7 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
           const loadingTimeout = unref(config.loadingTimeout);
           if (isDef(loadingTimeout) && loadingTimeout > 0) {
             setTimeout(() => {
-              if (loading) config.onLoadingSlow(key, config);
+              if (loading) emit('onLoadingSlow', key, config);
             }, loadingTimeout);
           }
 
@@ -294,7 +299,7 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
             delete concurrentPromisesTS[key];
           }, unref(config.dedupingInterval));
 
-          config.onSuccess(newData, key, config);
+          emit('onSuccess', newData, key, config);
         }
 
         const shouldIgnoreRequest =
@@ -342,10 +347,10 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
           }
         }
 
-        config.onError(err, key, config);
+        emit('onError', err, key, config);
         if (unref(config.shouldRetryOnError)) {
           const retryCount = (options.retryCount || 0) + 1;
-          config.onErrorRetry(err, key, config, revalidate, {
+          emit('onErrorRetry', err, key, config, revalidate, {
             dedupe: true,
             ...options,
             retryCount,
