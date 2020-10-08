@@ -262,7 +262,7 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
 
       try {
         isValidating.value = true;
-        cache.set(unref(keyValidating), true);
+        cache.set(keyValidating, true);
         if (!shouldDeduping) {
           // also update other hooks
           broadcastState(key, undefined, undefined, true);
@@ -399,7 +399,7 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
         dedupe = true,
       ) => {
         if (!isUndefined(updatedData) && !isEqual($data, updatedData)) {
-          $data = updatedData;
+          data.value = $data = updatedData;
         }
 
         if (error.value !== updatedError) {
