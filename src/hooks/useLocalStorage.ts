@@ -1,5 +1,4 @@
 export interface useLocalStorageOptions<T> {
-  key: string;
   value: T;
   defaultValue: T;
 }
@@ -14,4 +13,7 @@ export type useLocalStorageActions<T> = [
 ];
 
 // WIP
-export default function useLocalStorage() {}
+export default function useLocalStorage<T>(
+  key: string,
+  options: useLocalStorageOptions<T>,
+) {}
