@@ -7,7 +7,8 @@ import {
   onUpdated,
   onUnmounted,
 } from 'vue-demi';
-import useSWR from '@hooks/useSWR';
+import useSWR, { mutate, trigger } from '@hooks/useSWR';
+import cache from '@hooks/useSWR/cache';
 import { triggerDomEvent, wait } from '@test/utils/helper';
 
 describe('hooks/useSWR', () => {
@@ -737,7 +738,7 @@ describe('useSWR - revalidate', () => {
     expect(component.text()).toMatchInlineSnapshot(`"0, 0"`);
 
     await component.find('button').trigger('click');
-    await wait(1);
+    await wait();
     await component.vm.$nextTick();
     expect(component.text()).toMatchInlineSnapshot(`"1, 1"`);
   });
@@ -1093,7 +1094,7 @@ describe('useSWR - focus', () => {
 
     const component = mount(
       defineComponent({
-        template: `<div>data: {{ data }}</div>`,
+        template: `data: {{ data }}`,
         setup() {
           const { data } = useSWR('dynamic-5', () => value++, {
             dedupingInterval: 0,
@@ -1109,11 +1110,466 @@ describe('useSWR - focus', () => {
     await component.vm.$nextTick();
     expect(component.text()).toMatchInlineSnapshot(`"data: 0"`);
 
-    // TODO
+    await wait();
     triggerDomEvent('visibilitychange', window);
     triggerDomEvent('focus', window);
     await wait();
     await component.vm.$nextTick();
     expect(component.text()).toMatchInlineSnapshot(`"data: 1"`);
+  });
+
+  it("shouldn't revalidate on focus when revalidateOnFocus is false", async () => {
+    let value = 0;
+
+    const component = mount(
+      defineComponent({
+        template: `data: {{ data }}`,
+        setup() {
+          const { data } = useSWR('dynamic-6', () => value++, {
+            dedupingInterval: 0,
+            revalidateOnFocus: false,
+          });
+
+          return { data };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`"data:"`);
+
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 0"`);
+
+    await wait();
+    triggerDomEvent('visibilitychange', window);
+    triggerDomEvent('focus', window);
+    await wait();
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 0"`);
+  });
+
+  it('revalidateOnFocus shoule be stateful', async () => {
+    let value = 0;
+
+    const component = mount(
+      defineComponent({
+        template: `data: {{ data }} <button @click="revalidateOnFocus = !revalidateOnFocus"></button>`,
+        setup() {
+          const revalidateOnFocus = ref(false);
+          const { data } = useSWR('dynamic-revalidateOnFocus', () => value++, {
+            dedupingInterval: 0,
+            revalidateOnFocus,
+            focusThrottleInterval: 0,
+          });
+
+          return { data, revalidateOnFocus };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`"data:"`);
+
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 0"`);
+
+    await wait();
+    triggerDomEvent('visibilitychange', window);
+    triggerDomEvent('focus', window);
+    await wait();
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 0"`);
+
+    await component.find('button').trigger('click');
+    await wait();
+    triggerDomEvent('visibilitychange', window);
+    triggerDomEvent('focus', window);
+    await wait();
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 1"`);
+
+    await wait();
+    triggerDomEvent('visibilitychange', window);
+    triggerDomEvent('focus', window);
+    await wait();
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 2"`);
+
+    await component.find('button').trigger('click');
+    await wait();
+    triggerDomEvent('visibilitychange', window);
+    triggerDomEvent('focus', window);
+    await wait();
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 2"`);
+  });
+
+  it('focusThrottleInterval should work', async () => {
+    let value = 0;
+
+    const component = mount(
+      defineComponent({
+        template: `data: {{ data }}`,
+        setup() {
+          const { data } = useSWR('focusThrottleInterval-1', () => value++, {
+            dedupingInterval: 0,
+            revalidateOnFocus: true,
+            focusThrottleInterval: 200,
+          });
+
+          return { data };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`"data:"`);
+
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 0"`);
+
+    await wait();
+    triggerDomEvent('visibilitychange', window);
+    triggerDomEvent('focus', window);
+    await wait(210);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 1"`);
+
+    await wait();
+    triggerDomEvent('visibilitychange', window);
+    triggerDomEvent('focus', window);
+    await wait();
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 2"`);
+  });
+
+  it('focusThrottleInterval should be stateful', async () => {
+    let value = 0;
+
+    const component = mount(
+      defineComponent({
+        template: `data: {{ data }} <button @click="focusThrottleInterval += 100"></button>`,
+        setup() {
+          const focusThrottleInterval = ref(200);
+          const { data } = useSWR('focusThrottleInterval-2', () => value++, {
+            dedupingInterval: 0,
+            revalidateOnFocus: true,
+            focusThrottleInterval,
+          });
+
+          return { data, focusThrottleInterval };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`"data:"`);
+
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 0"`);
+
+    await wait();
+    triggerDomEvent('visibilitychange', window);
+    triggerDomEvent('focus', window);
+    await wait(210);
+    await wait();
+    triggerDomEvent('visibilitychange', window);
+    triggerDomEvent('focus', window);
+    await wait(210);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 2"`);
+
+    await component.find('button').trigger('click');
+    await wait();
+    triggerDomEvent('visibilitychange', window);
+    triggerDomEvent('focus', window);
+    await wait(210);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 3"`);
+
+    await wait(100);
+    triggerDomEvent('visibilitychange', window);
+    triggerDomEvent('focus', window);
+    await wait(310);
+    await wait();
+    triggerDomEvent('visibilitychange', window);
+    triggerDomEvent('focus', window);
+    await wait();
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 5"`);
+  });
+});
+
+describe('useSWR - local mutation', () => {
+  it('should trigger revalidation programmatically', async () => {
+    let value = 0;
+
+    const component = mount(
+      defineComponent({
+        template: `data: {{ data }}`,
+        setup() {
+          const { data } = useSWR('dynamic-7', () => value++, {
+            dedupingInterval: 0,
+          });
+
+          return { data };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`"data:"`);
+
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 0"`);
+
+    trigger('dynamic-7');
+    await wait();
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 1"`);
+  });
+
+  it('should trigger revalidation programmatically within a dedupingInterval', async () => {
+    let value = 0;
+
+    const component = mount(
+      defineComponent({
+        template: `data: {{ data }}`,
+        setup() {
+          const { data } = useSWR('dynamic-8', () => value++, {
+            dedupingInterval: 2000,
+          });
+
+          return { data };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`"data:"`);
+
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 0"`);
+
+    trigger('dynamic-8');
+    await wait();
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 1"`);
+  });
+
+  it('should mutate the cache and revalidate', async () => {
+    let value = 0;
+
+    const component = mount(
+      defineComponent({
+        template: `data: {{ data }}`,
+        setup() {
+          const { data } = useSWR('dynamic-9', () => value++, {
+            dedupingInterval: 0,
+          });
+
+          return { data };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`"data:"`);
+
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 0"`);
+
+    mutate('dynamic-9', 'mutate');
+    await wait();
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 1"`);
+  });
+
+  it('should dedupe extra request after mutation', async () => {
+    let value = 0;
+
+    const component = mount(
+      defineComponent({
+        template: `data: {{ data }}`,
+        setup() {
+          const { data } = useSWR('dynamic-10', () => value++, {
+            dedupingInterval: 2000,
+          });
+          useSWR('dynamic-10', () => value++, {
+            dedupingInterval: 2000,
+          });
+
+          return { data };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`"data:"`);
+
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 0"`);
+
+    await wait();
+    mutate('dynamic-10');
+    await wait();
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 1"`);
+  });
+
+  it('should mutate the chache and revalidate in async', async () => {
+    const component = mount(
+      defineComponent({
+        template: `data: {{ data }}`,
+        setup() {
+          const { data } = useSWR(
+            'dynamic-11',
+            () =>
+              new Promise(resolve => setTimeout(() => resolve('juice'), 200)),
+            {
+              dedupingInterval: 0,
+            },
+          );
+
+          return { data };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`"data:"`);
+
+    await wait(200);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: juice"`);
+
+    await wait();
+    mutate('dynamic-11', 'mutate');
+    await wait();
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: mutate"`);
+
+    await wait(200);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: juice"`);
+  });
+
+  it('should support async mutation', async () => {
+    const component = mount(
+      defineComponent({
+        template: `data: {{ data }}`,
+        setup() {
+          const { data } = useSWR('mutate-1', () => 0, {
+            dedupingInterval: 0,
+          });
+
+          return { data };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`"data:"`);
+
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 0"`);
+
+    await wait();
+    mutate(
+      'mutate-1',
+      new Promise(resolve => setTimeout(() => resolve(233), 100)),
+      false,
+    );
+    await wait(110);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 233"`);
+  });
+
+  it('should trigger on mutation without data', async () => {
+    let value = 0;
+
+    const component = mount(
+      defineComponent({
+        template: `data: {{ data }}`,
+        setup() {
+          const { data } = useSWR('dynamic-12', () => value++, {
+            dedupingInterval: 0,
+          });
+
+          return { data };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`"data:"`);
+
+    await wait(200);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 0"`);
+
+    await wait();
+    mutate('dynamic-12');
+    await wait();
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 1"`);
+  });
+
+  it('should call function as data passing current cached value', async () => {
+    cache.set('dynamic-13', 'cached data');
+    const callback = jest.fn();
+    await mutate('dynamic-13', callback);
+    expect(callback).toHaveBeenCalledWith('cached data');
+  });
+
+  it('should return results of the mutation', async () => {
+    expect(mutate('dynamic-14', Promise.resolve('data'))).resolves.toBe('data');
+
+    expect(
+      mutate('dynamic-15', Promise.reject(new Error('error'))),
+    ).rejects.toBeInstanceOf(Error);
+  });
+
+  it('should get bound mutate from useSWR', async () => {
+    const component = mount(
+      defineComponent({
+        template: `data: {{ data }} <button @click="boundMutate('mutated', false)"></button>`,
+        setup() {
+          const { data, mutate: boundMutate } = useSWR(
+            'dynamic-16',
+            () => 'fetched',
+          );
+
+          return { data, boundMutate };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`"data:"`);
+
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: fetched"`);
+
+    await component.find('button').trigger('click');
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: mutated"`);
+  });
+
+  it('should ignore in flight requests when mutating', async () => {
+    mutate('mutate-2', 1);
+
+    const component = mount(
+      defineComponent({
+        template: `{{ data }}`,
+        setup() {
+          const { data } = useSWR(
+            'mutate-2',
+            () => new Promise(resolve => setTimeout(() => resolve(2), 200)),
+          );
+
+          return { data };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`"1"`);
+
+    await wait(150);
+    mutate('mutate-2', 3);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"3"`);
+
+    await wait(100);
+    expect(component.text()).toMatchInlineSnapshot(`"3"`);
   });
 });
