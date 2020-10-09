@@ -61,11 +61,7 @@ if (!isServer && window.addEventListener) {
     () => revalidate(focusRevalidators),
     false,
   );
-  window.addEventListener(
-    'focus',
-    () => revalidate(focusRevalidators),
-    false,
-  );
+  window.addEventListener('focus', () => revalidate(focusRevalidators), false);
   // reconnect revalidate
   window.addEventListener(
     'online',

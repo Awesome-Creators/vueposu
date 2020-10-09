@@ -92,8 +92,8 @@ Currently supported functions
 
   <!-- - [ ] useCookie -->
 
-  - [ ] useLocalStorage
-  - [ ] useSessionStorage
+  - [x] useLocalStorage
+  - [x] useSessionStorage
 
 - SIDE EFFECT
 

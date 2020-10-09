@@ -39,9 +39,7 @@ const clear = () => {
 
 const keys = () => Array.from(cache.keys());
 
-const serializeKey = (
-  key: SWRKey,
-): [string, any, string, string] => {
+const serializeKey = (key: SWRKey): [string, any, string, string] => {
   let args = null;
   if (isFunction(key)) {
     try {
