@@ -22,6 +22,7 @@ import type {
   SWRKey,
   SWRConfig,
   UseSWRReturnType,
+  Mutate,
   BroadcastState,
   RevalidateOptions,
 } from './types';
@@ -105,7 +106,7 @@ const broadcastState: BroadcastState = (key, data, error, isValidating) => {
   }
 };
 
-export const mutate = async ($key, $data, shouldRevalidate = true) => {
+export const mutate: Mutate = async ($key, $data, shouldRevalidate = true) => {
   const [key, , keyErr] = serialize($key);
 
   if (isUndefined($data)) return trigger($key, shouldRevalidate);

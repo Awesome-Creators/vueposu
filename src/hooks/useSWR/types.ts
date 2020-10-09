@@ -65,4 +65,10 @@ export type BroadcastState<D = any, E = any> = (
   isValidating?: boolean,
 ) => void;
 
+export type Mutate<D = any> = (
+  key: SWRKey,
+  data?: D | Promise<D> | MutateCallback<D>,
+  shouldRevalidate?: boolean,
+) => Promise<D | undefined>;
+
 export type CacheListener = () => void;
