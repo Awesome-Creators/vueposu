@@ -57,18 +57,12 @@ if (!isServer && window.addEventListener) {
   // focus revalidate
   window.addEventListener(
     'visibilitychange',
-    () => {
-      console.log('visibilitychange');
-      revalidate(focusRevalidators);
-    },
+    () => revalidate(focusRevalidators),
     false,
   );
   window.addEventListener(
     'focus',
-    () => {
-      console.log('focus');
-      revalidate(focusRevalidators);
-    },
+    () => revalidate(focusRevalidators),
     false,
   );
   // reconnect revalidate
@@ -81,7 +75,7 @@ if (!isServer && window.addEventListener) {
 
 const serialize = key => cache.serializeKey(key);
 
-const trigger = ($key, shouldRevalidate = true) => {
+export const trigger = ($key, shouldRevalidate = true) => {
   const [key, , keyErr, keyValidating] = serialize($key);
   if (!key) return Promise.resolve();
 
@@ -111,7 +105,7 @@ const broadcastState: BroadcastState = (key, data, error, isValidating) => {
   }
 };
 
-const mutate = async ($key, $data, shouldRevalidate = true) => {
+export const mutate = async ($key, $data, shouldRevalidate = true) => {
   const [key, , keyErr] = serialize($key);
 
   if (isUndefined($data)) return trigger($key, shouldRevalidate);
