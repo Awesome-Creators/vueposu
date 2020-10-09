@@ -38,7 +38,7 @@ export type KeyType = string | any[] | null;
 
 type KeyFunction = () => KeyType;
 
-export type SWRKey = KeyFunction | KeyType;
+export type SWRKey = RefTyped<KeyFunction | KeyType>;
 
 export type MutateCallback<D = any> = (currentValue: D) => Promise<D> | D;
 

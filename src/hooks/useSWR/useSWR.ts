@@ -3,7 +3,13 @@
 // inspired by vercel swr: https://github.com/vercel/swr
 // learn at: https://github.com/chenbin92/swr-source-code
 
-import { ref, unref, watchEffect, getCurrentInstance } from 'vue-demi';
+import {
+  ref,
+  unref,
+  readonly,
+  watchEffect,
+  getCurrentInstance,
+} from 'vue-demi';
 import cache from './cache';
 import defaultConfig from './config';
 import isDocumentVisible from '../../libs/isDocumentVisible';
@@ -70,10 +76,8 @@ if (!isServer && window.addEventListener) {
   );
 }
 
-const serialize = key => cache.serializeKey(key);
-
 export const trigger = ($key, shouldRevalidate = true) => {
-  const [key, , keyErr, keyValidating] = serialize($key);
+  const [key, , keyErr, keyValidating] = cache.serializeKey($key);
   if (!key) return Promise.resolve();
 
   const updaters = cacheRevalidators[key];
@@ -103,7 +107,7 @@ const broadcastState: BroadcastState = (key, data, error, isValidating) => {
 };
 
 export const mutate: Mutate = async ($key, $data, shouldRevalidate = true) => {
-  const [key, , keyErr] = serialize($key);
+  const [key, , keyErr] = cache.serializeKey($key);
 
   if (isUndefined($data)) return trigger($key, shouldRevalidate);
 
@@ -184,9 +188,6 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
       fetcher: Fetcher<D> | undefined,
       config: SWRConfig<D, E> = {};
 
-    if (args.length > 0) {
-      $key = unref(args[0]);
-    }
     if (args.length > 2) {
       if (isFunction(args[1])) {
         fetcher = args[1];
@@ -211,10 +212,15 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
       fetcher = config.fetcher;
     }
 
-    let [key, fetcherArgs, keyErr, keyValidating] = serialize($key);
+    const serialize = () => {
+      $key = unref(args[0]);
+      return cache.serializeKey($key);
+    };
+
+    let [key, fetcherArgs, keyErr, keyValidating] = serialize();
 
     const resolveData = () => {
-      [key] = serialize($key);
+      [key] = serialize();
       const cachedData = cache.get(key);
       return isUndefined(cachedData) ? config.initialData : cachedData;
     };
@@ -232,12 +238,12 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
     };
 
     const boundMutate = (data, shouldRevalidate) => {
-      [key] = serialize($key);
+      [key] = serialize();
       return mutate(key, data, shouldRevalidate);
     };
 
     const addRevalidator = (revalidators, callback) => {
-      [key] = serialize($key);
+      [key] = serialize();
       if (!callback) return;
       if (!revalidators[key]) {
         revalidators[key] = [callback];
@@ -247,7 +253,7 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
     };
 
     const removeRevalidator = (revlidators, callback) => {
-      [key] = serialize($key);
+      [key] = serialize();
       if (revlidators[key]) {
         const revalidators = revlidators[key];
         const index = revalidators.indexOf(callback);
@@ -258,7 +264,7 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
     };
 
     const revalidate = async (options: RevalidateOptions = {}) => {
-      [key, fetcherArgs, keyErr, keyValidating] = serialize($key);
+      [key, fetcherArgs, keyErr, keyValidating] = serialize();
       if (!key || !fetcher || unmounted) return false;
       options = { dedupe: false, ...options };
 
@@ -364,7 +370,7 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
     };
 
     watchEffect(onInvalidate => {
-      [key] = serialize($key);
+      [key] = serialize();
       if (!key) return;
 
       unmounted = false;
@@ -462,7 +468,13 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
       });
     });
 
-    return { data, error, isValidating, revalidate, mutate: boundMutate };
+    return {
+      data: readonly(data),
+      error: readonly(error),
+      isValidating: readonly(isValidating),
+      revalidate,
+      mutate: boundMutate,
+    };
   } else {
     throw new Error(
       'Invalid hook call: `useSWR` can only be called inside of `setup()`.',
