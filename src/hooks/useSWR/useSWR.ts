@@ -57,10 +57,20 @@ if (!isServer && window.addEventListener) {
   // focus revalidate
   window.addEventListener(
     'visibilitychange',
-    () => revalidate(focusRevalidators),
+    () => {
+      console.log('visibilitychange');
+      revalidate(focusRevalidators);
+    },
     false,
   );
-  window.addEventListener('focus', () => revalidate(focusRevalidators), false);
+  window.addEventListener(
+    'focus',
+    () => {
+      console.log('focus');
+      revalidate(focusRevalidators);
+    },
+    false,
+  );
   // reconnect revalidate
   window.addEventListener(
     'online',
@@ -226,9 +236,9 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
     let unmounted = false;
 
     const emit = (event, ...params) => {
-      if(unmounted) return;
+      if (unmounted) return;
       config[event](...params);
-    }
+    };
 
     const boundMutate = (data, shouldRevalidate) => {
       [key] = serialize($key);

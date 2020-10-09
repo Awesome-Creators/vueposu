@@ -8,9 +8,7 @@ import {
   onUnmounted,
 } from 'vue-demi';
 import useSWR from '@hooks/useSWR';
-import cache from '@hooks/useSWR/cache';
-import { useSWRGlobalConfig } from '@hooks/useSWR/config';
-import { wait } from '../../utils/helper';
+import { triggerDomEvent, wait } from '@test/utils/helper';
 
 describe('hooks/useSWR', () => {
   it('should return `undefined` on hydration', () => {
@@ -1112,10 +1110,10 @@ describe('useSWR - focus', () => {
     expect(component.text()).toMatchInlineSnapshot(`"data: 0"`);
 
     // TODO
-    // await component.trigger('blur');
-    // await component.trigger('focus');
-    // await wait(1);
-    // await component.vm.$nextTick();
-    // expect(component.text()).toMatchInlineSnapshot(`"data: 1"`);
+    triggerDomEvent('visibilitychange', window);
+    triggerDomEvent('focus', window);
+    await wait();
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 1"`);
   });
 });

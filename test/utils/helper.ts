@@ -18,6 +18,7 @@ export const times = (times = 0, cb: Function) => {
 };
 
 // trigger dom event
-export const triggerDomEvent = evt => {
-  document.dispatchEvent(new Event(evt));
+export const triggerDomEvent = (evt, elm?) => {
+  const $elm = elm ?? document;
+  $elm.dispatchEvent(new Event(evt));
 };
