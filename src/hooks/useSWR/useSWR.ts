@@ -7,7 +7,10 @@ import {
   ref,
   unref,
   readonly,
+  watch,
   watchEffect,
+  isRef,
+  isReactive,
   getCurrentInstance,
 } from 'vue-demi';
 import cache from './cache';
@@ -368,6 +371,12 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
       loading = false;
       return true;
     };
+
+    if (isRef(args[0]) || isReactive(args[0])) {
+      watch(args[0], () => {
+        data.value = $data = resolveData();
+      });
+    }
 
     watchEffect(onInvalidate => {
       [key] = serialize();
