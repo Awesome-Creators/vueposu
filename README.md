@@ -92,6 +92,7 @@ Currently supported functions
 
   <!-- - [ ] useCookie -->
 
+  - [x] useWebStorage
   - [x] useLocalStorage
   - [x] useSessionStorage
 

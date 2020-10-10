@@ -1,10 +1,10 @@
 // import { mount } from '@vue/test-utils';
 // import { defineComponent } from 'vue-demi';
 // import { wait } from '@test/utils/helper';
-// import useLocalStorage from '@hooks/useLocalStorage';
+// import useSessionStorage from '@hooks/useSessionStorage';
 
 // // TODO: remove value
-// describe('hooks/useLocalStorage', () => {
+// describe('hooks/useSessionStorage', () => {
 //   beforeEach(() => {
 //     localStorage.clear();
 //   });
@@ -13,7 +13,7 @@
 //     const CompA = defineComponent({
 //       template: `{{ val }}`,
 //       setup() {
-//         const val = useLocalStorage('a', '1');
+//         const val = useSessionStorage('a', '1');
 //         return { val };
 //       },
 //     });
@@ -21,7 +21,7 @@
 //     const CompB = defineComponent({
 //       template: `{{ val }}`,
 //       setup() {
-//         const val = useLocalStorage('a', '1');
+//         const val = useSessionStorage('a', '1');
 //         return { val };
 //       },
 //     });
@@ -62,14 +62,14 @@
 //     // const CompA = defineComponent({
 //     //   template: `{{ val }}`,
 //     //   setup() {
-//     //     const val = useLocalStorage('b', null);
+//     //     const val = useSessionStorage('b', null);
 //     //     return { val };
 //     //   },
 //     // });
 //     // const CompB = defineComponent({
 //     //   template: `{{ val }}`,
 //     //   setup() {
-//     //     const val = useLocalStorage('b', null);
+//     //     const val = useSessionStorage('b', null);
 //     //     return { val };
 //     //   },
 //     // });
