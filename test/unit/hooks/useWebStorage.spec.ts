@@ -1,8 +1,7 @@
 import { mount } from '@vue/test-utils';
 import { defineComponent } from 'vue-demi';
-import { wait } from '@test/utils/helper';
-import useWebStorage, { Serializers } from '@hooks/useWebStorage';
-import useSWR from '../../../src/hooks/useSWR';
+import useWebStorage from '@hooks/useWebStorage';
+import { Serializers } from '@hooks/useWebStorage/serializer';
 
 // TODO: remvoe value
 describe('hooks/useWebStorage', () => {
@@ -73,10 +72,12 @@ describe('hooks/useWebStorage', () => {
   });
 
   it('[localStorage]: basic test', async () => {
+    localStorage.setItem('a', '1');
+
     const CompA = defineComponent({
       template: `{{ val }}`,
       setup() {
-        const val = useWebStorage('a', '1');
+        const val = useWebStorage('a', '233');
         return { val };
       },
     });
@@ -84,7 +85,7 @@ describe('hooks/useWebStorage', () => {
     const CompB = defineComponent({
       template: `{{ val }}`,
       setup() {
-        const val = useWebStorage('a', '1');
+        const val = useWebStorage('a', '666');
         return { val };
       },
     });
@@ -92,39 +93,40 @@ describe('hooks/useWebStorage', () => {
     const component = mount(
       defineComponent({
         components: { CompA, CompB },
-        template: `<CompA ref="a" /> <CompB ref="b" />`,
+        template: `<CompA ref="a" />, <CompB ref="b" />`,
       }),
     );
 
     const compA: any = component.vm.$refs.a;
     const compB: any = component.vm.$refs.b;
 
-    await wait();
-    expect(compA.val).toBe('1');
-    expect(compB.val).toBe('1');
-    expect(component.text()).toBe('1 1');
+    await component.vm.$nextTick();
+    expect(component.text()).toBe('1, 1');
     expect(localStorage.getItem('a')).toBe('1');
 
     compA.val = '2';
-    await wait();
-    expect(component.text()).toBe('2 2');
-    expect(compA.val).toBe('2');
+    await component.vm.$nextTick();
     expect(compB.val).toBe('2');
+    expect(component.text()).toBe('2, 2');
     expect(localStorage.getItem('a')).toBe('2');
 
-    await wait();
-    expect(compA.val).toBe('2');
-    expect(compB.val).toBe('2');
-    expect(component.text()).toBe('2 2');
-    expect(localStorage.getItem('a')).toBe('2');
+    compA.val = null;
+    await component.vm.$nextTick();
+    expect(compB.val).toBe(null);
+    expect(component.text()).toBe(',');
+    expect(localStorage.getItem('a')).toBe(null);
 
-    // compA.val = null
-    // // localStorage.removeItem('a')
-    // await wait()
+    // localStorage.setItem('a', '2');
+    // await component.vm.$nextTick();
+    // expect(compA.val).toBe('2');
+    // expect(compB.val).toBe('2');
+    // expect(component.text()).toBe('2, 2');
+
+    // localStorage.removeItem('a');
+    // await component.vm.$nextTick();
     // expect(compA.val).toBe(null);
     // expect(compB.val).toBe(null);
-
-    // expect(localStorage.getItem('a')).toBeNull();
+    // expect(component.text()).toBe(',');
 
     component.unmount();
   });
@@ -133,15 +135,54 @@ describe('hooks/useWebStorage', () => {
     const CompA = defineComponent({
       template: `{{ val }}`,
       setup() {
-        const val = useSWR('b', () => '1');
-        return { val: val.data, mutate: val.mutate };
+        const val = useWebStorage('b', null);
+        return { val };
       },
     });
     const CompB = defineComponent({
       template: `{{ val }}`,
       setup() {
-        const val = useSWR('b', () => '1');
-        return { val: val.data };
+        const val = useWebStorage('b', null);
+        return { val };
+      },
+    });
+    const component = mount(
+      defineComponent({
+        components: { CompA, CompB },
+        template: `<CompA ref="a" /> <CompB ref="b" />`,
+      }),
+    );
+    const compA: any = component.vm.$refs.a;
+    const compB: any = component.vm.$refs.b;
+
+    await component.vm.$nextTick();
+    expect(compA.val).toBe(null);
+    expect(compB.val).toBe(null);
+    expect(component.text()).toBe('');
+    expect(localStorage.getItem('b')).toBe(null);
+
+    compA.val = '1';
+    await component.vm.$nextTick();
+    expect(component.text()).toBe('1 1');
+    expect(compA.val).toBe('1');
+    expect(compB.val).toBe('1');
+    expect(localStorage.getItem('b')).toBe('1');
+  });
+
+  it('[sessionStorage]: basic test', async () => {
+    const CompA = defineComponent({
+      template: `{{ val }}`,
+      setup() {
+        const val = useWebStorage('a', '1', sessionStorage);
+        return { val };
+      },
+    });
+
+    const CompB = defineComponent({
+      template: `{{ val }}`,
+      setup() {
+        const val = useWebStorage('a', '1', sessionStorage);
+        return { val };
       },
     });
 
@@ -155,156 +196,58 @@ describe('hooks/useWebStorage', () => {
     const compA: any = component.vm.$refs.a;
     const compB: any = component.vm.$refs.b;
 
-    await wait();
+    await component.vm.$nextTick();
     expect(compA.val).toBe('1');
     expect(compB.val).toBe('1');
     expect(component.text()).toBe('1 1');
+    expect(sessionStorage.getItem('a')).toBe('1');
 
-    compA.mutate('2');
-    await wait();
+    compA.val = '2';
+    await component.vm.$nextTick();
+    expect(component.text()).toBe('2 2');
     expect(compA.val).toBe('2');
     expect(compB.val).toBe('2');
-    expect(component.text()).toBe('2 2');
+    expect(sessionStorage.getItem('a')).toBe('2');
 
-    compA.mutate(null);
-    await wait();
-    expect(compA.val).toBe('');
-    expect(compB.val).toBe('');
-    expect(component.text()).toBe('');
+    component.unmount();
   });
 
-  // it('[localStorage]: any test', async () => {
-  //   // const CompA = defineComponent({
-  //   //   template: `{{ val }}`,
-  //   //   setup() {
-  //   //     const val = useWebStorage('b', null);
-  //   //     return { val };
-  //   //   },
-  //   // });
-  //   // const CompB = defineComponent({
-  //   //   template: `{{ val }}`,
-  //   //   setup() {
-  //   //     const val = useWebStorage('b', null);
-  //   //     return { val };
-  //   //   },
-  //   // });
-  //   // const component = mount(
-  //   //   defineComponent({
-  //   //     components: { CompA, CompB },
-  //   //     template: `<CompA ref="a" /> <CompB ref="b" />`,
-  //   //   }),
-  //   // );
-  //   // const compA: any = component.vm.$refs.a;
-  //   // const compB: any = component.vm.$refs.b;
-  //   // // await wait();
-  //   // console.log(compA.val);
-  //   // expect(compA.val).toBe('');
-  //   // expect(compB.val).toBe('');
-  //   // expect(component.text()).toBe(' ');
-  //   // expect(localStorage.getItem('a')).toBe('');
-  //   // compA.val = '1';
-  //   // await wait();
-  //   // expect(component.text()).toBe('1 1');
-  //   // expect(compA.val).toBe('1');
-  //   // expect(compB.val).toBe('1');
-  //   // expect(localStorage.getItem('a')).toBe('1');
-  //   // await wait();
-  //   // expect(compA.val).toBe('1');
-  //   // expect(compB.val).toBe('1');
-  //   // expect(component.text()).toBe('1 1');
-  //   // expect(localStorage.getItem('a')).toBe('1');
-  //   // component.unmount();
-  // });
+  it('[sessionStorage]: any test', async () => {
+    const CompA = defineComponent({
+      template: `{{ val }}`,
+      setup() {
+        const val = useWebStorage('b', null, sessionStorage);
+        return { val };
+      },
+    });
+    const CompB = defineComponent({
+      template: `{{ val }}`,
+      setup() {
+        const val = useWebStorage('b', null, sessionStorage);
+        return { val };
+      },
+    });
+    const component = mount(
+      defineComponent({
+        components: { CompA, CompB },
+        template: `<CompA ref="a" /> <CompB ref="b" />`,
+      }),
+    );
+    const compA: any = component.vm.$refs.a;
+    const compB: any = component.vm.$refs.b;
 
-  // it('[sessionStorage]: basic test', async () => {
-  //   const CompA = defineComponent({
-  //     template: `{{ val }}`,
-  //     setup() {
-  //       const val = useWebStorage('a', '1', sessionStorage);
-  //       return { val };
-  //     },
-  //   });
+    await component.vm.$nextTick();
+    expect(compA.val).toBe(null);
+    expect(compB.val).toBe(null);
+    expect(component.text()).toBe('');
+    expect(sessionStorage.getItem('b')).toBe(null);
 
-  //   const CompB = defineComponent({
-  //     template: `{{ val }}`,
-  //     setup() {
-  //       const val = useWebStorage('a', '1', sessionStorage);
-  //       return { val };
-  //     },
-  //   });
-
-  //   const component = mount(
-  //     defineComponent({
-  //       components: { CompA, CompB },
-  //       template: `<CompA ref="a" /> <CompB ref="b" />`,
-  //     }),
-  //   );
-
-  //   const compA: any = component.vm.$refs.a;
-  //   const compB: any = component.vm.$refs.b;
-
-  //   await wait();
-  //   expect(compA.val).toBe('1');
-  //   expect(compB.val).toBe('1');
-  //   expect(component.text()).toBe('1 1');
-  //   expect(localStorage.getItem('a')).toBe('1');
-
-  //   compA.val = '2';
-  //   await wait();
-  //   expect(component.text()).toBe('2 2');
-  //   expect(compA.val).toBe('2');
-  //   expect(compB.val).toBe('2');
-  //   expect(localStorage.getItem('a')).toBe('2');
-
-  //   await wait();
-  //   expect(compA.val).toBe('2');
-  //   expect(compB.val).toBe('2');
-  //   expect(component.text()).toBe('2 2');
-  //   expect(localStorage.getItem('a')).toBe('2');
-
-  //   component.unmount();
-  // });
-
-  // it('[sessionStorage]: any test', async () => {
-  // const CompA = defineComponent({
-  //   template: `{{ val }}`,
-  //   setup() {
-  //     const val = useWebStorage('b',null,sessionStorage);
-  //     return { val };
-  //   },
-  // });
-  // const CompB = defineComponent({
-  //   template: `{{ val }}`,
-  //   setup() {
-  //     const val = useWebStorage('b',null,sessionStorage);
-  //     return { val };
-  //   },
-  // });
-  // const component = mount(
-  //   defineComponent({
-  //     components: { CompA, CompB },
-  //     template: `<CompA ref="a" /> <CompB ref="b" />`,
-  //   }),
-  // );
-  // const compA: any = component.vm.$refs.a;
-  // const compB: any = component.vm.$refs.b;
-  // // await wait();
-  // console.log(compA.val);
-  // expect(compA.val).toBe('');
-  // expect(compB.val).toBe('');
-  // expect(component.text()).toBe(' ');
-  // expect(localStorage.getItem('a')).toBe('');
-  // compA.val = '1';
-  // await wait();
-  // expect(component.text()).toBe('1 1');
-  // expect(compA.val).toBe('1');
-  // expect(compB.val).toBe('1');
-  // expect(localStorage.getItem('a')).toBe('1');
-  // await wait();
-  // expect(compA.val).toBe('1');
-  // expect(compB.val).toBe('1');
-  // expect(component.text()).toBe('1 1');
-  // expect(localStorage.getItem('a')).toBe('1');
-  // component.unmount();
-  // });
+    compA.val = '1';
+    await component.vm.$nextTick();
+    expect(component.text()).toBe('1 1');
+    expect(compA.val).toBe('1');
+    expect(compB.val).toBe('1');
+    expect(sessionStorage.getItem('b')).toBe('1');
+    component.unmount();
+  });
 });
