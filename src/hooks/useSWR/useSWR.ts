@@ -152,7 +152,6 @@ export const mutate: Mutate = async ($key, $data, shouldRevalidate = true) => {
   cache.set(keyErr, error);
 
   mutationEndTS[key] = Date.now() - 1;
-
   const updaters = cacheRevalidators[key];
   if (updaters) {
     const promises = [];
@@ -240,9 +239,9 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
       config[event](...params);
     };
 
-    const boundMutate = (data, shouldRevalidate) => {
+    const boundMutate = ($$data, shouldRevalidate) => {
       [key] = serialize();
-      return mutate(key, data, shouldRevalidate);
+      return mutate(key, $$data, shouldRevalidate);
     };
 
     const addRevalidator = (revalidators, callback) => {
