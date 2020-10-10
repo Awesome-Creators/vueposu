@@ -88,7 +88,7 @@ describe('hooks/useSWR', () => {
     expect(component.text()).toMatchInlineSnapshot(`"hello, SWR"`);
   });
 
-  it('should dedupe requests by default', async () => {
+  it('should dedupe same key requests within the same component', async () => {
     let count = 0;
     const fetch = () => {
       count++;
@@ -117,6 +117,51 @@ describe('hooks/useSWR', () => {
     expect(count).toBe(1);
   });
 
+  it('should dedupe same key requests within the different components', async () => {
+    let count = 0;
+    const fetch = () => {
+      count++;
+      return new Promise(resolve => setTimeout(() => resolve('SWR'), 200));
+    };
+
+    const CompA = defineComponent({
+      template: `{{ data }}`,
+      setup() {
+        const { data } = useSWR('constant-5', fetch);
+        return {
+          data,
+        };
+      },
+    })
+
+    const CompB = defineComponent({
+      template: `{{ data }}`,
+      setup() {
+        const { data } = useSWR('constant-5', fetch);
+        return {
+          data,
+        };
+      },
+    })
+
+    const component = mount(
+      defineComponent({
+        components: {
+          CompA, CompB
+        },
+        template: `<CompA /> <CompB />`,
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`""`);
+    await wait(200);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"SWR SWR"`);
+    // only fetches once
+    console.log(count, 'ass')
+    expect(count).toBe(1);
+  });
+
   it('should trigger the onSuccess event', async () => {
     let juice = null;
 
@@ -125,7 +170,7 @@ describe('hooks/useSWR', () => {
         template: `hello, {{ data }}`,
         setup() {
           const { data } = useSWR(
-            'constant-5',
+            'constant-6',
             () => new Promise(resolve => setTimeout(() => resolve('SWR'), 200)),
             { onSuccess: $data => (juice = $data) },
           );
