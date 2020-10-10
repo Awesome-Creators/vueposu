@@ -149,16 +149,15 @@ describe('hooks/useSWR', () => {
         components: {
           CompA, CompB
         },
-        template: `<CompA /> <CompB />`,
+        template: `<CompA />, <CompB />`,
       }),
     );
 
-    expect(component.text()).toMatchInlineSnapshot(`""`);
+    expect(component.text()).toMatchInlineSnapshot(`","`);
     await wait(200);
     await component.vm.$nextTick();
-    expect(component.text()).toMatchInlineSnapshot(`"SWR SWR"`);
+    expect(component.text()).toMatchInlineSnapshot(`"SWR, SWR"`);
     // only fetches once
-    console.log(count, 'ass')
     expect(count).toBe(1);
   });
 
