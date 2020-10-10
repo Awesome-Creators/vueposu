@@ -1,4 +1,3 @@
-import { null } from 'mathjs';
 import { computed } from 'vue-demi';
 import useSWR from './useSWR';
 
