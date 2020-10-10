@@ -1740,37 +1740,6 @@ describe('useSWR - local mutation', () => {
   });
 });
 
-// TODO
-// describe('useSWR - global configs', () => {
-//   it('should read the config fallback from the config ref', async () => {
-//     let value = 0;
-//     const fetcher = () => value++;
-//     useSWRGlobalConfig({
-//       fetcher, refreshInterval: 100, dedupingInterval: 0
-//     });
-
-//     const component = mount(
-//       defineComponent({
-//         template: `data: {{ data }}`,
-//         setup() {
-//           const { data } = useSWR('dynamic-18');
-
-//           return { data };
-//         },
-//       }),
-//     );
-
-//     expect(component.text()).toMatchInlineSnapshot(`"data:"`);
-
-//     await component.vm.$nextTick();
-//     expect(component.text()).toMatchInlineSnapshot(`"data: 0"`);
-
-//     await wait(110);
-//     await component.vm.$nextTick();
-//     expect(component.text()).toMatchInlineSnapshot(`"data: 1"`);
-//   })
-// })
-
 describe('useSWR - key', () => {
   it('should respect requests after key has changed', async () => {
     const component = mount(
@@ -1924,57 +1893,267 @@ describe('useSWR - key', () => {
   });
 });
 
-// WIP
-// describe('useSWR - config callbacks', () => {
-//   it('should trigger the onSuccess event with the latest version of the onSuccess callback', async () => {
-//     let state = null;
-//     let count = 0;
+describe('useSWR - config callbacks', () => {
+  it('should trigger the onSuccess event with the latest version of the onSuccess callback', async () => {
+    let state = null;
+    let count = 0;
 
-//     const Block = defineComponent({
-//       template: `hello, {{ data }}, {{ text }} <button @click="revalidate"></button>`,
-//       props: {
-//         text: String,
-//       },
-//       setup(props) {
-//         const { data, revalidate } = useSWR(
-//           'config callbacks - onSuccess',
-//           () => new Promise(resolve => setTimeout(() => resolve(count++), 200)),
-//           { onSuccess: () => (state = props.text) },
-//         );
+    const Block = defineComponent({
+      template: `<template>
+        hello, {{ data }}, {{ text }} <button @click="revalidate"></button>
+      </template>`,
+      props: {
+        text: String,
+      },
+      setup(props) {
+        const { data, revalidate } = useSWR(
+          'callbacks-onSuccess',
+          () => new Promise(resolve => setTimeout(() => resolve(count++), 200)),
+          { onSuccess: () => (state = props.text) },
+        );
 
-//         return { data, revalidate, ...toRefs(props) };
-//       },
-//     });
+        return { data, revalidate, ...toRefs(props) };
+      },
+    });
 
-//     const component = mount(
-//       defineComponent({
-//         components: { Block },
-//         template: `<Block :text="text" />`,
-//         setup() {
-//           const text = ref('a');
+    const component = mount(
+      defineComponent({
+        components: { Block },
+        template: `<Block :text="text" />`,
+        setup() {
+          const text = ref('a');
 
-//           return { text };
-//         },
-//       }),
-//     );
+          return { text };
+        },
+      }),
+    );
 
-//     await component.vm.$nextTick();
-//     expect(component.text()).toMatchInlineSnapshot(`"hello, , a"`);
-//     expect(state).toBe(null);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, , a"`);
+    expect(state).toBe(null);
 
-//     await wait(200);
-//     await component.vm.$nextTick();
-//     expect(component.text()).toMatchInlineSnapshot(`"hello, 0, a"`);
+    await wait(200);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, 0, a"`);
+    expect(state).toBe('a');
 
-//     component.vm.text = 'b';
-//     await component.vm.$nextTick();
-//     expect(component.text()).toMatchInlineSnapshot(`"hello, 0, b"`);
-//     expect(state).toBe('a');
+    component.vm.text = 'b';
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, 0, b"`);
+    expect(state).toBe('a');
 
-//     // await component.find('button').trigger('click');
-//     // await wait(201);
-//     // await component.vm.$nextTick();
-//     // expect(component.text()).toMatchInlineSnapshot(`"hello, 1, b"`);
-//     // expect(state).toBe('b');
-//   });
-// });
+    await component.find('button').trigger('click');
+    await wait(201);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, 1, b"`);
+    expect(state).toBe('b');
+  });
+
+  it('should trigger the onError event with the latest version of the onError callback', async () => {
+    let state = null;
+    let count = 0;
+
+    const Block = defineComponent({
+      template: `<template>
+        hello, {{ error ? error.message : data }}, {{ text }} <button @click="revalidate"></button>
+      </template>`,
+      props: {
+        text: String,
+      },
+      setup(props) {
+        const { data, error, revalidate } = useSWR(
+          'callbacks-onError',
+          () =>
+            new Promise((_, reject) =>
+              setTimeout(() => reject(new Error(`Error: ${count++}`)), 200),
+            ),
+          { onError: () => (state = props.text) },
+        );
+
+        return { data, error, revalidate, ...toRefs(props) };
+      },
+    });
+
+    const component = mount(
+      defineComponent({
+        components: { Block },
+        template: `<Block :text="text" />`,
+        setup() {
+          const text = ref('a');
+
+          return { text };
+        },
+      }),
+    );
+
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, , a"`);
+    expect(state).toBe(null);
+
+    await wait(200);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, Error: 0, a"`);
+    expect(state).toBe('a');
+
+    component.vm.text = 'b';
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, Error: 0, b"`);
+    expect(state).toBe('a');
+
+    await component.find('button').trigger('click');
+    await wait(201);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, Error: 1, b"`);
+    expect(state).toBe('b');
+  });
+
+  it('should trigger the onErrorRetry event with the latest version of the onErrorRetry callback', async () => {
+    let state = null;
+    let count = 0;
+
+    const Block = defineComponent({
+      template: `<template>
+        hello, {{ error ? error.message : data }}, {{ text }}
+      </template>`,
+      props: {
+        text: String,
+      },
+      setup(props) {
+        const { data, error } = useSWR(
+          'callbacks-onErrorRetry',
+          () =>
+            new Promise((_, reject) =>
+              setTimeout(() => reject(new Error(`Error: ${count++}`)), 200),
+            ),
+          {
+            onErrorRetry: (_, __, ___, revalidate, options) => {
+              state = props.text;
+              setTimeout(() => revalidate(options), 100);
+            },
+          },
+        );
+
+        return { data, error, ...toRefs(props) };
+      },
+    });
+
+    const component = mount(
+      defineComponent({
+        components: { Block },
+        template: `<Block :text="text" />`,
+        setup() {
+          const text = ref('a');
+
+          return { text };
+        },
+      }),
+    );
+
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, , a"`);
+    expect(state).toBe(null);
+
+    await wait(200);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, Error: 0, a"`);
+    expect(state).toBe('a');
+
+    component.vm.text = 'b';
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, Error: 0, b"`);
+    expect(state).toBe('a');
+
+    await wait(301);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, Error: 1, b"`);
+    expect(state).toBe('b');
+  });
+
+  it('should trigger the onLoadingSlow and onSuccess event with the latest version of the callbacks', async () => {
+    let state = null;
+    let count = 0;
+
+    const Block = defineComponent({
+      template: `<template>
+        hello, {{ error ? error.message : data }}, {{ text }}
+      </template>`,
+      props: {
+        text: String,
+      },
+      setup(props) {
+        const { data, error } = useSWR(
+          'callbacks-onLoadingSlow',
+          () => new Promise(resolve => setTimeout(() => resolve(count++), 200)),
+          {
+            onLoadingSlow: () => {
+              state = props.text;
+            },
+            onSuccess: () => {
+              state = props.text;
+            },
+            loadingTimeout: 100,
+          },
+        );
+
+        return { data, error, ...toRefs(props) };
+      },
+    });
+
+    const component = mount(
+      defineComponent({
+        components: { Block },
+        template: `<Block :text="text" />`,
+        setup() {
+          const text = ref('a');
+
+          return { text };
+        },
+      }),
+    );
+
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, , a"`);
+    expect(state).toBe(null);
+
+    await wait(101);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, , a"`);
+    expect(state).toBe('a');
+
+    component.vm.text = 'b';
+    await wait(100);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"hello, 0, b"`);
+    expect(state).toBe('b');
+  });
+});
+
+describe('useSWR - global configs', () => {
+  it('should read the config fallback from the config ref', async () => {
+    let value = 0;
+    const fetcher = () => value++;
+    useSWRGlobalConfig({
+      fetcher, refreshInterval: 100, dedupingInterval: 0
+    });
+
+    const component = mount(
+      defineComponent({
+        template: `data: {{ data }}`,
+        setup() {
+          const { data } = useSWR('dynamic-18');
+
+          return { data };
+        },
+      }),
+    );
+
+    expect(component.text()).toMatchInlineSnapshot(`"data:"`);
+
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 0"`);
+
+    await wait(110);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"data: 1"`);
+  })
+})
