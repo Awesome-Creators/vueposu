@@ -17,213 +17,8 @@ describe('hooks/useBrowserTabChange', () => {
     });
   });
 
-  it('test options', async () => {
-    const component = mount(
-      defineComponent({
-        setup() {
-          const leave = ref(false);
-          const back = ref(true);
-          const [leaveRef, backRef] = useBrowserTabChange({
-            leave: () => {
-              leave.value = true;
-              back.value = false;
-            },
-            back: () => {
-              leave.value = false;
-              back.value = true;
-            },
-          });
-          return { leave, back, leaveRef, backRef };
-        },
-        template: `<template />`,
-      }),
-    );
-    expect(component.vm.leave).toBe(false);
-    expect(component.vm.back).toBe(true);
-    expect(component.vm.leaveRef).toBe(false);
-    expect(component.vm.backRef).toBe(true);
-
-    // leave
-    triggerDomEvent('visibilitychange');
-    (document as any).hidden = true;
-
-    // wait dom change
-    await wait();
-    expect(component.vm.leave).toBe(true);
-    expect(component.vm.back).toBe(false);
-    expect(component.vm.leaveRef).toBe(true);
-    expect(component.vm.backRef).toBe(false);
-
-    // back
-    triggerDomEvent('visibilitychange');
-    (document as any).hidden = false;
-
-    // wait dom change
-    await wait();
-    expect(component.vm.leave).toBe(false);
-    expect(component.vm.back).toBe(true);
-    expect(component.vm.leaveRef).toBe(false);
-    expect(component.vm.backRef).toBe(true);
-
-    component.unmount();
-  });
-
-  it('test common', async () => {
-    const component = mount(
-      defineComponent({
-        template: `<template />`,
-        setup() {
-          const leave = ref(false);
-          const back = ref(true);
-          const [leaveRef, backRef] = useBrowserTabChange(
-            ({ leave: L, back: B }) => {
-              leave.value = L;
-              back.value = B;
-            },
-          );
-          return { leave, back, leaveRef, backRef };
-        },
-      }),
-    );
-    expect(component.vm.leave).toBe(false);
-    expect(component.vm.back).toBe(true);
-    expect(component.vm.leaveRef).toBe(false);
-    expect(component.vm.backRef).toBe(true);
-
-    // leave
-    triggerDomEvent('visibilitychange');
-    (document as any).hidden = true;
-
-    // wait dom change
-    await wait();
-    expect(component.vm.leave).toBe(true);
-    expect(component.vm.back).toBe(false);
-    expect(component.vm.leaveRef).toBe(true);
-    expect(component.vm.backRef).toBe(false);
-
-    // back
-    triggerDomEvent('visibilitychange');
-    (document as any).hidden = false;
-
-    // wait dom change
-    await wait();
-    expect(component.vm.leave).toBe(false);
-    expect(component.vm.back).toBe(true);
-    expect(component.vm.leaveRef).toBe(false);
-    expect(component.vm.backRef).toBe(true);
-
-    component.unmount();
-  });
-
-  it('test not options', async () => {
-    const component = mount(
-      defineComponent({
-        template: `<template />`,
-        setup() {
-          const leave = ref(false);
-          const back = ref(true);
-          const [leaveRef, backRef] = useBrowserTabChange();
-          return { leave, back, leaveRef, backRef };
-        },
-      }),
-    );
-    expect(component.vm.leave).toBe(false);
-    expect(component.vm.back).toBe(true);
-    expect(component.vm.leaveRef).toBe(false);
-    expect(component.vm.backRef).toBe(true);
-
-    component.unmount();
-  });
-
-  it('test single options', async () => {
-    const component = mount(
-      defineComponent({
-        template: `<template />`,
-        setup() {
-          const count = ref(0);
-          const [leaveRef, backRef] = useBrowserTabChange({
-            leave: () => {
-              count.value += 1;
-            },
-          });
-          return { count, leaveRef, backRef };
-        },
-      }),
-    );
-    expect(component.vm.count).toBe(0);
-    expect(component.vm.leaveRef).toBe(false);
-    expect(component.vm.backRef).toBe(true);
-
-    // leave
-    triggerDomEvent('visibilitychange');
-    (document as any).hidden = true;
-
-    await wait();
-    expect(component.vm.count).toBe(1);
-    expect(component.vm.leaveRef).toBe(true);
-    expect(component.vm.backRef).toBe(false);
-
-    // back
-    triggerDomEvent('visibilitychange');
-    (document as any).hidden = false;
-
-    await wait();
-    expect(component.vm.count).toBe(1);
-    expect(component.vm.leaveRef).toBe(false);
-    expect(component.vm.backRef).toBe(true);
-
-    // leave
-    triggerDomEvent('visibilitychange');
-    (document as any).hidden = true;
-
-    await wait();
-    expect(component.vm.count).toBe(2);
-    expect(component.vm.leaveRef).toBe(true);
-    expect(component.vm.backRef).toBe(false);
-
-    component.unmount();
-  });
-
-  it('mock js user', async () => {
-    const component = mount(
-      defineComponent({
-        template: `<template />`,
-        setup() {
-          const [leaveRef, backRef] = useBrowserTabChange('屁股我们能' as any);
-          return { leaveRef, backRef };
-        },
-      }),
-    );
-    expect(component.vm.leaveRef).toBe(false);
-    expect(component.vm.backRef).toBe(true);
-
-    // leave
-    triggerDomEvent('visibilitychange');
-    (document as any).hidden = true;
-
-    await wait();
-    expect(component.vm.leaveRef).toBe(true);
-    expect(component.vm.backRef).toBe(false);
-
-    // back
-    triggerDomEvent('visibilitychange');
-    (document as any).hidden = false;
-
-    await wait();
-    expect(component.vm.leaveRef).toBe(false);
-    expect(component.vm.backRef).toBe(true);
-
-    // leave
-    triggerDomEvent('visibilitychange');
-    (document as any).hidden = true;
-
-    await wait();
-    expect(component.vm.leaveRef).toBe(true);
-    expect(component.vm.backRef).toBe(false);
-    component.unmount();
-  });
-
-  it('test unmount', async () => {
+  it('test basic usage', async () => {
+    // test unmount
     const removeEventListener = document.removeEventListener.bind(document);
     const fn = jest.fn();
     document.removeEventListener = (...args) => {
@@ -235,24 +30,34 @@ describe('hooks/useBrowserTabChange', () => {
       defineComponent({
         setup() {
           const leave = ref(false);
-          const back = ref(true);
-          const [leaveRef, backRef] = useBrowserTabChange({
-            leave: () => {
-              leave.value = true;
-              back.value = false;
-            },
-            back: () => {
-              leave.value = false;
-              back.value = true;
-            },
+          useBrowserTabChange(isHidden => {
+            leave.value = isHidden;
           });
-          return { leave, back, leaveRef, backRef };
+          return { leave };
         },
         template: `<template />`,
       }),
     );
-    component.unmount();
 
+    expect(component.vm.leave).toBe(false);
+
+    // leave
+    triggerDomEvent('visibilitychange');
+    (document as any).hidden = true;
+
+    // wait dom change
+    await wait();
+    expect(component.vm.leave).toBe(true);
+
+    // back
+    triggerDomEvent('visibilitychange');
+    (document as any).hidden = false;
+
+    // wait dom change
+    await wait();
+    expect(component.vm.leave).toBe(false);
+
+    component.unmount();
     expect(fn).toBeCalledTimes(4);
   });
 });
