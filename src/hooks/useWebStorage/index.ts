@@ -6,15 +6,16 @@ import type { StorageMap } from './map';
 type RemoveItemEvent = Event & { key: string };
 type SetItemEvent = RemoveItemEvent & { value: any };
 
-const originalLocalSetItem = localStorage.setItem;
-const originalSessionSetItem = sessionStorage.setItem;
-const originalLocalRemoveItem = localStorage.removeItem;
-const originalSessionRemoveItem = sessionStorage.removeItem;
-const originalLocalClear = localStorage.clear;
-const originalSessionClear = sessionStorage.clear;
+const originalLocalSetItem = localStorage.setItem.bind(localStorage);
+const originalSessionSetItem = sessionStorage.setItem.bind(sessionStorage);
+const originalLocalRemoveItem = localStorage.removeItem.bind(localStorage);
+const originalSessionRemoveItem = sessionStorage.removeItem.bind(sessionStorage);
+const originalLocalClear = localStorage.clear.bind(localStorage);
+const originalSessionClear = sessionStorage.clear.bind(sessionStorage);
 
 // override
 window.localStorage.setItem = (key, value) => {
+  console.log('asdasdas')
   const event = new Event('localSetItemEvent') as SetItemEvent;
   event.key = key;
   event.value = value;
@@ -28,20 +29,6 @@ window.sessionStorage.setItem = (key, value) => {
   event.value = value;
   window.dispatchEvent(event);
   originalSessionSetItem(key, value);
-};
-
-window.localStorage.removeItem = key => {
-  const event = new Event('localRemoveItemEvent') as SetItemEvent;
-  event.key = key;
-  window.dispatchEvent(event);
-  originalLocalRemoveItem(key);
-};
-
-window.sessionStorage.removeItem = key => {
-  const event = new Event('sessionRemoveItemEvent') as SetItemEvent;
-  event.key = key;
-  window.dispatchEvent(event);
-  originalSessionRemoveItem(key);
 };
 
 window.localStorage.removeItem = key => {
