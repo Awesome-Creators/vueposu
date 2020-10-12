@@ -19,8 +19,9 @@ export interface SWRConfig<
   revalidateOnFocus?: RefTyped<boolean>;
   revalidateOnReconnect?: RefTyped<boolean>;
   shouldRetryOnError?: RefTyped<boolean>;
+  suspense?: RefTyped<boolean>;
   fetcher?: F;
-  initialData?: D;
+  initialData?: RefTyped<D>;
 
   onLoadingSlow?: (key: string, config: SWRConfig<D, E>) => void;
   onSuccess?: (data: D, key: string, config: SWRConfig<D, E>) => void;

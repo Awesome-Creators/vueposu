@@ -23,7 +23,7 @@ import {
   isUndefined,
   isDef,
   isUndef,
-  isEqual,
+  isEqual
 } from '../../libs/helper';
 
 import type {
@@ -224,13 +224,17 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
     const resolveData = () => {
       [key] = serialize();
       const cachedData = cache.get(key);
-      return isUndefined(cachedData) ? config.initialData : cachedData;
+      return isUndefined(cachedData) ? unref(config.initialData) : cachedData;
     };
 
-    let $data = resolveData();
+    const initialData = resolveData();
+    const initialError = cache.get(keyErr)
+    const initialIsValidating = !!cache.get(keyValidating);
+
+    let $data = initialData;
     const data = ref($data);
-    const error = ref(cache.get(keyErr));
-    const isValidating = ref(!!cache.get(keyValidating));
+    const error = ref(initialError);
+    const isValidating = ref(initialIsValidating);
 
     let unmounted = false;
 

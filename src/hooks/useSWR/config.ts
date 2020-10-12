@@ -39,14 +39,13 @@ const config = shallowRef<SWRConfig>({
   focusThrottleInterval: 5000,
   dedupingInterval: 2000,
   loadingTimeout: (slowConnection ? 5 : 3) * 1000,
-
   refreshInterval: 0,
   refreshWhenHidden: false,
   refreshWhenOffline: false,
   revalidateOnFocus: true,
   revalidateOnReconnect: true,
   shouldRetryOnError: true,
-
+  suspense: false,
   fetcher: useRequest,
 });
 
