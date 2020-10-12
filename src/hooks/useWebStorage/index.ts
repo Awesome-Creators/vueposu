@@ -9,13 +9,14 @@ type SetItemEvent = RemoveItemEvent & { value: any };
 const originalLocalSetItem = localStorage.setItem.bind(localStorage);
 const originalSessionSetItem = sessionStorage.setItem.bind(sessionStorage);
 const originalLocalRemoveItem = localStorage.removeItem.bind(localStorage);
-const originalSessionRemoveItem = sessionStorage.removeItem.bind(sessionStorage);
+const originalSessionRemoveItem = sessionStorage.removeItem.bind(
+  sessionStorage,
+);
 const originalLocalClear = localStorage.clear.bind(localStorage);
 const originalSessionClear = sessionStorage.clear.bind(sessionStorage);
 
 // override
 window.localStorage.setItem = (key, value) => {
-  console.log('asdasdas')
   const event = new Event('localSetItemEvent') as SetItemEvent;
   event.key = key;
   event.value = value;
@@ -61,7 +62,7 @@ window.sessionStorage.clear = () => {
 
 // handler
 const handleSetItem = (key: string, value: any, map: StorageMap) => {
-  console.log(key, value)
+  console.log(key, value);
   if (key in map) {
     map[key].value = value;
   }
@@ -99,15 +100,14 @@ export default function useWebStorage<T>(
 ) {
   const storageMap =
     storage === window.localStorage ? localStorageMap : sessionStorageMap;
-  const setItem = (storage === window.localStorage
-    ? originalLocalSetItem
-    : originalSessionSetItem
-  ).bind(storage);
-  const removeItem = (storage === window.localStorage
-    ? originalLocalRemoveItem
-    : originalSessionRemoveItem
-  ).bind(storage);
-
+  const setItem =
+    storage === window.localStorage
+      ? originalLocalSetItem
+      : originalSessionSetItem;
+  const removeItem =
+    storage === window.localStorage
+      ? originalLocalRemoveItem
+      : originalSessionRemoveItem;
   const update = value => {
     if (value === null) {
       removeItem(key);
