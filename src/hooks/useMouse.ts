@@ -1,4 +1,4 @@
-import { reactive, watchEffect, toRefs } from 'vue-demi';
+import { reactive, watchEffect, toRefs, getCurrentInstance } from 'vue-demi';
 
 interface MouseCursorState {
   pageX: number;
@@ -22,25 +22,31 @@ const MOUSE_MOVE = 'mousemove';
 
 // TODO: COMMENT NEED
 export default function useMouse() {
-  const state = reactive(initialState);
+  if (getCurrentInstance()) { 
+    const state = reactive(initialState);
 
-  const moveHandler = (event: MouseEvent) => {
-    const { pageX, pageY, screenX, screenY, clientX, clientY } = event;
-    state.pageX = pageX;
-    state.pageY = pageY;
-    state.screenX = screenX;
-    state.screenY = screenY;
-    state.clientX = clientX;
-    state.clientY = clientY;
-  };
+    const moveHandler = (event: MouseEvent) => {
+      const { pageX, pageY, screenX, screenY, clientX, clientY } = event;
+      state.pageX = pageX;
+      state.pageY = pageY;
+      state.screenX = screenX;
+      state.screenY = screenY;
+      state.clientX = clientX;
+      state.clientY = clientY;
+    };
 
-  watchEffect(onInvalidate => {
-    document.addEventListener(MOUSE_MOVE, moveHandler);
+    watchEffect(onInvalidate => {
+      document.addEventListener(MOUSE_MOVE, moveHandler);
 
-    onInvalidate(() => {
-      document.removeEventListener(MOUSE_MOVE, moveHandler);
+      onInvalidate(() => {
+        document.removeEventListener(MOUSE_MOVE, moveHandler);
+      });
     });
-  });
 
-  return toRefs(state);
+    return toRefs(state);
+  } else {
+    throw new Error(
+      'Invalid hook call: `useMouse` can only be called inside of `setup()`.',
+    );
+  }
 }
