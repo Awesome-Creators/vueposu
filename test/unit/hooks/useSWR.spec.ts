@@ -4,6 +4,7 @@ import {
   computed,
   toRefs,
   defineComponent,
+  defineAsyncComponent,
   onMounted,
   onUpdated,
   onUnmounted,
@@ -132,7 +133,7 @@ describe('hooks/useSWR', () => {
           data,
         };
       },
-    })
+    });
 
     const CompB = defineComponent({
       template: `{{ data }}`,
@@ -142,12 +143,13 @@ describe('hooks/useSWR', () => {
           data,
         };
       },
-    })
+    });
 
     const component = mount(
       defineComponent({
         components: {
-          CompA, CompB
+          CompA,
+          CompB,
         },
         template: `<CompA />, <CompB />`,
       }),
@@ -1784,6 +1786,66 @@ describe('useSWR - local mutation', () => {
   });
 });
 
+// describe('useSWR - suspense', () => {
+//   it('should render fallback', async () => {
+//     const Block = defineComponent({
+//       template: `{{ data }}`,
+//       setup() {
+//         const { data } = useSWR(
+//           'suspense-1',
+//           () => new Promise(resolve => setTimeout(() => resolve('SWR'), 100)),
+//           {
+//             suspense: true,
+//           },
+//         );
+
+//         return { data };
+//       },
+//     });
+
+//     const component = mount(
+//       defineComponent({
+//         components: { Block },
+//         template: `
+//           <Suspense>
+//             <template #default>
+//               <Block />
+//             </template>
+//             <template #fallback>
+//               fallback
+//             </template>
+//           </Suspense>
+//         `,
+//       }),
+//     );
+
+//     expect(component.text()).toMatchInlineSnapshot(`"fallback"`)
+
+//     await wait(110);
+//     await component.vm.$nextTick();
+//     expect(component.text()).toMatchInlineSnapshot(`"SWR"`)
+//   });
+// });
+
+// describe('useSWR - cache', () => {
+//   it('should not react to direct cache updates but mutate', async () => {
+//     cache.set('cache-1', 'custom cache message');
+
+//     const component = mount(
+//       defineComponent({
+//         template: `{{ error ? error.message : data }}`,
+//         setup() {
+//           const { data, error } = useSWR('cache-1', () => value, {
+//             dedupingInterval: 0,
+//           });
+
+//           return { data, error };
+//         },
+//       }),
+//     );
+//   });
+// });
+
 describe('useSWR - key', () => {
   it('should respect requests after key has changed', async () => {
     const component = mount(
@@ -2177,7 +2239,9 @@ describe('useSWR - global configs', () => {
     let value = 0;
     const fetcher = () => value++;
     useSWRGlobalConfig({
-      fetcher, refreshInterval: 100, dedupingInterval: 0
+      fetcher,
+      refreshInterval: 100,
+      dedupingInterval: 0,
     });
 
     const component = mount(
@@ -2199,5 +2263,5 @@ describe('useSWR - global configs', () => {
     await wait(110);
     await component.vm.$nextTick();
     expect(component.text()).toMatchInlineSnapshot(`"data: 1"`);
-  })
-})
+  });
+});
