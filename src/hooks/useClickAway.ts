@@ -1,6 +1,8 @@
 import { watchEffect, unref } from 'vue-demi';
-import { getTargetElement, Target } from '../libs/dom';
+import { getTargetElement } from '../libs/dom';
+
 import type { RefTyped } from '../types/global';
+import type { Target } from '../libs/dom';
 
 const defaultEvent = 'click';
 
