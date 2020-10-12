@@ -66,7 +66,6 @@ Currently supported functions
   - [x] useFullscreen
   - [x] useMouse
   - [ ] useScroll
-  - [ ] useScrollTo
   - [x] useTitle
 
 - FUNCTIONALITY
@@ -81,8 +80,9 @@ Currently supported functions
   <!-- - [ ] useEventEmitter -->
   - [x] useQueue
   <!-- - [ ] useRaf -->
+  - [x] useRequest
   - [x] useSet
-  - [ ] useSWR
+  - [x] useSWR
   - [x] useThrottle
   - [x] useThrottleFn
   - [x] useToggle
