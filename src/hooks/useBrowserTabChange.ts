@@ -1,10 +1,5 @@
-import { ref, onMounted, onBeforeUnmount } from 'vue-demi';
-import { isDef, isFunction, isObject } from '../libs/helper';
-
-import type { Ref } from 'vue-demi';
-
-// return type of useBrowserTabChange
-type UseBrowserTabChangeReturnType = [leave: Ref<boolean>, back: Ref<boolean>];
+import { onMounted, onBeforeUnmount, getCurrentInstance } from 'vue-demi';
+import { isFunction } from '../libs/helper';
 
 // the difference platfrom listen
 const DIFFERENCE_PLATFORM_EVT = [
@@ -15,94 +10,19 @@ const DIFFERENCE_PLATFORM_EVT = [
 ];
 
 /**
- * useBrowserTabChange function options define
- * @property `leave` when user leave tab will call it callback function
- * @property `back` when user back tab will call it callback function
- */
-interface UseBrowserTabChangeOptions {
-  leave?: Function;
-  back?: Function;
-}
-
-/**
- * useBrowserTabChange function options define
- * @property `leave` when user leave tab will be `true`, otherwise `false`
- * @property `back` when user back tab will be `true`, otherwise `false`
- */
-type UseBrowserTabChangeCallbackOptions = {
-  leave: boolean;
-  back: boolean;
-};
-
-/**
- * useBrowserTabChange function
- * @property `options.leave` when user leave tab will be `true`, otherwise `false`
- * @property `options.back` when user back tab will be `true`, otherwise `false`
- */
-interface UseBrowserTabChangeCallback {
-  (options?: UseBrowserTabChangeCallbackOptions): UseBrowserTabChangeReturnType;
-}
-
-/**
  * useBrowserTabChange function
  * when user `leave`/`back` current tab will trigger this hook
  * always execute the last one
  *
- * @param callback function for useBrowserTabChange
- *
- * @callback optons.leave when user leave tab will be `true`, otherwise `false`
- * @callback optons.back when user back tab will be `true`, otherwise `false`
- * @returns `[leave: Ref<boolean>, back: Ref<boolean>]`
+ * @param onHiddenStatusChange function for useBrowserTabChange
  */
 export default function useBrowserTabChange(
-  callback?: (options: UseBrowserTabChangeCallbackOptions) => void,
-): UseBrowserTabChangeReturnType;
-
-/**
- * useBrowserTabChange function
- * when user `leave/back` current tab will trigger this hook
- * always execute the last one
- *
- * @param options.leave when user leave tab will call it callback function
- * @param options.back when user back tab will call it callback function
- * @returns `[leave: Ref<boolean>, back: Ref<boolean>]`
- */
-export default function useBrowserTabChange(
-  options?: UseBrowserTabChangeOptions,
-);
-
-export default function useBrowserTabChange(
-  options,
-): UseBrowserTabChangeReturnType {
-  const leave = ref(!document.hidden);
-  const back = ref(document.hidden);
-
-  if (isDef(options)) {
-    let listener;
+  onHiddenStatusChange: (isHidden?: boolean) => void,
+) {
+  if (getCurrentInstance()) {
+    const listener = () => setTimeout(() => onHiddenStatusChange(document.hidden));
 
     onMounted(() => {
-      const getListener = cb => () => {
-        setTimeout(() => {
-          cb();
-          leave.value = document.hidden;
-          back.value = !document.hidden;
-        }, 0);
-      };
-
-      if (isFunction(options)) {
-        const $listener = options as UseBrowserTabChangeCallback;
-        listener = getListener(() =>
-          $listener({ leave: document.hidden, back: !document.hidden }),
-        );
-      } else if (isObject(options)) {
-        const $options = options as UseBrowserTabChangeOptions;
-        listener = getListener(() =>
-          document.hidden ? $options?.leave() : $options.back?.(),
-        );
-      } else {
-        listener = getListener(() => {});
-      }
-
       DIFFERENCE_PLATFORM_EVT.forEach(evt => {
         document.addEventListener(evt, listener);
       });
@@ -113,7 +33,9 @@ export default function useBrowserTabChange(
         document.removeEventListener(evt, listener);
       });
     });
+  } else {
+    throw new Error(
+      'Invalid hook call: `useBrowserTabChange` can only be called inside of `setup()`.',
+    );
   }
-
-  return [leave, back];
 }
