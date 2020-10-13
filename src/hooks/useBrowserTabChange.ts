@@ -1,5 +1,4 @@
 import { onMounted, onBeforeUnmount, getCurrentInstance } from 'vue-demi';
-import { isFunction } from '../libs/helper';
 
 // the difference platfrom listen
 const DIFFERENCE_PLATFORM_EVT = [
