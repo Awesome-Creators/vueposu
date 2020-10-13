@@ -1786,6 +1786,7 @@ describe('useSWR - local mutation', () => {
   });
 });
 
+// WIP
 // describe('useSWR - suspense', () => {
 //   it('should render fallback', async () => {
 //     const Block = defineComponent({
@@ -1827,6 +1828,7 @@ describe('useSWR - local mutation', () => {
 //   });
 // });
 
+// WIP
 // describe('useSWR - cache', () => {
 //   it('should not react to direct cache updates but mutate', async () => {
 //     cache.set('cache-1', 'custom cache message');
