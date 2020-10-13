@@ -1,4 +1,11 @@
-import { reactive, watchEffect, toRefs, getCurrentInstance } from 'vue-demi';
+import {
+  reactive,
+  readonly,
+  onMounted,
+  onBeforeUnmount,
+  toRefs,
+  getCurrentInstance,
+} from 'vue-demi';
 
 interface MouseCursorState {
   pageX: number;
@@ -18,11 +25,9 @@ const initialState: MouseCursorState = {
   clientY: 0,
 };
 
-const MOUSE_MOVE = 'mousemove';
-
 // TODO: COMMENT NEED
 export default function useMouse() {
-  if (getCurrentInstance()) { 
+  if (getCurrentInstance()) {
     const state = reactive(initialState);
 
     const moveHandler = (event: MouseEvent) => {
@@ -35,15 +40,14 @@ export default function useMouse() {
       state.clientY = clientY;
     };
 
-    watchEffect(onInvalidate => {
-      document.addEventListener(MOUSE_MOVE, moveHandler);
-
-      onInvalidate(() => {
-        document.removeEventListener(MOUSE_MOVE, moveHandler);
-      });
+    onMounted(() => {
+      document.addEventListener('mousemove', moveHandler);
+    });
+    onBeforeUnmount(() => {
+      document.removeEventListener('mousemove', moveHandler);
     });
 
-    return toRefs(state);
+    return toRefs(readonly(state));
   } else {
     throw new Error(
       'Invalid hook call: `useMouse` can only be called inside of `setup()`.',

@@ -1,4 +1,5 @@
 /* istanbul ignore file */
+import { isRef, unref } from 'vue-demi';
 import { isFunction } from './helper';
 
 import type { Ref } from 'vue-demi';
@@ -9,7 +10,7 @@ export type Target<T = HTMLElement> =
   | (() => T | null)
   | Ref<T | null | undefined>;
 
-type TargetElement = HTMLElement | Document | Window;
+type TargetElement = HTMLElement | Element | Document | Window;
 
 export function isHTMLElement(element) {
   return element?.nodeType === 1;
@@ -23,8 +24,8 @@ export function getTargetElement(
 
   const targetElement = isFunction(target)
     ? target()
-    : 'value' in target
-    ? target.value
+    : isRef(target)
+    ? unref(target)
     : target;
 
   return targetElement;
