@@ -1,5 +1,6 @@
-import { computed, ref } from 'vue-demi';
-import { Ref } from 'vue-demi';
+import { readonly, ref } from 'vue-demi';
+
+import type { DeepReadonly, Ref } from 'vue-demi';
 
 // TODO: COMMENT NEED
 export interface StableActions<K> {
@@ -9,7 +10,9 @@ export interface StableActions<K> {
   has: (key: K) => boolean;
 }
 
-type UseSetReturnType<K> = [Ref<Set<K>>, StableActions<K>];
+type UseSetReturnType<K> = {
+  set: DeepReadonly<Ref<Set<K>>>;
+} & StableActions<K>;
 
 const useSet = <K>(initialSet = new Set<K>()): UseSetReturnType<K> => {
   let set = ref<Set<K>>(new Set(initialSet));
@@ -25,7 +28,11 @@ const useSet = <K>(initialSet = new Set<K>()): UseSetReturnType<K> => {
     },
     has: (item: K) => set.value.has(item),
   };
-  return [computed(() => set.value), stableActions];
+
+  return {
+    set: readonly(set),
+    ...stableActions,
+  };
 };
 
 export default useSet;
