@@ -8,10 +8,10 @@ describe('hooks/useCounterInterval', () => {
     const component = mount(
       defineComponent({
         setup() {
-          const { count, active, start, stop } = useCounterInterval();
+          const { count, isActive, start, stop } = useCounterInterval();
           return {
             count,
-            active,
+            isActive,
             start,
             stop,
           };
@@ -21,16 +21,16 @@ describe('hooks/useCounterInterval', () => {
     );
 
     expect(component.vm.count).toBe(60);
-    expect(component.vm.active).toBe(false);
+    expect(component.vm.isActive).toBe(false);
     component.vm.start();
 
     await wait(15000);
     expect(component.vm.count).toBe(45);
-    expect(component.vm.active).toBe(true);
+    expect(component.vm.isActive).toBe(true);
 
     await wait(30000);
     expect(component.vm.count).toBe(15);
-    expect(component.vm.active).toBe(true);
+    expect(component.vm.isActive).toBe(true);
 
     await wait(14000);
     expect(component.vm.count).toBe(1);
@@ -38,27 +38,27 @@ describe('hooks/useCounterInterval', () => {
     component.vm.stop();
     await wait(10000);
     expect(component.vm.count).toBe(1);
-    expect(component.vm.active).toBe(false);
+    expect(component.vm.isActive).toBe(false);
 
     component.vm.start();
     await wait(1000);
     expect(component.vm.count).toBe(0);
-    expect(component.vm.active).toBe(false);
+    expect(component.vm.isActive).toBe(false);
 
     await wait();
-    expect(component.vm.active).toBe(false);
+    expect(component.vm.isActive).toBe(false);
   });
 
   it('test step = 2', async () => {
     const component = mount(
       defineComponent({
         setup() {
-          const { count, active, start, stop } = useCounterInterval({
+          const { count, isActive, start, stop } = useCounterInterval({
             step: 2,
           });
           return {
             count,
-            active,
+            isActive,
             start,
             stop,
           };
@@ -68,31 +68,31 @@ describe('hooks/useCounterInterval', () => {
     );
 
     expect(component.vm.count).toBe(60);
-    expect(component.vm.active).toBe(false);
+    expect(component.vm.isActive).toBe(false);
     component.vm.start();
 
     await wait(15000);
     expect(component.vm.count).toBe(30);
-    expect(component.vm.active).toBe(true);
+    expect(component.vm.isActive).toBe(true);
 
     await wait(30000);
     expect(component.vm.count).toBe(0);
-    expect(component.vm.active).toBe(false);
+    expect(component.vm.isActive).toBe(false);
 
     await wait();
-    expect(component.vm.active).toBe(false);
+    expect(component.vm.isActive).toBe(false);
   });
 
   it('immediateStart = true', async () => {
     const component = mount(
       defineComponent({
         setup() {
-          const { count, active, start, stop } = useCounterInterval({
+          const { count, isActive, start, stop } = useCounterInterval({
             immediateStart: true,
           });
           return {
             count,
-            active,
+            isActive,
             start,
             stop,
           };
@@ -102,27 +102,27 @@ describe('hooks/useCounterInterval', () => {
     );
 
     expect(component.vm.count).toBe(60);
-    expect(component.vm.active).toBe(true);
+    expect(component.vm.isActive).toBe(true);
 
     await wait(15000);
     expect(component.vm.count).toBe(45);
-    expect(component.vm.active).toBe(true);
+    expect(component.vm.isActive).toBe(true);
 
     await wait(30000);
     expect(component.vm.count).toBe(15);
-    expect(component.vm.active).toBe(true);
+    expect(component.vm.isActive).toBe(true);
 
     await wait(15000);
     expect(component.vm.count).toBe(0);
     await wait();
-    expect(component.vm.active).toBe(false);
+    expect(component.vm.isActive).toBe(false);
   });
 
   it('test inc', async () => {
     const component = mount(
       defineComponent({
         setup() {
-          const { count, active, start, stop } = useCounterInterval({
+          const { count, isActive, start, stop } = useCounterInterval({
             immediateStart: true,
             type: 'inc',
             initialValue: 0,
@@ -130,7 +130,7 @@ describe('hooks/useCounterInterval', () => {
           });
           return {
             count,
-            active,
+            isActive,
             start,
             stop,
           };
@@ -140,32 +140,32 @@ describe('hooks/useCounterInterval', () => {
     );
 
     expect(component.vm.count).toBe(0);
-    expect(component.vm.active).toBe(true);
+    expect(component.vm.isActive).toBe(true);
 
     await wait(15000);
     expect(component.vm.count).toBe(15);
-    expect(component.vm.active).toBe(true);
+    expect(component.vm.isActive).toBe(true);
 
     await wait(30000);
     expect(component.vm.count).toBe(45);
-    expect(component.vm.active).toBe(true);
+    expect(component.vm.isActive).toBe(true);
 
     await wait(15000);
     expect(component.vm.count).toBe(60);
     await wait();
-    expect(component.vm.active).toBe(false);
+    expect(component.vm.isActive).toBe(false);
   });
 
   it('test dec', async () => {
     const component = mount(
       defineComponent({
         setup() {
-          const { count, active, start, stop } = useCounterInterval({
+          const { count, isActive, start, stop } = useCounterInterval({
             type: 'dec',
           });
           return {
             count,
-            active,
+            isActive,
             start,
             stop,
           };
@@ -175,16 +175,16 @@ describe('hooks/useCounterInterval', () => {
     );
 
     expect(component.vm.count).toBe(60);
-    expect(component.vm.active).toBe(false);
+    expect(component.vm.isActive).toBe(false);
     component.vm.start();
 
     await wait(15000);
     expect(component.vm.count).toBe(45);
-    expect(component.vm.active).toBe(true);
+    expect(component.vm.isActive).toBe(true);
 
     await wait(30000);
     expect(component.vm.count).toBe(15);
-    expect(component.vm.active).toBe(true);
+    expect(component.vm.isActive).toBe(true);
 
     await wait(14000);
     expect(component.vm.count).toBe(1);
@@ -192,14 +192,14 @@ describe('hooks/useCounterInterval', () => {
     component.vm.stop();
     await wait(10000);
     expect(component.vm.count).toBe(1);
-    expect(component.vm.active).toBe(false);
+    expect(component.vm.isActive).toBe(false);
 
     component.vm.start();
     await wait(1000);
     expect(component.vm.count).toBe(0);
-    expect(component.vm.active).toBe(false);
+    expect(component.vm.isActive).toBe(false);
 
     await wait();
-    expect(component.vm.active).toBe(false);
+    expect(component.vm.isActive).toBe(false);
   });
 });

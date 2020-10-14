@@ -13,12 +13,14 @@ interface UseCounterIntervalOptions {
   immediateStart?: boolean;
 }
 
-type UseCounterIntervalReturnType = {
-  count: CounterNumber;
-  active: Ref<boolean>;
+type UseCounterIntervalActions = {
   start: () => void;
   stop: () => void;
 };
+type UseCounterIntervalReturnType = {
+  count: CounterNumber;
+  isActive: Ref<boolean>;
+} & UseCounterIntervalActions;
 
 // TODO: COMMENT NEED
 export default function useCounterInterval(
@@ -37,7 +39,7 @@ export default function useCounterInterval(
 
   // TODO: check total is gt or lt than initialValue
 
-  const [$active, $start, $stop] = useInterval({
+  const { isActive: $isActive, start, stop } = useInterval({
     cb: () => {
       if (type === 'dec' && count.value > total) {
         dec(step);
@@ -49,21 +51,22 @@ export default function useCounterInterval(
     immediateStart,
   });
 
-  const active = ref($active);
+  const isActive = ref($isActive);
 
   watch(count, ct => {
-    if (ct === total) active.value = false;
+    if (ct === total) isActive.value = false;
   });
 
-  const start = () => {
-    $start();
-    active.value = true;
+  return {
+    count,
+    isActive,
+    start: () => {
+      start();
+      isActive.value = true;
+    },
+    stop: () => {
+      stop();
+      isActive.value = false;
+    },
   };
-
-  const stop = () => {
-    $stop();
-    active.value = false;
-  };
-
-  return { count, active, start, stop };
 }

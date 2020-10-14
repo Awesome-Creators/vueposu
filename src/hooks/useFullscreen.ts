@@ -5,20 +5,16 @@ import fullscreen from '../libs/fullscreen';
 import { isDef, isFunction } from '../libs/helper';
 import { isHTMLElement } from '../libs/dom';
 
-import type { WritableComputedRef } from 'vue-demi';
+import type { Ref } from 'vue-demi';
 import type { Target } from '../libs/dom';
 import type { RefTyped } from '../types/global';
 
-interface UseFullscreenActions {
-  setFullscreen: () => void;
+type UseFullscreenReturnType = {
+  isFullscreen: Ref<boolean>;
+  enterFullscreen: () => void;
   exitFullscreen: () => void;
   toggleFullscreen: (status?: RefTyped<boolean>) => void;
-}
-
-type UseFullscreenReturnType = [
-  WritableComputedRef<boolean>,
-  UseFullscreenActions,
-];
+};
 
 // TODO: COMMENT NEED
 export default function useFullscreen(
@@ -41,7 +37,7 @@ export default function useFullscreen(
       });
     });
 
-    const toggleFullscreen: UseFullscreenActions['toggleFullscreen'] = status => {
+    const toggleFullscreen = status => {
       isFullscreen.value = isDef(status)
         ? Boolean(unref(status))
         : !isFullscreen.value;
@@ -56,17 +52,15 @@ export default function useFullscreen(
       }
     });
 
-    return [
-      computed({
+    return {
+      isFullscreen: computed({
         get: () => isFullscreen.value,
         set: status => (isFullscreen.value = Boolean(unref(status))),
       }),
-      {
-        setFullscreen: () => toggleFullscreen(true),
-        exitFullscreen: () => toggleFullscreen(false),
-        toggleFullscreen,
-      },
-    ];
+      enterFullscreen: () => toggleFullscreen(true),
+      exitFullscreen: () => toggleFullscreen(false),
+      toggleFullscreen,
+    };
   } else {
     throw new Error(
       'Invalid hook call: `useFullscreen` can only be called inside of `setup()`.',

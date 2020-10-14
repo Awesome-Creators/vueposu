@@ -7,13 +7,16 @@ import type { RefTyped } from '../types/global';
 
 type NumberType = number | string;
 export type CounterNumber = RefTyped<NumberType>;
-type UseCounterReturnType = {
-  count: Ref<number>;
+
+type UseCounterActions = {
   inc: (n?: CounterNumber) => void;
   dec: (n?: CounterNumber) => void;
   set: (value: CounterNumber | ((currentValue: number) => number)) => void;
   reset: () => void;
 };
+type UseCounterReturnType = {
+  count: Ref<number>;
+} & UseCounterActions;
 
 // TODO: COMMENT NEED
 interface CounterOptions {

@@ -8,7 +8,11 @@ interface UseIntervalOptions {
   immediateStart?: boolean;
 }
 
-type UseIntervalReturnType = [Ref<boolean>, () => void, () => void];
+type UseIntervalReturnType = {
+  isActive: Ref<boolean>;
+  start: () => void;
+  stop: () => void;
+};
 
 // TODO: COMMENT NEED
 export default function useInterval(
@@ -16,19 +20,19 @@ export default function useInterval(
 ): UseIntervalReturnType {
   const { cb, interval = 1000, immediateStart = true } = options;
   let timer = null;
-  let active = ref(immediateStart);
+  let isActive = ref(immediateStart);
 
   const stop = () => {
     if (timer) {
       clearInterval(timer);
       timer = null;
-      active.value = false;
+      isActive.value = false;
     }
   };
 
   const start = () => {
     stop();
-    active.value = true;
+    isActive.value = true;
 
     timer = setInterval(() => {
       isFunction(cb) && cb();
@@ -39,5 +43,5 @@ export default function useInterval(
 
   immediateStart && start();
 
-  return [active, start, stop];
+  return { isActive, start, stop };
 }
