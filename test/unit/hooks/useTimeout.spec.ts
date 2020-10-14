@@ -10,9 +10,9 @@ describe('hooks/useTimeout', () => {
       defineComponent({
         template: `<template />`,
         setup() {
-          const [active, start, stop] = useTimeout({ cb: fn });
+          const { isActive, start, stop } = useTimeout(fn);
           return {
-            active,
+            isActive,
             start,
             stop,
           };
@@ -20,9 +20,9 @@ describe('hooks/useTimeout', () => {
       }),
     );
 
-    expect(component.vm.active).toBe(true);
+    expect(component.vm.isActive).toBe(true);
     await wait(1100);
-    expect(component.vm.active).toBe(false);
+    expect(component.vm.isActive).toBe(false);
   });
 
   it('immediateStart = false', async () => {
@@ -31,12 +31,9 @@ describe('hooks/useTimeout', () => {
       defineComponent({
         template: `<template />`,
         setup() {
-          const [active, start, stop] = useTimeout({
-            cb: fn,
-            immediateStart: false,
-          });
+          const { isActive, start, stop } = useTimeout(fn, 0, false);
           return {
-            active,
+            isActive,
             start,
             stop,
           };
@@ -44,23 +41,21 @@ describe('hooks/useTimeout', () => {
       }),
     );
 
-    expect(component.vm.active).toBe(false);
+    expect(component.vm.isActive).toBe(false);
+    
     component.vm.start();
-    await wait();
-    expect(component.vm.active).toBe(true);
+    expect(component.vm.isActive).toBe(true);
 
     await wait(1100);
-    expect(component.vm.active).toBe(false);
+    expect(component.vm.isActive).toBe(false);
 
     component.vm.start();
-    await wait();
-    expect(component.vm.active).toBe(true);
+    expect(component.vm.isActive).toBe(true);
+
     component.vm.stop();
-
-    await wait();
-    expect(component.vm.active).toBe(false);
+    expect(component.vm.isActive).toBe(false);
 
     await wait(1100);
-    expect(component.vm.active).toBe(false);
+    expect(component.vm.isActive).toBe(false);
   });
 });
