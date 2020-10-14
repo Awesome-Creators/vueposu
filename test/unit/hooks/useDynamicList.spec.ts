@@ -7,11 +7,13 @@ describe('hooks/useDynamicList', () => {
   it('test actions', async () => {
     const component = mount(
       defineComponent({
-        template: `<template>{{ JSON.stringify(state) }}</template>`,
+        template: `<template>{{ JSON.stringify(list) }}</template>`,
         setup() {
-          const [state, actions] = useDynamicList([1, 2, 3]);
+          const {
+            list, ...actions
+          } = useDynamicList([1, 2, 3]);
           return {
-            state,
+            list,
             ...actions,
           };
         },
