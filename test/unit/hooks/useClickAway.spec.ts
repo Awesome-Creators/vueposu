@@ -10,9 +10,9 @@ describe('hooks/useClickAway', () => {
           const count = ref(0);
           const buttonRef = ref();
 
-          useClickAway(() => {
+          useClickAway(buttonRef, () => {
             count.value += 1;
-          }, buttonRef);
+          });
 
           return {
             count,
@@ -52,9 +52,9 @@ describe('hooks/useClickAway', () => {
           const buttonRef2 = ref();
           const buttonRef3 = ref();
 
-          useClickAway(() => {
+          useClickAway([buttonRef, buttonRef2, buttonRef3], () => {
             count.value += 1;
-          }, [buttonRef, buttonRef2, buttonRef3]);
+          });
 
           return {
             count,
@@ -107,10 +107,10 @@ describe('hooks/useClickAway', () => {
           const buttonRef = ref();
 
           useClickAway(
+            buttonRef,
             () => {
               count.value += 1;
             },
-            buttonRef,
             ['touchstart'],
           );
 
@@ -152,10 +152,10 @@ describe('hooks/useClickAway', () => {
           const buttonRef = ref();
 
           useClickAway(
+            buttonRef,
             () => {
               count.value += 1;
             },
-            buttonRef,
             ['touchstart', 'click'],
           );
 
