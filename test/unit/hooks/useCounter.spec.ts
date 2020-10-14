@@ -8,7 +8,7 @@ describe('hooks/useCounter', () => {
       defineComponent({
         template: '<template />',
         setup() {
-          const [count, actions] = useCounter('0');
+          const { count, ...actions } = useCounter('0');
 
           return {
             count,
@@ -50,7 +50,7 @@ describe('hooks/useCounter', () => {
           </template>
         `,
         setup() {
-          const [count] = useCounter(0, {
+          const { count } = useCounter(0, {
             min: -1,
             max: 2,
           });
@@ -101,7 +101,7 @@ describe('hooks/useCounter', () => {
       defineComponent({
         template: '<template />',
         setup() {
-          const [count, actions] = useCounter(0, {
+          const { count, ...actions } = useCounter(0, {
             min: 2,
             max: '10',
           });
@@ -141,7 +141,7 @@ describe('hooks/useCounter', () => {
           const min = ref(0);
           const max = ref(10);
           const step = ref(0.1);
-          const [count, actions] = useCounter(initial, {
+          const { count, ...actions } = useCounter(initial, {
             min,
             max,
             step,

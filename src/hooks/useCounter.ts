@@ -6,21 +6,20 @@ import type { Ref } from 'vue-demi';
 import type { RefTyped } from '../types/global';
 
 type NumberType = number | string;
-type UseCounterReturnType = [Ref<number>, CounterActions];
 export type CounterNumber = RefTyped<NumberType>;
+type UseCounterReturnType = {
+  count: Ref<number>;
+  inc: (n?: CounterNumber) => void;
+  dec: (n?: CounterNumber) => void;
+  set: (value: CounterNumber | ((currentValue: number) => number)) => void;
+  reset: () => void;
+};
 
 // TODO: COMMENT NEED
 interface CounterOptions {
   min?: CounterNumber;
   max?: CounterNumber;
   step?: CounterNumber;
-}
-
-export interface CounterActions {
-  inc: (n?: CounterNumber) => void;
-  dec: (n?: CounterNumber) => void;
-  set: (value: CounterNumber | ((currentValue: number) => number)) => void;
-  reset: () => void;
 }
 
 const isNumber = (n: any) => isDef(n) && !isNaN(unref(n));
@@ -81,28 +80,28 @@ function useCounter(
     set(fix(initial()));
   };
 
-  return [
-    computed({
-      get: () => current.value,
-      set: v => {
-        if (isNumber(v)) {
-          set(v);
-        } else {
-          throw new TypeError(
-            `Invalid assignment: expected a number-string or number but got: ${
-              isDef(v) ? typeof v : v
-            }`,
-          );
-        }
-      },
-    }),
-    {
-      inc,
-      dec,
-      set,
-      reset,
+  const count = computed({
+    get: () => current.value,
+    set: v => {
+      if (isNumber(v)) {
+        set(v);
+      } else {
+        throw new TypeError(
+          `Invalid assignment: expected a number-string or number but got: ${
+            isDef(v) ? typeof v : v
+          }`,
+        );
+      }
     },
-  ];
+  });
+
+  return {
+    count,
+    inc,
+    dec,
+    set,
+    reset,
+  };
 }
 
 export default useCounter;
