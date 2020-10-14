@@ -11,13 +11,13 @@ type EventType = MouseEvent | TouchEvent;
 /**
  * useClickAway function
  *
- * @param eventHandler Handler function on external click.
  * @param target Execution handler target.
+ * @param eventHandler Handler function on external click.
  * @param eventName Event trigger.
  */
 function useClickAway(
-  eventHandler: RefTyped<(event: EventType) => void>,
   target: Target | Target[],
+  eventHandler: RefTyped<(event: EventType) => void>,
   eventName: RefTyped<string | string[]> = defaultEvent,
 ): void {
   const handler = event => {
