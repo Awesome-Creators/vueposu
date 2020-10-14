@@ -13,12 +13,12 @@ interface UseCounterIntervalOptions {
   immediateStart?: boolean;
 }
 
-type UseCounterIntervalReturnType = [
-  conter: CounterNumber,
-  active: Ref<boolean>,
-  start: () => void,
-  stop: () => void,
-];
+type UseCounterIntervalReturnType = {
+  count: CounterNumber;
+  active: Ref<boolean>;
+  start: () => void;
+  stop: () => void;
+};
 
 // TODO: COMMENT NEED
 export default function useCounterInterval(
@@ -33,15 +33,15 @@ export default function useCounterInterval(
     immediateStart = false,
   } = options;
 
-  const [counter, { inc, dec }] = useCounter(initialValue);
+  const { count, inc, dec } = useCounter(initialValue);
 
   // TODO: check total is gt or lt than initialValue
 
   const [$active, $start, $stop] = useInterval({
     cb: () => {
-      if (type === 'dec' && counter.value > total) {
+      if (type === 'dec' && count.value > total) {
         dec(step);
-      } else if (type === 'inc' && counter.value < total) {
+      } else if (type === 'inc' && count.value < total) {
         inc(step);
       }
     },
@@ -51,7 +51,7 @@ export default function useCounterInterval(
 
   const active = ref($active);
 
-  watch(counter, ct => {
+  watch(count, ct => {
     if (ct === total) active.value = false;
   });
 
@@ -65,5 +65,5 @@ export default function useCounterInterval(
     active.value = false;
   };
 
-  return [counter, active, start, stop];
+  return { count, active, start, stop };
 }
