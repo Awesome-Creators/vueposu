@@ -22,7 +22,7 @@ describe('hooks/useCopyToClipboard', () => {
       defineComponent({
         template: `<template />`,
         setup() {
-          const [copy, text, supportCopy] = useCopyToClipboard();
+          const { copy, text, supportCopy } = useCopyToClipboard();
           return {
             copy,
             text,

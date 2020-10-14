@@ -2,11 +2,11 @@ import { ref } from 'vue-demi';
 import type { Ref } from 'vue-demi';
 
 // TODO: COMMENT NEED
-export type UseCopyToClipboardReturnType = [
-  copy: (txt: string) => Promise<void>,
-  text: Ref<string>,
-  supportCopy: boolean,
-];
+export type UseCopyToClipboardReturnType = {
+  copy: (txt: string) => Promise<void>;
+  text: Ref<string>;
+  supportCopy: boolean;
+};
 
 export default function useCopyToClipboard(): UseCopyToClipboardReturnType {
   const text = ref('');
@@ -17,5 +17,5 @@ export default function useCopyToClipboard(): UseCopyToClipboardReturnType {
     return window.navigator.clipboard.writeText(txt);
   };
 
-  return [copy, text, supportCopy];
+  return { copy, text, supportCopy };
 }
