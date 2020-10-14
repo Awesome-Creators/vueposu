@@ -1,37 +1,36 @@
-import { onBeforeUnmount, ref } from 'vue-demi';
+import { onBeforeUnmount, ref, readonly } from 'vue-demi';
 import { isFunction } from '../libs/helper';
 import type { Ref } from 'vue-demi';
 
-interface UseTimeoutOptions {
-  cb: Function;
-  timeout?: number;
-  immediateStart?: boolean;
-}
-
-type UseTimeoutReturnType = [Ref<boolean>, () => void, () => void];
+type UseTimeoutReturnType = {
+  isActive: Ref<boolean>;
+  start: () => void;
+  stop: () => void;
+};
 
 // TODO: COMMENT NEED
 export default function useTimeout(
-  options: UseTimeoutOptions,
+  callback: () => void,
+  timeout: number = 0,
+  immediateStart: boolean = true,
 ): UseTimeoutReturnType {
-  const { cb, timeout = 1000, immediateStart = true } = options;
   let timer = null;
-  let active = ref(immediateStart);
+  let isActive = ref(immediateStart);
 
   const stop = () => {
     if (timer) {
       clearTimeout(timer);
       timer = null;
-      active.value = false;
+      isActive.value = false;
     }
   };
 
   const start = () => {
     stop();
-    active.value = true;
+    isActive.value = true;
     timer = setTimeout(() => {
-      isFunction(cb) && cb();
-      active.value = false;
+      isFunction(callback) && callback();
+      isActive.value = false;
     }, timeout);
   };
 
@@ -39,5 +38,9 @@ export default function useTimeout(
 
   onBeforeUnmount(stop);
 
-  return [active, start, stop];
+  return {
+    isActive: readonly(isActive),
+    start,
+    stop,
+  };
 }
