@@ -1,5 +1,6 @@
 /**
  * useFavicon - change site icon
+ * 
  * @param url favicon url
  */
 export default function useFavicon(url?: string) {
@@ -19,6 +20,7 @@ export default function useFavicon(url?: string) {
   // if has url, immediately update icon
   if (url) changeIcon(url);
 
+  // WIP: restore?
   // export changeIcon
   return [changeIcon];
 }
