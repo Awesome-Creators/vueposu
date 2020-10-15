@@ -37,11 +37,13 @@ export default function useScroll(target?: Target<ScrollTarget>) {
         state.y = (currentTarget as HTMLElement).scrollTop;
       }
     };
-    
+
     let targetElement;
     onMounted(() => {
       targetElement = getTargetElement(target, document);
-      targetElement.addEventListener('scroll', scrollHandler);
+      targetElement.addEventListener('scroll', scrollHandler, {
+        passive: true,
+      });
     });
     onBeforeUnmount(() => {
       targetElement.removeEventListener('scroll', scrollHandler);
