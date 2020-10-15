@@ -38,7 +38,7 @@ import { useCounter } from 'vueposu';
 const Component = defineComponent({
   setup() {
     // create a counter
-    const [count, { inc, dec, set, reset }] = useCounter(0);
+    const { count, inc, dec, set, reset } = useCounter(0);
 
     return {
       count,
@@ -57,49 +57,49 @@ Currently supported functions
 
 - DOM
 
-  <!-- - [ ] useAudio -->
+  <!-- - [`useAudio`](https://vueposu.now.sh/useAudio.html) -->
 
-  - [x] useBrowserTabChange
-  - [x] useClickAway
-  - [x] useCopyToClipboard
-  - [x] useFavicon
-  - [x] useFullscreen
-  - [x] useMouse
-  - [x] useScroll
-  - [x] useTitle
+  - [`useBrowserTabChange`](https://vueposu.now.sh/useBrowserTabChange.html)
+  - [`useClickAway`](https://vueposu.now.sh/useClickAway.html)
+  - [`useCopyToClipboard`](https://vueposu.now.sh/useCopyToClipboard.html)
+  - [`useFavicon`](https://vueposu.now.sh/useFavicon.html)
+  - [`useFullscreen`](https://vueposu.now.sh/useFullscreen.html)
+  - [`useMouse`](https://vueposu.now.sh/useMouse.html)
+  - [`useScroll`](https://vueposu.now.sh/useScroll.html)
+  <!-- - [`useScrollTo`](https://vueposu.now.sh/useScrollTo.html) -->
+  - [`useTitle`](https://vueposu.now.sh/useTitle.html)
 
 - FUNCTIONALITY
 
-  <!-- - [ ] useCalculator -->
+  <!-- - [`useCalculator`](https://vueposu.now.sh/useCalculator.html) -->
 
-  - [x] useCounter
-  - [x] useCounterInterval
-  - [x] useDebounce
-  - [x] useDebounceFn
-  - [x] useDynamicList
-  <!-- - [ ] useEventEmitter -->
-  - [x] useQueue
-  <!-- - [ ] useRaf -->
-  - [x] useRequest
-  - [x] useSet
-  - [x] useSWR
-  - [x] useThrottle
-  - [x] useThrottleFn
-  - [x] useToggle
-  <!-- - [ ] useTrace -->
-  - [ ] etc..
+  - [`useCounter`](https://vueposu.now.sh/useCounter.html)
+  - [`useCounterInterval`](https://vueposu.now.sh/useCounterInterval.html)
+  - [`useDebounce`](https://vueposu.now.sh/useDebounce.html)
+  - [`useDebounceFn`](https://vueposu.now.sh/useDebounceFn.html)
+  - [`useDynamicList`](https://vueposu.now.sh/useDynamicList.html)
+  <!-- - [`useEventEmitter`](https://vueposu.now.sh/useEventEmitter.html) -->
+  - [`useQueue`](https://vueposu.now.sh/useQueue.html)
+  <!-- - [`useRaf`](https://vueposu.now.sh/useRaf.html) -->
+  - [`useRequest`](https://vueposu.now.sh/useRequest.html)
+  - [`useSet`](https://vueposu.now.sh/useSet.html)
+  - [`useSWR`](https://vueposu.now.sh/useSWR.html)
+  - [`useThrottle`](https://vueposu.now.sh/useThrottle.html)
+  - [`useThrottleFn`](https://vueposu.now.sh/useThrottleFn.html)
+  - [`useToggle`](https://vueposu.now.sh/useToggle.html)
+  <!-- - [`useTrace`](https://vueposu.now.sh/useTrace.html) -->
 
 - CACHE
 
-  <!-- - [ ] useCookie -->
+  <!-- - [`useCookie`](https://vueposu.now.sh/useCookie.html) -->
 
-  - [x] useWebStorage
-  - [x] useLocalStorage
-  - [x] useSessionStorage
+  - [`useWebStorage`](https://vueposu.now.sh/useWebStorage.html)
+  - [`useLocalStorage`](https://vueposu.now.sh/useLocalStorage.html)
+  - [`useSessionStorage`](https://vueposu.now.sh/useSessionStorage.html)
 
 - SIDE EFFECT
 
-  - [x] useDebounceEffect
-  - [x] useInterval
-  - [x] useThrottleEffect
-  - [x] useTimeout
+  - [`useDebounceEffect`](https://vueposu.now.sh/useDebounceEffect.html)
+  - [`useInterval`](https://vueposu.now.sh/useInterval.html)
+  - [`useThrottleEffect`](https://vueposu.now.sh/useThrottleEffect.html)
+  - [`useTimeout`](https://vueposu.now.sh/useTimeout.html)
