@@ -7,69 +7,73 @@ describe('hooks/useToggle', () => {
     const component = mount(
       defineComponent({
         setup() {
-          const [status, toggles] = useToggle();
+          const { state, setLeft, setRight, toggle } = useToggle();
 
           return {
-            status,
-            ...toggles,
+            state,
+            setLeft,
+            setRight,
+            toggle,
           };
         },
         template: `<template />`,
       }),
     );
 
-    expect(component.vm.status).toBe(true);
+    expect(component.vm.state).toBe(true);
 
     component.vm.toggle();
-    expect(component.vm.status).toBe(false);
+    expect(component.vm.state).toBe(false);
 
     component.vm.setLeft();
-    expect(component.vm.status).toBe(true);
+    expect(component.vm.state).toBe(true);
 
     component.vm.toggle('boy next door');
-    expect(component.vm.status).toBe('boy next door');
+    expect(component.vm.state).toBe('boy next door');
 
     component.vm.setRight();
-    expect(component.vm.status).toBe(false);
+    expect(component.vm.state).toBe(false);
 
     component.vm.toggle();
-    expect(component.vm.status).toBe(true);
+    expect(component.vm.state).toBe(true);
 
-    component.vm.status = 'boy next door';
-    expect(component.vm.status).toBe('boy next door');
+    component.vm.state = 'boy next door';
+    expect(component.vm.state).toBe('boy next door');
   });
 
   it('should be work when `reverseValue` is undef', async () => {
     const component = mount(
       defineComponent({
         setup() {
-          const [status, toggles] = useToggle('hello');
+          const { state, setLeft, setRight, toggle } = useToggle('hello');
 
           return {
-            status,
-            ...toggles,
+            state,
+            setLeft,
+            setRight,
+            toggle,
           };
         },
         template: `<template />`,
       }),
     );
 
-    expect(component.vm.status).toBe('hello');
+    expect(component.vm.state).toBe('hello');
 
     component.vm.toggle();
-    expect(component.vm.status).toBe(false);
+    expect(component.vm.state).toBe(false);
 
     component.vm.setLeft();
-    expect(component.vm.status).toBe('hello');
+    expect(component.vm.state).toBe('hello');
 
     component.vm.toggle('boy next door');
-    expect(component.vm.status).toBe('boy next door');
+    expect(component.vm.state).toBe('boy next door');
 
     component.vm.setRight();
-    expect(component.vm.status).toBe(false);
+    expect(component.vm.state).toBe(false);
 
     component.vm.toggle();
-    expect(component.vm.status).toBe('hello');
+    expect(component.vm.state).toBe('hello');
   });
 
   it('should be work when `defaultValue`, `reverseValue` is RefTyped', async () => {
@@ -78,42 +82,47 @@ describe('hooks/useToggle', () => {
         setup() {
           const defaultValue = ref('hello');
           const reverseValue = ref('world');
-          const [status, toggles] = useToggle(defaultValue, reverseValue);
+          const { state, setLeft, setRight, toggle } = useToggle(
+            defaultValue,
+            reverseValue,
+          );
 
           return {
             defaultValue,
             reverseValue,
-            status,
-            ...toggles,
+            state,
+            setLeft,
+            setRight,
+            toggle,
           };
         },
         template: `<template />`,
       }),
     );
 
-    expect(component.vm.status).toBe('hello');
+    expect(component.vm.state).toBe('hello');
 
     component.vm.toggle();
-    expect(component.vm.status).toBe('world');
+    expect(component.vm.state).toBe('world');
 
     component.vm.toggle('boy next door');
-    expect(component.vm.status).toBe('boy next door');
+    expect(component.vm.state).toBe('boy next door');
 
     component.vm.toggle();
-    expect(component.vm.status).toBe('hello');
+    expect(component.vm.state).toBe('hello');
 
     component.vm.defaultValue = 'boy next door';
     component.vm.setLeft();
-    expect(component.vm.status).toBe('boy next door');
+    expect(component.vm.state).toBe('boy next door');
 
     component.vm.toggle();
-    expect(component.vm.status).toBe('world');
+    expect(component.vm.state).toBe('world');
 
     component.vm.reverseValue = 'thank you sir';
     component.vm.setRight();
-    expect(component.vm.status).toBe('thank you sir');
+    expect(component.vm.state).toBe('thank you sir');
 
     component.vm.toggle();
-    expect(component.vm.status).toBe('boy next door');
+    expect(component.vm.state).toBe('boy next door');
   });
 });
