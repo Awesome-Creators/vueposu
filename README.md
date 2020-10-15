@@ -65,7 +65,7 @@ Currently supported functions
   - [x] useFavicon
   - [x] useFullscreen
   - [x] useMouse
-  - [ ] useScroll
+  - [x] useScroll
   - [x] useTitle
 
 - FUNCTIONALITY
