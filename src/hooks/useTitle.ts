@@ -1,4 +1,10 @@
-import { ref, watch, onBeforeUnmount, getCurrentInstance } from 'vue-demi';
+import {
+  ref,
+  unref,
+  watch,
+  onBeforeUnmount,
+  getCurrentInstance,
+} from 'vue-demi';
 
 import type { RefTyped } from '../types/global';
 
@@ -10,7 +16,7 @@ import type { RefTyped } from '../types/global';
  */
 export default function useTitle(
   overridedTitle?: RefTyped<string>,
-  restoreOnUnmount: boolean = true,
+  restoreOnUnmount: RefTyped<boolean> = true,
 ) {
   if (getCurrentInstance()) {
     const originalTitle = document.title;
@@ -37,7 +43,7 @@ export default function useTitle(
     };
 
     onBeforeUnmount(() => {
-      if (restoreOnUnmount) {
+      if (unref(restoreOnUnmount)) {
         restoreTitle();
       }
       observer.disconnect();
