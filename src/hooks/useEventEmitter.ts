@@ -1,3 +1,5 @@
+import { onBeforeUnmount, getCurrentInstance } from 'vue-demi';
+
 type Subscription = (v: any) => void;
 
 export class EventEmitter {
@@ -11,10 +13,19 @@ export class EventEmitter {
 
   useSubscription = (s: Subscription) => {
     this.#subscriptions.add(s);
+    onBeforeUnmount(() => {
+      this.#subscriptions.delete(s);
+    });
   };
 }
 
 // TODO: COMMENT NEED
 export default function useEventEmitter() {
-  return new EventEmitter();
+  if (getCurrentInstance()) {
+    return new EventEmitter();
+  } else {
+    throw new Error(
+      'Invalid hook call: `useEventEmitter` can only be called inside of `setup()`.',
+    );
+  }
 }
