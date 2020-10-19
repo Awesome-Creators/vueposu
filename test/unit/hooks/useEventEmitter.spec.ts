@@ -10,9 +10,9 @@ describe('hooks/useEventEmitter', () => {
         setup() {
           const count = ref(0);
           const text = ref('');
-          const emitter = useEventEmitter();
+          const { emit, useSubscription } = useEventEmitter();
 
-          emitter.useSubscription(value => {
+          useSubscription(value => {
             text.value = value;
             count.value++;
           });
@@ -20,7 +20,8 @@ describe('hooks/useEventEmitter', () => {
           return {
             count,
             text,
-            emitter,
+            emit,
+            useSubscription,
           };
         },
       }),
@@ -29,23 +30,23 @@ describe('hooks/useEventEmitter', () => {
     expect(component.vm.count).toBe(0);
     expect(component.vm.text).toBe('');
 
-    component.vm.emitter.emit('a');
+    component.vm.emit('a');
     expect(component.vm.count).toBe(1);
     expect(component.vm.text).toBe('a');
 
-    component.vm.emitter.emit('b');
+    component.vm.emit('b');
     expect(component.vm.count).toBe(2);
     expect(component.vm.text).toBe('b');
 
-    component.vm.emitter.useSubscription((value) => {
+    component.vm.useSubscription(value => {
       component.vm.text += value;
       component.vm.count++;
     });
-    component.vm.emitter.emit('c');
+    component.vm.emit('c');
     expect(component.vm.count).toBe(4);
     expect(component.vm.text).toBe('cc');
-    
-    component.vm.emitter.emit('d');
+
+    component.vm.emit('d');
     expect(component.vm.count).toBe(6);
     expect(component.vm.text).toBe('dd');
   });
