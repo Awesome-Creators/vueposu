@@ -1,26 +1,44 @@
+import { getCurrentInstance } from 'vue-demi';
+
 /**
  * useFavicon - change site icon
- * 
+ *
  * @param url favicon url
  */
 export default function useFavicon(url?: string) {
-  // change site favicon
-  const changeIcon = ($url: string) => {
-    if ($url) {
-      const link: HTMLLinkElement =
-        document.querySelector("link[rel*='icon']") ||
-        document.createElement('link');
-      link.type = 'image/x-icon';
-      link.rel = 'shortcut icon';
-      link.href = $url;
-      document.getElementsByTagName('head')[0].appendChild(link);
+  if (getCurrentInstance()) {
+    let link: HTMLLinkElement = document.querySelector("link[rel*='icon']");
+    let originalIcon = '';
+    if (link) {
+      originalIcon = link.href;
+    } else {
+      link = document.createElement('link');
     }
-  };
+    link.type = 'image/x-icon';
+    link.rel = 'shortcut icon';
 
-  // if has url, immediately update icon
-  if (url) changeIcon(url);
+    // change site favicon
+    const changeIcon = ($url: string) => {
+      if ($url) {
+        link.href = $url;
+        document.getElementsByTagName('head')[0].appendChild(link);
+      }
+    };
 
-  // WIP: restore?
-  // export changeIcon
-  return [changeIcon];
+    // restore favicon if it has the original icon
+    const restoreIcon = () => {
+      if (originalIcon) {
+        changeIcon(originalIcon);
+      }
+    };
+
+    // if has url, immediately update icon
+    if (url) changeIcon(url);
+
+    return { changeIcon, restoreIcon };
+  } else {
+    throw new Error(
+      'Invalid hook call: `useFavicon` can only be called inside of `setup()`.',
+    );
+  }
 }
