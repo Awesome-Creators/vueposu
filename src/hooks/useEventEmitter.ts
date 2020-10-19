@@ -1,4 +1,4 @@
-import { onBeforeUnmount, getCurrentInstance } from 'vue-demi';
+import { getCurrentInstance } from 'vue-demi';
 
 type Subscription = (v: any) => void;
 
@@ -13,9 +13,6 @@ export class EventEmitter {
 
   useSubscription = (s: Subscription) => {
     this.#subscriptions.add(s);
-    onBeforeUnmount(() => {
-      this.#subscriptions.delete(s);
-    });
   };
 }
 
