@@ -13,7 +13,7 @@ const DIFFERENCE_PLATFORM_EVT = [
  * when user `leave`/`back` current tab will trigger this hook
  * always execute the last one
  *
- * @param onHiddenStatusChange function for useBrowserTabChange
+ * @param onHiddenStatusChange change handler function for useBrowserTabChange
  */
 export default function useBrowserTabChange(
   onHiddenStatusChange: (isHidden?: boolean) => void,
