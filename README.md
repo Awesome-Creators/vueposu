@@ -61,7 +61,7 @@ Currently supported functions
 
   - [`useBrowserTabChange`](https://vueposu.now.sh/useBrowserTabChange.html)
   - [`useClickAway`](https://vueposu.now.sh/useClickAway.html)
-  - [`useCopyToClipboard`](https://vueposu.now.sh/useCopyToClipboard.html)
+  - [`useClipboard`](https://vueposu.now.sh/useClipboard.html)
   - [`useFavicon`](https://vueposu.now.sh/useFavicon.html)
   - [`useFullscreen`](https://vueposu.now.sh/useFullscreen.html)
   - [`useMouse`](https://vueposu.now.sh/useMouse.html)
