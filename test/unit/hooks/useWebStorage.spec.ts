@@ -250,4 +250,10 @@ describe('hooks/useWebStorage', () => {
     expect(sessionStorage.getItem('b')).toBe('1');
     component.unmount();
   });
+
+  it('should throw error when `useWebStorage` not be called inside of `setup()`', () => {
+    expect(() => useWebStorage('a')).toThrowError(
+      'Invalid hook call: `useWebStorage` can only be called inside of `setup()`.',
+    );
+  });
 });
