@@ -4,7 +4,7 @@ import {
   computed,
   toRefs,
   defineComponent,
-  defineAsyncComponent,
+  // defineAsyncComponent,
   onMounted,
   onUpdated,
   onUnmounted,
