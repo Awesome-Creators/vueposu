@@ -1,7 +1,7 @@
-import { onMounted, onBeforeUnmount, getCurrentInstance } from 'vue-demi';
+import { onMounted, onUnmounted, getCurrentInstance } from 'vue-demi';
 
 // the difference platfrom listen
-const DIFFERENCE_PLATFORM_EVT = [
+const differencePlatformEvents = [
   'mozvisibilitychange',
   'webkitvisibilitychange',
   'msvisibilitychange',
@@ -19,17 +19,18 @@ export default function useBrowserTabChange(
   onHiddenStatusChange: (isHidden?: boolean) => void,
 ) {
   if (getCurrentInstance()) {
-    const listener = () => setTimeout(() => onHiddenStatusChange(document.hidden));
+    const listener = () =>
+      setTimeout(() => onHiddenStatusChange(document.hidden));
 
     onMounted(() => {
-      DIFFERENCE_PLATFORM_EVT.forEach(evt => {
-        document.addEventListener(evt, listener);
+      differencePlatformEvents.forEach(event => {
+        document.addEventListener(event, listener);
       });
     });
 
-    onBeforeUnmount(() => {
-      DIFFERENCE_PLATFORM_EVT.forEach(evt => {
-        document.removeEventListener(evt, listener);
+    onUnmounted(() => {
+      differencePlatformEvents.forEach(event => {
+        document.removeEventListener(event, listener);
       });
     });
   } else {
