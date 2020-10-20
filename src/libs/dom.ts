@@ -10,7 +10,7 @@ export type Target<T = HTMLElement> =
   | (() => T | null)
   | Ref<T | null | undefined>;
 
-type TargetElement = HTMLElement | Element | Document | Window;
+export type TargetElement = HTMLElement | Element | Document | Window;
 
 export function isHTMLElement(element) {
   return element?.nodeType === 1;
