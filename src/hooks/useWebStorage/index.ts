@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue-demi';
+import { ref, computed, getCurrentInstance } from 'vue-demi';
 import { read, write } from './serializer';
 import { localStorageMap, sessionStorageMap } from './map';
 
@@ -98,33 +98,39 @@ export default function useWebStorage<T>(
   defaultValue?: T,
   storage: Storage = window.localStorage,
 ) {
-  const storageMap =
-    storage === window.localStorage ? localStorageMap : sessionStorageMap;
-  const setItem =
-    storage === window.localStorage
-      ? originalLocalSetItem
-      : originalSessionSetItem;
-  const removeItem =
-    storage === window.localStorage
-      ? originalLocalRemoveItem
-      : originalSessionRemoveItem;
-  const update = value => {
-    if (value === null) {
-      removeItem(key);
-    } else {
-      setItem(key, write(value));
-    }
-    return value;
-  };
+  if (getCurrentInstance()) {
+    const storageMap =
+      storage === window.localStorage ? localStorageMap : sessionStorageMap;
+    const setItem =
+      storage === window.localStorage
+        ? originalLocalSetItem
+        : originalSessionSetItem;
+    const removeItem =
+      storage === window.localStorage
+        ? originalLocalRemoveItem
+        : originalSessionRemoveItem;
+    const update = value => {
+      if (value === null) {
+        removeItem(key);
+      } else {
+        setItem(key, write(value));
+      }
+      return value;
+    };
 
-  const item =
-    storageMap[key] ||
-    (storageMap[key] = ref(update(read(storage.getItem(key), defaultValue))));
+    const item =
+      storageMap[key] ||
+      (storageMap[key] = ref(update(read(storage.getItem(key), defaultValue))));
 
-  return computed({
-    get: () => item.value,
-    set: value => {
-      item.value = update(value);
-    },
-  });
+    return computed({
+      get: () => item.value,
+      set: value => {
+        item.value = update(value);
+      },
+    });
+  } else {
+    throw new Error(
+      'Invalid hook call: `useWebStorage` can only be called inside of `setup()`.',
+    );
+  }
 }

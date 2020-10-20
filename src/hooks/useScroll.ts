@@ -1,11 +1,10 @@
 import {
   reactive,
   readonly,
-  onMounted,
-  onBeforeUnmount,
   toRefs,
   getCurrentInstance,
 } from 'vue-demi';
+import useEventListener from './useEventListener';
 import { getTargetElement } from '../libs/dom';
 
 import type { Target } from '../libs/dom';
@@ -37,17 +36,10 @@ export default function useScroll(target?: Target<ScrollTarget>) {
         state.y = (currentTarget as HTMLElement).scrollTop;
       }
     };
-
-    let targetElement;
-    onMounted(() => {
-      targetElement = getTargetElement(target, document);
-      targetElement.addEventListener('scroll', scrollHandler, {
-        passive: true,
-      });
-    });
-    onBeforeUnmount(() => {
-      targetElement.removeEventListener('scroll', scrollHandler);
-    });
+    
+    useEventListener((() => getTargetElement(target, document)) as Target, 'scroll', scrollHandler, {
+      passive: true,
+    })
 
     return toRefs(readonly(state));
   } else {

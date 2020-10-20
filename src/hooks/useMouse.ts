@@ -1,11 +1,10 @@
 import {
   reactive,
   readonly,
-  onMounted,
-  onBeforeUnmount,
   toRefs,
   getCurrentInstance,
 } from 'vue-demi';
+import useEventListener from './useEventListener';
 
 interface MouseCursorState {
   pageX: number;
@@ -40,12 +39,7 @@ export default function useMouse() {
       state.clientY = clientY;
     };
 
-    onMounted(() => {
-      document.addEventListener('mousemove', moveHandler);
-    });
-    onBeforeUnmount(() => {
-      document.removeEventListener('mousemove', moveHandler);
-    });
+    useEventListener(document, 'mousemove', moveHandler);
 
     return toRefs(readonly(state));
   } else {

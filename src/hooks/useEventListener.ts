@@ -1,4 +1,10 @@
-import { unref, watchEffect, getCurrentInstance } from 'vue-demi';
+import {
+  unref,
+  onMounted,
+  onUnmounted,
+  watchEffect,
+  getCurrentInstance,
+} from 'vue-demi';
 import { getTargetElement } from '../libs/dom';
 
 import type { RefTyped } from '../types/global';
@@ -37,12 +43,9 @@ function useEventListener(
 // TODO: COMMENT NEED
 function useEventListener(...args) {
   if (getCurrentInstance()) {
-    watchEffect(onInvalidate => {
-      let target,
-        type,
-        listener,
-        options;
+    let target, type, listener, options;
 
+    const serialize = () => {
       if (typeof unref(args[0]) === 'string') {
         target = window;
         type = unref(args[0]);
@@ -54,12 +57,17 @@ function useEventListener(...args) {
         listener = args[2];
         options = args[3] || false;
       }
+    };
 
-      target.addEventListener(type, listener, options);
-
-      onInvalidate(() => {
-        target.removeEventListener(type, listener, options);
+    onMounted(() => {
+      watchEffect(() => {
+        serialize();
       });
+      target.addEventListener(type, listener, options);
+    });
+
+    onUnmounted(() => {
+      target.removeEventListener(type, listener, options);
     });
   } else {
     throw new Error(
