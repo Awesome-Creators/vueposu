@@ -1,16 +1,17 @@
-import { ref, watch } from 'vue-demi';
-import type { Ref } from 'vue-demi';
+import { ref, unref, watch } from 'vue-demi';
 import useDebounceFn from '../hooks/useDebounceFn';
+
+import type { Ref } from 'vue-demi';
 
 // TODO: COMMENT NEED
 export default function useDebounce<T>(value: Ref<T>, wait = 0) {
   if (wait === 0) return value;
-  const delayValue = ref(value.value) as Ref<T>;
+  const delayValue = ref(unref(value)) as Ref<T>;
 
   watch(
     value,
     useDebounceFn(() => {
-      delayValue.value = value.value;
+      delayValue.value = unref(value);
     }, wait),
   );
 
