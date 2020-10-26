@@ -9,26 +9,27 @@ describe('hooks/useThrottle', () => {
       defineComponent({
         template: `
           <template>
-            <span id="val">{{val}}</span>
-            <span id="val2">{{val2}}</span>
+            <span id="value">{{value}}</span>
+            <span id="throttled">{{throttled}}</span>
           </template>
         `,
         setup() {
-          const val = ref(1);
-          const val2 = useThrottle(val);
+          const value = ref(1);
+          const throttled = useThrottle(value);
+
           return {
-            val,
-            val2,
+            value,
+            throttled,
           };
         },
       }),
     );
 
-    component.vm.val = 2;
+    component.vm.value = 2;
     await wait();
 
-    expect(component.find('#val').text()).toBe('2');
-    expect(component.find('#val2').text()).toBe('2');
+    expect(component.find('#value').text()).toBe('2');
+    expect(component.find('#throttled').text()).toBe('2');
   });
 
   it('test wait', async () => {
@@ -36,40 +37,57 @@ describe('hooks/useThrottle', () => {
       defineComponent({
         template: `
           <template>
-            <span id="val">{{val}}</span>
-            <span id="val2">{{val2}}</span>
+            <span id="value">{{value}}</span>
+            <span id="throttled">{{throttled}}</span>
           </template>
         `,
         setup() {
-          const val = ref(1);
-          const val2 = useThrottle(val, 100);
+          const value = ref(1);
+          const wait = ref(100);
+          const throttled = useThrottle(value, wait);
+
           return {
-            val,
-            val2,
+            value,
+            throttled,
+            wait
           };
         },
       }),
     );
 
-    component.vm.val = 2;
-    await wait();
+    component.vm.value = 2;
 
-    expect(component.find('#val').text()).toBe('2');
-    expect(component.find('#val2').text()).toBe('2');
+    await component.vm.$nextTick();
+    expect(component.find('#value').text()).toBe('2');
+    expect(component.find('#throttled').text()).toBe('2');
 
-    component.vm.val = 3;
-    await wait();
-    expect(component.find('#val').text()).toBe('3');
+    component.vm.value = 3;
+    await component.vm.$nextTick();
+    expect(component.find('#value').text()).toBe('3');
+    expect(component.find('#throttled').text()).toBe('2');
 
-    component.vm.val = 4;
-    await wait();
-    expect(component.find('#val').text()).toBe('4');
+    component.vm.value = 4;
+    await component.vm.$nextTick();
+    expect(component.find('#value').text()).toBe('4');
+    expect(component.find('#throttled').text()).toBe('2');
 
-    component.vm.val = 5;
-    await wait();
-    expect(component.find('#val').text()).toBe('5');
+    component.vm.value = 5;
+    await component.vm.$nextTick();
+    expect(component.find('#value').text()).toBe('5');
+    expect(component.find('#throttled').text()).toBe('2');
 
-    await wait(300);
-    expect(component.find('#val2').text()).toBe('5');
+    await wait(100);
+    expect(component.find('#throttled').text()).toBe('5');
+
+    component.vm.wait = 200;
+    component.vm.value = 6;
+    await wait(100);
+    expect(component.find('#value').text()).toBe('6');
+    expect(component.find('#throttled').text()).toBe('6');
+
+    component.vm.value = 7;
+    await wait(100);
+    expect(component.find('#value').text()).toBe('7');
+    expect(component.find('#throttled').text()).toBe('7');
   });
 });

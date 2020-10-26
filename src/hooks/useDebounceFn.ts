@@ -1,5 +1,8 @@
+import { unref } from 'vue-demi';
 import debounce from '../libs/debounce';
+
 import type { Fn } from '../libs/debounce';
+import type { RefTyped } from '../types/global';
 
 /**
  * useDebounceFn function
@@ -9,8 +12,8 @@ import type { Fn } from '../libs/debounce';
  * @returns debounced.cancel function
  * @returns debounced.flush function
  */
-function useDebounceFn<T extends Fn>(callback: T, wait = 0) {
-  const debounced = debounce(callback, wait);
+function useDebounceFn<T extends Fn>(callback: T, wait: RefTyped<number> = 0) {
+  const debounced = debounce(callback, unref(wait));
   return debounced;
 }
 
