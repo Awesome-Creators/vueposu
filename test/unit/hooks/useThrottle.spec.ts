@@ -71,23 +71,26 @@ describe('hooks/useThrottle', () => {
     expect(component.find('#value').text()).toBe('4');
     expect(component.find('#throttled').text()).toBe('2');
 
+    await wait(100);
+    expect(component.find('#throttled').text()).toBe('4');
+
+    component.vm.wait = 200;
     component.vm.value = 5;
     await component.vm.$nextTick();
     expect(component.find('#value').text()).toBe('5');
-    expect(component.find('#throttled').text()).toBe('2');
-
-    await wait(100);
     expect(component.find('#throttled').text()).toBe('5');
 
-    component.vm.wait = 200;
     component.vm.value = 6;
-    await wait(100);
+    await component.vm.$nextTick();
     expect(component.find('#value').text()).toBe('6');
-    expect(component.find('#throttled').text()).toBe('6');
+    expect(component.find('#throttled').text()).toBe('5');
 
     component.vm.value = 7;
-    await wait(100);
+    await component.vm.$nextTick();
     expect(component.find('#value').text()).toBe('7');
+    expect(component.find('#throttled').text()).toBe('5');
+
+    await wait(200);
     expect(component.find('#throttled').text()).toBe('7');
   });
 });

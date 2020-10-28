@@ -10,33 +10,31 @@ describe('hooks/useDebounceEffect.spec', () => {
       defineComponent({
         template: `<template />`,
         setup() {
-          const val = ref(1);
-          const changeVal = () => {
-            val.value += 1;
-          };
-          useDebounceEffect(fn, val);
+          const count = ref(1);
+          const inc = () => count.value++;
+          useDebounceEffect(fn, count);
           return {
-            val,
-            changeVal,
+            count,
+            inc,
           };
         },
       }),
     );
 
-    component.vm.changeVal();
+    component.vm.inc();
     await wait();
     expect(fn).toBeCalledTimes(1);
-    expect(fn.mock.calls).toContainEqual([2, 1]);
+    expect(fn.mock.calls[0]).toEqual([2, 1]);
 
-    component.vm.changeVal();
+    component.vm.inc();
     await wait();
     expect(fn).toBeCalledTimes(2);
-    expect(fn.mock.calls).toContainEqual([3, 2]);
+    expect(fn.mock.calls[1]).toEqual([3, 2]);
 
-    component.vm.changeVal();
+    component.vm.inc();
     await wait();
     expect(fn).toBeCalledTimes(3);
-    expect(fn.mock.calls).toContainEqual([4, 3]);
+    expect(fn.mock.calls[2]).toEqual([4, 3]);
   });
 
   it('test wait', async () => {
@@ -45,26 +43,37 @@ describe('hooks/useDebounceEffect.spec', () => {
       defineComponent({
         template: `<template />`,
         setup() {
-          const val = ref(1);
-          const changeVal = () => {
-            val.value += 1;
-          };
-          useDebounceEffect(fn, val, 300);
+          const count = ref(1);
+          const inc = () => count.value++;
+          const wait = ref(300);
+          useDebounceEffect(fn, count, wait);
+
           return {
-            val,
-            changeVal,
+            count,
+            inc,
+            wait,
           };
         },
       }),
     );
 
-    component.vm.changeVal();
+    component.vm.inc();
     await wait();
     expect(fn).toBeCalledTimes(0);
 
     await wait(300);
     expect(fn).toBeCalledTimes(1);
-    expect(fn.mock.calls).toContainEqual([2, 1]);
+    expect(fn.mock.calls[0]).toEqual([2, 1]);
+
+    component.vm.wait = 400;
+    component.vm.inc();
+    await wait();
+    await wait(300);
+    expect(fn).toBeCalledTimes(1);
+
+    await wait(100);
+    expect(fn).toBeCalledTimes(2);
+    expect(fn.mock.calls[1]).toEqual([3, 2]);
   });
 
   it('test wait interrupt', async () => {
@@ -73,34 +82,40 @@ describe('hooks/useDebounceEffect.spec', () => {
       defineComponent({
         template: `<template />`,
         setup() {
-          const val = ref(1);
-          const changeVal = () => {
-            val.value += 1;
-          };
-          useDebounceEffect(fn, val, 300);
+          const count = ref(1);
+          const inc = () => count.value++;
+          useDebounceEffect(fn, count, 300);
+
           return {
-            val,
-            changeVal,
+            count,
+            inc,
           };
         },
       }),
     );
 
-    component.vm.changeVal();
+    component.vm.inc();
     await wait();
     expect(fn).toBeCalledTimes(0);
 
     await wait(300);
     expect(fn).toBeCalledTimes(1);
-    expect(fn.mock.calls).toContainEqual([2, 1]);
+    expect(fn.mock.calls[0]).toEqual([2, 1]);
 
-    component.vm.changeVal();
+    component.vm.inc();
     await wait(150);
-    component.vm.changeVal();
+    component.vm.inc();
     await wait(150);
-    expect(fn.mock.calls).toContainEqual([2, 1]);
+    expect(fn).toBeCalledTimes(1);
 
     await wait(300);
-    expect(fn.mock.calls).toContainEqual([4, 3]);
+    expect(fn).toBeCalledTimes(2);
+    expect(fn.mock.calls[1]).toEqual([4, 3]);
+  });
+
+  it('should throw error when `useDebounceEffect` not be called inside of `setup()`', () => {
+    expect(() => useDebounceEffect(() => {}, ref(1))).toThrowError(
+      'Invalid hook call: `useDebounceEffect` can only be called inside of `setup()`.',
+    );
   });
 });

@@ -66,7 +66,6 @@ describe('hooks/useDebounce', () => {
     expect(component.find('#debounced').text()).toBe('2');
 
     component.vm.value = 3;
-    await component.vm.$nextTick();
     expect(component.find('#debounced').text()).toBe('2');
 
     await wait(200);

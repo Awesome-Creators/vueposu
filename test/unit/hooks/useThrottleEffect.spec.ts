@@ -10,28 +10,26 @@ describe('hooks/useThrottleEffect', () => {
       defineComponent({
         template: `<template />`,
         setup() {
-          const val = ref(1);
-          const changeVal = () => {
-            val.value += 1;
-          };
-          useThrottleEffect(fn, val);
+          const count = ref(1);
+          const inc = () => count.value++;
+          useThrottleEffect(fn, count);
           return {
-            val,
-            changeVal,
+            count,
+            inc,
           };
         },
       }),
     );
 
-    component.vm.changeVal();
+    component.vm.inc();
     await wait();
     expect(fn).toBeCalledTimes(1);
-    expect(fn.mock.calls).toContainEqual([2, 1]);
+    expect(fn.mock.calls[0]).toEqual([2, 1]);
 
-    component.vm.changeVal();
+    component.vm.inc();
     await wait();
     expect(fn).toBeCalledTimes(2);
-    expect(fn.mock.calls).toContainEqual([3, 2]);
+    expect(fn.mock.calls[1]).toEqual([3, 2]);
   });
 
   it('test wait', async () => {
@@ -40,31 +38,40 @@ describe('hooks/useThrottleEffect', () => {
       defineComponent({
         template: `<template />`,
         setup() {
-          const val = ref(1);
-          const changeVal = () => {
-            val.value += 1;
-          };
-          useThrottleEffect(fn, val, 300);
+          const count = ref(1);
+          const inc = () => count.value++;
+          const wait = ref(300);
+          useThrottleEffect(fn, count, wait);
+
           return {
-            val,
-            changeVal,
+            count,
+            inc,
+            wait
           };
         },
       }),
     );
 
-    component.vm.changeVal();
+    component.vm.inc();
     await wait();
     expect(fn).toBeCalledTimes(1);
-    expect(fn.mock.calls).toContainEqual([2, 1]);
+    expect(fn.mock.calls[0]).toEqual([2, 1]);
 
-    await wait(300);
+    await wait(299);
+    component.vm.inc();
+    await wait();
     expect(fn).toBeCalledTimes(1);
-    expect(fn.mock.calls).toContainEqual([2, 1]);
 
-    await wait(300);
-    expect(fn).toBeCalledTimes(1);
-    expect(fn.mock.calls).toContainEqual([2, 1]);
+    component.vm.wait = 400;
+    component.vm.inc();
+    await wait();
+    expect(fn).toBeCalledTimes(2);
+    expect(fn.mock.calls[1]).toEqual([4, 3]);
+    
+    await wait(399);
+    component.vm.inc();
+    await wait();
+    expect(fn).toBeCalledTimes(2);
   });
 
   it('test wait interrupt', async () => {
@@ -73,32 +80,35 @@ describe('hooks/useThrottleEffect', () => {
       defineComponent({
         template: `<template />`,
         setup() {
-          const val = ref(1);
-          const changeVal = () => {
-            val.value += 1;
-          };
-          useThrottleEffect(fn, val, 300);
+          const count = ref(1);
+          const inc = () => count.value++;
+          useThrottleEffect(fn, count, 300);
           return {
-            val,
-            changeVal,
+            count,
+            inc,
           };
         },
       }),
     );
 
-    component.vm.changeVal();
+    component.vm.inc();
     await wait();
     expect(fn).toBeCalledTimes(1);
-    expect(fn.mock.calls).toContainEqual([2, 1]);
+    expect(fn.mock.calls[0]).toEqual([2, 1]);
 
-    component.vm.changeVal();
+    component.vm.inc();
     await wait(150);
     expect(fn).toBeCalledTimes(1);
-    expect(fn.mock.calls).toContainEqual([2, 1]);
 
-    component.vm.changeVal();
+    component.vm.inc();
     await wait(150);
     expect(fn).toBeCalledTimes(2);
-    expect(fn.mock.calls).toContainEqual([3, 2]);
+    expect(fn.mock.calls[1]).toEqual([3, 2]);
+  });
+
+  it('should throw error when `useThrottleEffect` not be called inside of `setup()`', () => {
+    expect(() => useThrottleEffect(() => {}, ref(1))).toThrowError(
+      'Invalid hook call: `useThrottleEffect` can only be called inside of `setup()`.',
+    );
   });
 });
