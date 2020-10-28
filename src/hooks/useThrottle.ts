@@ -9,14 +9,15 @@ export default function useThrottle<T>(
   value: Ref<T>,
   wait: RefTyped<number> = 0,
 ) {
-  if (unref(wait) === 0) return value;
   const delayValue: Ref<T> = ref(unref(value)) as Ref<T>;
+  const throttled = useThrottleFn(
+    () => (delayValue.value = unref(value)),
+    wait,
+  );
 
-  watch(value, () => {
-    useThrottleFn(() => {
-      delayValue.value = unref(value);
-    }, unref(wait));
-  });
+  watch(value, () =>
+    unref(wait) > 0 ? throttled.value() : (delayValue.value = unref(value)),
+  );
 
   return delayValue;
 }

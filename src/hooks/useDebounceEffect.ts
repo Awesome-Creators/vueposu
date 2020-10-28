@@ -1,7 +1,8 @@
-import debounce from '../libs/debounce';
-import { watch } from 'vue-demi';
+import { unref, watch, getCurrentInstance } from 'vue-demi';
+import useDebounceFn from './useDebounceFn';
 
-import type { WatchSource } from 'vue-demi';
+import type { Ref, WatchSource } from 'vue-demi';
+import type { RefTyped } from '../types/global';
 
 type MapSources<T> = {
   [K in keyof T]: T[K] extends WatchSource<infer V>
@@ -17,13 +18,19 @@ type EffectListener<T> = (
 ) => void;
 
 // TODO: COMMENT NEED
-export default function useDebounceEffect<T>(
+export default function useDebounceEffect<T extends Ref>(
   listener: EffectListener<T>,
   deps: T,
-  wait: number = 0,
+  wait: RefTyped<number> = 0,
 ) {
-  const $listener = (value, oldValue) => listener(value, oldValue);
-  const debounced = debounce($listener, wait);
+  if (getCurrentInstance()) {
+    const $listener = (value, oldValue) => listener(value, oldValue);
+    const debounced = useDebounceFn($listener, wait);
 
-  watch(deps, wait > 0 ? debounced : $listener);
+    watch(deps, ((value, oldValue) => unref(wait) > 0 ? debounced.value(value, oldValue) : $listener(value, oldValue)));
+  } else {
+    throw new Error(
+      'Invalid hook call: `useDebounceEffect` can only be called inside of `setup()`.',
+    );
+  }
 }

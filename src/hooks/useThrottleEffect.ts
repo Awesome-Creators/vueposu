@@ -1,5 +1,8 @@
-import throttle from '../libs/throttle';
-import { WatchSource, watch } from 'vue-demi';
+import { unref, watch, getCurrentInstance } from 'vue-demi';
+import useThrottleFn from './useThrottleFn';
+
+import type { Ref, WatchSource } from 'vue-demi';
+import type { RefTyped } from '../types/global';
 
 // TODO: COMMENT NEED
 type MapSources<T> = {
@@ -15,13 +18,19 @@ type EffectListener<T> = (
   oldValue: MapSources<T>,
 ) => void;
 
-export default function useThrottleEffect<T>(
+export default function useThrottleEffect<T extends Ref>(
   listener: EffectListener<T>,
   deps: T,
-  wait: number = 0,
+  wait: RefTyped<number> = 0,
 ) {
-  const $listener = (value, oldValue) => listener(value, oldValue);
-  const throttled = throttle($listener, wait);
+  if (getCurrentInstance()) {
+    const $listener = (value, oldValue) => listener(value, oldValue);
+    const throttled = useThrottleFn($listener, wait);
 
-  watch(deps, wait > 0 ? throttled : $listener);
+    watch(deps, ((value, oldValue) => unref(wait) > 0 ? throttled.value(value, oldValue) : $listener(value, oldValue)));
+  } else {
+    throw new Error(
+      'Invalid hook call: `useThrottleEffect` can only be called inside of `setup()`.',
+    );
+  }
 }
