@@ -1652,6 +1652,7 @@ describe('useSWR - local mutation', () => {
             resolve(value);
           }, 200),
         ),
+        false
       ),
     ).resolves.toBe('on');
 
@@ -1665,10 +1666,12 @@ describe('useSWR - local mutation', () => {
         key,
         new Promise(resolve =>
           setTimeout(() => {
+            console.log('asdasd')
             value = 'off';
             resolve(value);
           }, 400),
         ),
+        false
       ),
     ).resolves.toBe('off');
 

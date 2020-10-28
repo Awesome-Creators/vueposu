@@ -121,7 +121,7 @@ export const mutate: Mutate = async ($key, $data, shouldRevalidate = true) => {
   const beforeConcurrentPromisesTs = concurrentPromisesTS[key];
 
   let data, error;
-
+  
   if ($data && isFunction($data)) {
     try {
       data = await $data(cache.get(key));
