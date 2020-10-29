@@ -13,8 +13,8 @@ type MapSources<T> = {
 };
 
 type EffectListener<T> = (
-  value: MapSources<T>,
-  oldValue: MapSources<T>,
+  value?: MapSources<T>,
+  oldValue?: MapSources<T>,
 ) => void;
 
 // TODO: COMMENT NEED
@@ -24,10 +24,11 @@ export default function useDebounceEffect<T extends Ref>(
   wait: RefTyped<number> = 0,
 ) {
   if (getCurrentInstance()) {
-    const $listener = (value, oldValue) => listener(value, oldValue);
-    const debounced = useDebounceFn($listener, wait);
+    const debounced = useDebounceFn(listener, wait);
 
-    watch(deps, ((value, oldValue) => unref(wait) > 0 ? debounced.value(value, oldValue) : $listener(value, oldValue)));
+    watch(deps, (...args: Parameters<EffectListener<T>>) =>
+      unref(wait) > 0 ? debounced.value(...args) : listener(...args),
+    );
   } else {
     throw new Error(
       'Invalid hook call: `useDebounceEffect` can only be called inside of `setup()`.',

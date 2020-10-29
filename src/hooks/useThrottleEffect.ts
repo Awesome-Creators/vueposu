@@ -14,20 +14,22 @@ type MapSources<T> = {
 };
 
 type EffectListener<T> = (
-  value: MapSources<T>,
-  oldValue: MapSources<T>,
+  value?: MapSources<T>,
+  oldValue?: MapSources<T>,
 ) => void;
 
+// TODO: COMMENT NEED
 export default function useThrottleEffect<T extends Ref>(
   listener: EffectListener<T>,
   deps: T,
   wait: RefTyped<number> = 0,
 ) {
   if (getCurrentInstance()) {
-    const $listener = (value, oldValue) => listener(value, oldValue);
-    const throttled = useThrottleFn($listener, wait);
+    const throttled = useThrottleFn(listener, wait);
 
-    watch(deps, ((value, oldValue) => unref(wait) > 0 ? throttled.value(value, oldValue) : $listener(value, oldValue)));
+    watch(deps, (...args: Parameters<EffectListener<T>>) =>
+      unref(wait) > 0 ? throttled.value(...args) : listener(...args),
+    );
   } else {
     throw new Error(
       'Invalid hook call: `useThrottleEffect` can only be called inside of `setup()`.',

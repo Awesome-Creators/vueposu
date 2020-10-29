@@ -1,4 +1,4 @@
-import { ref, unref, watch } from 'vue-demi';
+import { ref, unref, readonly, watch } from 'vue-demi';
 import useThrottleFn from '../hooks/useThrottleFn';
 
 import type { Ref } from 'vue-demi';
@@ -19,5 +19,5 @@ export default function useThrottle<T>(
     unref(wait) > 0 ? throttled.value() : (delayValue.value = unref(value)),
   );
 
-  return delayValue;
+  return readonly(delayValue);
 }

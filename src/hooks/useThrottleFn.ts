@@ -1,4 +1,4 @@
-import { ref, unref, watch } from 'vue-demi';
+import { ref, unref, readonly, watch } from 'vue-demi';
 import throttle from '../libs/throttle';
 import { isFunction } from '../libs/helper';
 
@@ -31,7 +31,7 @@ function useThrottleFn<T extends Fn>(callback: T, wait: RefTyped<number> = 0) {
     },
   );
 
-  return throttled;
+  return readonly(throttled);
 }
 
 export default useThrottleFn;

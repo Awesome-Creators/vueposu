@@ -1,4 +1,4 @@
-import { ref, unref, watch } from 'vue-demi';
+import { ref, unref, readonly, watch } from 'vue-demi';
 import debounce from '../libs/debounce';
 import { isFunction } from '../libs/helper';
 
@@ -27,7 +27,7 @@ function useDebounceFn<T extends Fn>(callback: T, wait: RefTyped<number> = 0) {
     immediate: true,
   })
 
-  return debounced;
+  return readonly(debounced);
 }
 
 export default useDebounceFn;
