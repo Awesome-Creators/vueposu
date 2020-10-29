@@ -24,11 +24,11 @@ describe('hooks/useClipboard', () => {
       defineComponent({
         template: `<template />`,
         setup() {
-          const { copy, text, supportCopy } = useClipboard();
+          const { copy, text, supported } = useClipboard();
           return {
             copy,
             text,
-            supportCopy,
+            supported,
           };
         },
       }),
