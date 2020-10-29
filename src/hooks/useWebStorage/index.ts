@@ -62,7 +62,6 @@ window.sessionStorage.clear = () => {
 
 // handler
 const handleSetItem = (key: string, value: any, map: StorageMap) => {
-  console.log(key, value);
   if (key in map) {
     map[key].value = value;
   }

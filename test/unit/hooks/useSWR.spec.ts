@@ -1666,7 +1666,6 @@ describe('useSWR - local mutation', () => {
         key,
         new Promise(resolve =>
           setTimeout(() => {
-            console.log('asdasd')
             value = 'off';
             resolve(value);
           }, 400),
