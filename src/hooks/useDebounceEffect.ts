@@ -1,9 +1,10 @@
 import { unref, watch, getCurrentInstance } from 'vue-demi';
 import useDebounceFn from './useDebounceFn';
 
-import type { Ref, WatchSource } from 'vue-demi';
+import type { WatchSource, WatchCallback } from 'vue-demi';
 import type { RefTyped } from '../types/global';
 
+// TODO: COMMENT NEED
 type MapSources<T> = {
   [K in keyof T]: T[K] extends WatchSource<infer V>
     ? V
@@ -12,21 +13,36 @@ type MapSources<T> = {
     : never;
 };
 
-type EffectListener<T> = (
-  value?: MapSources<T>,
-  oldValue?: MapSources<T>,
-) => void;
-
 // TODO: COMMENT NEED
-export default function useDebounceEffect<T extends Ref>(
-  listener: EffectListener<T>,
+function useDebounceEffect<
+  T extends Readonly<Array<WatchSource<unknown> | object>>
+>(
+  listener: WatchCallback<MapSources<T>, MapSources<T>>,
   deps: T,
+  wait?: RefTyped<number>,
+);
+
+function useDebounceEffect<T>(
+  listener: WatchCallback<T, T>,
+  deps: WatchSource<T>,
+  wait?: RefTyped<number>,
+);
+
+function useDebounceEffect<T extends object>(
+  listener: WatchCallback<T, T>,
+  deps: T,
+  wait?: RefTyped<number>,
+);
+
+function useDebounceEffect<T = any>(
+  listener: any,
+  deps: T | WatchSource<T>,
   wait: RefTyped<number> = 0,
 ) {
   if (getCurrentInstance()) {
     const debounced = useDebounceFn(listener, wait);
 
-    watch(deps, (...args: Parameters<EffectListener<T>>) =>
+    watch(deps as any, (...args) =>
       unref(wait) > 0 ? debounced.value(...args) : listener(...args),
     );
   } else {
@@ -35,3 +51,5 @@ export default function useDebounceEffect<T extends Ref>(
     );
   }
 }
+
+export default useDebounceEffect;

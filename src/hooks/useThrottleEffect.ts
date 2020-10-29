@@ -1,7 +1,7 @@
 import { unref, watch, getCurrentInstance } from 'vue-demi';
 import useThrottleFn from './useThrottleFn';
 
-import type { Ref, WatchSource } from 'vue-demi';
+import type { WatchSource, WatchCallback } from 'vue-demi';
 import type { RefTyped } from '../types/global';
 
 // TODO: COMMENT NEED
@@ -13,21 +13,36 @@ type MapSources<T> = {
     : never;
 };
 
-type EffectListener<T> = (
-  value?: MapSources<T>,
-  oldValue?: MapSources<T>,
-) => void;
-
 // TODO: COMMENT NEED
-export default function useThrottleEffect<T extends Ref>(
-  listener: EffectListener<T>,
+function useThrottleEffect<
+  T extends Readonly<Array<WatchSource<unknown> | object>>
+>(
+  listener: WatchCallback<MapSources<T>, MapSources<T>>,
   deps: T,
+  wait?: RefTyped<number>,
+);
+
+function useThrottleEffect<T>(
+  listener: WatchCallback<T, T>,
+  deps: WatchSource<T>,
+  wait?: RefTyped<number>,
+);
+
+function useThrottleEffect<T extends object>(
+  listener: WatchCallback<T, T>,
+  deps: T,
+  wait?: RefTyped<number>,
+);
+
+function useThrottleEffect<T = any>(
+  listener: any,
+  deps: T | WatchSource<T>,
   wait: RefTyped<number> = 0,
 ) {
   if (getCurrentInstance()) {
     const throttled = useThrottleFn(listener, wait);
 
-    watch(deps, (...args: Parameters<EffectListener<T>>) =>
+    watch(deps as any, (...args) =>
       unref(wait) > 0 ? throttled.value(...args) : listener(...args),
     );
   } else {
@@ -36,3 +51,5 @@ export default function useThrottleEffect<T extends Ref>(
     );
   }
 }
+
+export default useThrottleEffect;
