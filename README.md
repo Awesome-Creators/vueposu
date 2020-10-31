@@ -26,6 +26,7 @@
   <br />
 </div>
 
+
 ## 📦 INSTALLATION
 
 Works for both Vue 3 and 2, but if you are using `vue2` must ensure installed `@vue/composition-api`
@@ -45,6 +46,7 @@ npm i vueposu @vue/composition-api
 # or
 yarn add vueposu @vue/composition-api
 ```
+
 
 ## 🍳 USAGE
 
@@ -66,6 +68,7 @@ const Component = defineComponent({
   },
 });
 ```
+
 
 ## 🚀 API
 
@@ -129,3 +132,19 @@ Currently supported functions
   - [`useInterval`](https://vueposu.now.sh/animation/useInterval.html)
   <!-- - [`useRaf`](https://vueposu.now.sh/animation/useRaf.html) -->
   - [`useTimeout`](https://vueposu.now.sh/animation/useTimeout.html)
+
+
+## Thanks
+
+In no particular order, Vueposu is inspired by these great awesome works:
+
+- [react-use](https://github.com/streamich/react-use)
+- [vueuse](https://github.com/antfu/vueuse)
+- [vue-composable](https://github.com/pikax/vue-composable)
+- [vercel/swr](https://github.com/vercel/swr)
+- [ahooks](https://github.com/alibaba/hooks)
+
+
+## License
+
+The MIT License.
