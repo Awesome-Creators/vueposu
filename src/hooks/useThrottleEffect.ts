@@ -42,8 +42,8 @@ function useThrottleEffect<T = any>(
   if (getCurrentInstance()) {
     const throttled = useThrottleFn(listener, wait);
 
-    watch(deps as any, (...args) =>
-      unref(wait) > 0 ? throttled.value(...args) : listener(...args),
+    watch(deps as any, (value, oldValue) =>
+      unref(wait) > 0 ? throttled.value(value, oldValue) : listener(value, oldValue),
     );
   } else {
     throw new Error(

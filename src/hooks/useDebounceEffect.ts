@@ -42,8 +42,8 @@ function useDebounceEffect<T = any>(
   if (getCurrentInstance()) {
     const debounced = useDebounceFn(listener, wait);
 
-    watch(deps as any, (...args) =>
-      unref(wait) > 0 ? debounced.value(...args) : listener(...args),
+    watch(deps as any, (value, oldValue) =>
+      unref(wait) > 0 ? debounced.value(value, oldValue) : listener(value, oldValue),
     );
   } else {
     throw new Error(
