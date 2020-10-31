@@ -1,15 +1,10 @@
 <div align="center">
   <h1>
     <br />
-    <br />
     VUEPOSU
-    <br />
-    <br />
-    <br />
     <br />
   </h1>
   <sup>
-    <br />
     <br />
     <a href="https://app.circleci.com/pipelines/github/Awesome-Creators/vueposu?branch=develop">
       <img src="https://circleci.com/gh/Awesome-Creators/vueposu/tree/develop.svg?style=svg&circle-token=74859479154a741060b1bd036508b21782ae7424" alt="CircleCI" />
@@ -17,7 +12,6 @@
     <a href="https://codecov.io/gh/Awesome-Creators/vueposu">
       <img src="https://codecov.io/gh/Awesome-Creators/vueposu/branch/develop/graph/badge.svg?token=FA4WQGNR20" alt="codecov" />
     </a>
-    <br />
     <br />
     🧭 Vue's Eternal Pose (永久指针, 永久指針エターナルポース, Etānaru Pōsu)
     <br />
