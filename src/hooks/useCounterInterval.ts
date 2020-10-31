@@ -1,16 +1,18 @@
+import { ref, unref, readonly, watch } from 'vue-demi';
 import useCounter from '../hooks/useCounter';
-import type { CounterNumber } from '../hooks/useCounter';
 import useInterval from '../hooks/useInterval';
-import { ref, watch } from 'vue-demi';
+
 import type { Ref } from 'vue-demi';
+import type { CounterNumber } from '../hooks/useCounter';
+import type { RefTyped } from '../types/global';
 
 interface UseCounterIntervalOptions {
   initialValue?: CounterNumber;
-  type?: 'inc' | 'dec';
-  step?: number;
-  total?: number;
-  interval?: number;
-  immediateStart?: boolean;
+  type?: RefTyped<'inc' | 'dec'>;
+  step?: RefTyped<number>;
+  total?: RefTyped<number>;
+  interval?: RefTyped<number>;
+  immediateStart?: RefTyped<boolean>;
 }
 
 type UseCounterIntervalActions = {
@@ -38,28 +40,27 @@ export default function useCounterInterval(
   const { count, inc, dec } = useCounter(initialValue);
 
   // TODO: check total is gt or lt than initialValue
-
-  const { isActive: $isActive, start, stop } = useInterval({
-    cb: () => {
-      if (type === 'dec' && count.value > total) {
+  const { isActive: $isActive, start, stop } = useInterval(
+    () => {
+      if (unref(type) === 'dec' && count.value > unref(total)) {
         dec(step);
-      } else if (type === 'inc' && count.value < total) {
+      } else if (unref(type) === 'inc' && count.value < unref(total)) {
         inc(step);
       }
     },
     interval,
     immediateStart,
-  });
+  );
 
-  const isActive = ref($isActive);
+  const isActive = ref(unref($isActive));
 
-  watch(count, ct => {
-    if (ct === total) isActive.value = false;
+  watch(count, () => {
+    if (count.value === unref(total)) isActive.value = false;
   });
 
   return {
     count,
-    isActive,
+    isActive: readonly(isActive),
     start: () => {
       start();
       isActive.value = true;

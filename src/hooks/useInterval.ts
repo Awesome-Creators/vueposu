@@ -1,12 +1,14 @@
-import { onBeforeUnmount, ref } from 'vue-demi';
+import {
+  ref,
+  unref,
+  readonly,
+  watchEffect,
+  getCurrentInstance,
+} from 'vue-demi';
 import { isFunction } from '../libs/helper';
-import type { Ref } from 'vue-demi';
 
-interface UseIntervalOptions {
-  cb: Function;
-  interval?: number;
-  immediateStart?: boolean;
-}
+import type { Ref } from 'vue-demi';
+import type { RefTyped } from '../types/global';
 
 type UseIntervalReturnType = {
   isActive: Ref<boolean>;
@@ -16,32 +18,44 @@ type UseIntervalReturnType = {
 
 // TODO: COMMENT NEED
 export default function useInterval(
-  options: UseIntervalOptions,
+  callback: () => void,
+  interval: RefTyped<number> = 0,
+  immediateStart: RefTyped<boolean> = true,
 ): UseIntervalReturnType {
-  const { cb, interval = 1000, immediateStart = true } = options;
-  let timer = null;
-  let isActive = ref(immediateStart);
+  if (getCurrentInstance()) {
+    let timer = null;
+    const isActive = ref(immediateStart);
 
-  const stop = () => {
-    if (timer) {
-      clearInterval(timer);
-      timer = null;
-      isActive.value = false;
-    }
-  };
+    const stop = () => {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+        isActive.value = false;
+      }
+    };
 
-  const start = () => {
-    stop();
-    isActive.value = true;
+    const start = () => {
+      stop();
+      isActive.value = true;
+      timer = setInterval(() => {
+        isFunction(callback) && callback();
+      }, unref(interval));
+    };
 
-    timer = setInterval(() => {
-      isFunction(cb) && cb();
-    }, interval);
-  };
+    watchEffect(onInvalidate => {
+      unref(immediateStart) && start();
 
-  onBeforeUnmount(stop);
+      onInvalidate(stop);
+    });
 
-  immediateStart && start();
-
-  return { isActive, start, stop };
+    return {
+      isActive: readonly(isActive),
+      start,
+      stop,
+    };
+  } else {
+    throw new Error(
+      'Invalid hook call: `useInterval` can only be called inside of `setup()`.',
+    );
+  }
 }

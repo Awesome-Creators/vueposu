@@ -3,7 +3,7 @@ import useInterval from '@hooks/useInterval';
 import { mount } from '@vue/test-utils';
 import { wait } from '../../utils/helper';
 
-jest.setTimeout(100000);
+// jest.setTimeout(100000);
 
 describe('hooks/useInterval', () => {
   it('just callback', async () => {
@@ -12,7 +12,7 @@ describe('hooks/useInterval', () => {
       defineComponent({
         template: '<template />',
         setup() {
-          const { isActive } = useInterval({ cb: fn });
+          const { isActive } = useInterval(fn);
           return {
             isActive,
           };
@@ -40,7 +40,7 @@ describe('hooks/useInterval', () => {
       defineComponent({
         template: '<template />',
         setup() {
-          const { isActive } = useInterval({ cb: fn, interval: 300 });
+          const { isActive } = useInterval(fn, 300);
           return {
             isActive,
           };
@@ -65,10 +65,7 @@ describe('hooks/useInterval', () => {
       defineComponent({
         template: '<template />',
         setup() {
-          const { isActive, start, stop } = useInterval({
-            cb: fn,
-            immediateStart: false,
-          });
+          const { isActive, start, stop } = useInterval(fn, 0, false);
           return {
             isActive,
             start,
@@ -101,5 +98,11 @@ describe('hooks/useInterval', () => {
     await wait(1100);
     expect(fn).toBeCalledTimes(2);
     expect(component.vm.isActive).toBe(false);
+  });
+
+  it('should throw error when `useInterval` not be called inside of `setup()`', () => {
+    expect(() => useInterval(() => {})).toThrowError(
+      'Invalid hook call: `useInterval` can only be called inside of `setup()`.',
+    );
   });
 });
