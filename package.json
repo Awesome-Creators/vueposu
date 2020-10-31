@@ -1,8 +1,9 @@
 {
   "name": "vueposu",
   "version": "0.1.4",
+  "description": "A hooks library based on Vue Composition-API",
   "repository": "git@github.com:Awesome-Creators/vueposu.git",
-  "author": "yuxino <nbsawz@gmail.com>",
+  "homepage": "https://vueposu.now.sh",
   "license": "MIT",
   "main": "./index.js",
   "modules": "./index.js",

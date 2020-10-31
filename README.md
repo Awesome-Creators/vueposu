@@ -1,14 +1,31 @@
-<p align="center">
-
-# VUEPOSU
-
-Vue's Eternal Pose (永久指针, 永久指針エターナルポース, Etānaru Pōsu)
-
-(A hooks library based on Vue composition-api)
-
-[![CircleCI](https://circleci.com/gh/Awesome-Creators/vueposu/tree/develop.svg?style=svg&circle-token=74859479154a741060b1bd036508b21782ae7424)](https://app.circleci.com/pipelines/github/Awesome-Creators/vueposu?branch=develop) [![codecov](https://codecov.io/gh/Awesome-Creators/vueposu/branch/develop/graph/badge.svg?token=FA4WQGNR20)](https://codecov.io/gh/Awesome-Creators/vueposu)
-
-</p>
+<div align="center">
+  <h1>
+    <br />
+    <br />
+    VUEPOSU
+    <br />
+    <br />
+    <br />
+    <br />
+  </h1>
+  <sup>
+    <br />
+    <br />
+    <a href="https://app.circleci.com/pipelines/github/Awesome-Creators/vueposu?branch=develop">
+      <img src="https://circleci.com/gh/Awesome-Creators/vueposu/tree/develop.svg?style=svg&circle-token=74859479154a741060b1bd036508b21782ae7424" alt="CircleCI" />
+    </a>
+    <a href="https://codecov.io/gh/Awesome-Creators/vueposu">
+      <img src="https://codecov.io/gh/Awesome-Creators/vueposu/branch/develop/graph/badge.svg?token=FA4WQGNR20" alt="codecov" />
+    </a>
+    <br />
+    <br />
+    🧭 Vue's Eternal Pose (永久指针, 永久指針エターナルポース, Etānaru Pōsu)
+    <br />
+    (A hooks library based on <b>Vue Composition-API</b>)
+  </sup>
+  <br />
+  <br />
+</div>
 
 ## 📦 INSTALLATION
 
@@ -57,49 +74,59 @@ Currently supported functions
 
 - DOM
 
-  <!-- - [`useAudio`](https://vueposu.now.sh/useAudio.html) -->
+  <!-- - [`useAudio`](https://vueposu.now.sh/dom/useAudio.html) -->
 
-  - [`useBrowserTabChange`](https://vueposu.now.sh/useBrowserTabChange.html)
-  - [`useClickAway`](https://vueposu.now.sh/useClickAway.html)
-  - [`useClipboard`](https://vueposu.now.sh/useClipboard.html)
-  - [`useFavicon`](https://vueposu.now.sh/useFavicon.html)
-  - [`useFullscreen`](https://vueposu.now.sh/useFullscreen.html)
-  - [`useMouse`](https://vueposu.now.sh/useMouse.html)
-  - [`useScroll`](https://vueposu.now.sh/useScroll.html)
-  <!-- - [`useScrollTo`](https://vueposu.now.sh/useScrollTo.html) -->
-  - [`useTitle`](https://vueposu.now.sh/useTitle.html)
+  - [`useBrowserTabChange`](https://vueposu.now.sh/dom/useBrowserTabChange.html)
+  - [`useClickAway`](https://vueposu.now.sh/dom/useClickAway.html)
+  - [`useClipboard`](https://vueposu.now.sh/dom/useClipboard.html)
+  - [`useEventListener`](https://vueposu.now.sh/dom/useEventListener.html)
+  - [`useFavicon`](https://vueposu.now.sh/dom/useFavicon.html)
+  - [`useFullscreen`](https://vueposu.now.sh/dom/useFullscreen.html)
+  - [`useTitle`](https://vueposu.now.sh/dom/useTitle.html)
 
-- FUNCTIONALITY
+- SENSORS
 
-  <!-- - [`useCalculator`](https://vueposu.now.sh/useCalculator.html) -->
+  - [`useMouse`](https://vueposu.now.sh/sensors/useMouse.html)
+  - [`useScroll`](https://vueposu.now.sh/sensors/useScroll.html)
+  <!-- - [`useScrollTo`](https://vueposu.now.sh/sensors/useScrollTo.html) -->
 
-  - [`useCounter`](https://vueposu.now.sh/useCounter.html)
-  - [`useCounterInterval`](https://vueposu.now.sh/useCounterInterval.html)
-  - [`useDebounce`](https://vueposu.now.sh/useDebounce.html)
-  - [`useDebounceFn`](https://vueposu.now.sh/useDebounceFn.html)
-  - [`useDynamicList`](https://vueposu.now.sh/useDynamicList.html)
-  <!-- - [`useEventEmitter`](https://vueposu.now.sh/useEventEmitter.html) -->
-  - [`useQueue`](https://vueposu.now.sh/useQueue.html)
-  <!-- - [`useRaf`](https://vueposu.now.sh/useRaf.html) -->
-  - [`useRequest`](https://vueposu.now.sh/useRequest.html)
-  - [`useSet`](https://vueposu.now.sh/useSet.html)
+- STATE
+
+  <!-- - [`useCalculator`](https://vueposu.now.sh/state/useCalculator.html) -->
+
+  - [`useCounter`](https://vueposu.now.sh/state/useCounter.html)
+  - [`useCounterInterval`](https://vueposu.now.sh/state/useCounterInterval.html)
+  - [`useDynamicList`](https://vueposu.now.sh/state/useDynamicList.html)
+  - [`useQueue`](https://vueposu.now.sh/state/useQueue.html)
+  - [`useSet`](https://vueposu.now.sh/state/useSet.html)
+  - [`useToggle`](https://vueposu.now.sh/state/useToggle.html)
+
+- SWR
+
   - [`useSWR`](https://vueposu.now.sh/useSWR.html)
-  - [`useThrottle`](https://vueposu.now.sh/useThrottle.html)
-  - [`useThrottleFn`](https://vueposu.now.sh/useThrottleFn.html)
-  - [`useToggle`](https://vueposu.now.sh/useToggle.html)
-  <!-- - [`useTrace`](https://vueposu.now.sh/useTrace.html) -->
 
 - CACHE
 
-  <!-- - [`useCookie`](https://vueposu.now.sh/useCookie.html) -->
+  <!-- - [`useCookie`](https://vueposu.now.sh/cache/useCookie.html) -->
 
-  - [`useWebStorage`](https://vueposu.now.sh/useWebStorage.html)
-  - [`useLocalStorage`](https://vueposu.now.sh/useLocalStorage.html)
-  - [`useSessionStorage`](https://vueposu.now.sh/useSessionStorage.html)
+  - [`useWebStorage`](https://vueposu.now.sh/cache/useWebStorage.html)
+  - [`useLocalStorage`](https://vueposu.now.sh/cache/useLocalStorage.html)
+  - [`useSessionStorage`](https://vueposu.now.sh/cache/useSessionStorage.html)
 
 - SIDE EFFECT
 
-  - [`useDebounceEffect`](https://vueposu.now.sh/useDebounceEffect.html)
-  - [`useInterval`](https://vueposu.now.sh/useInterval.html)
-  - [`useThrottleEffect`](https://vueposu.now.sh/useThrottleEffect.html)
-  - [`useTimeout`](https://vueposu.now.sh/useTimeout.html)
+  - [`useDebounce`](https://vueposu.now.sh/side-effect/useDebounce.html)
+  - [`useDebounceEffect`](https://vueposu.now.sh/side-effect/useDebounceEffect.html)
+  - [`useDebounceFn`](https://vueposu.now.sh/side-effect/useDebounceFn.html)
+  - [`useEventEmitter`](https://vueposu.now.sh/side-effect/useEventEmitter.html)
+  - [`useRequest`](https://vueposu.now.sh/side-effect/useRequest.html)
+  - [`useThrottle`](https://vueposu.now.sh/side-effect/useThrottle.html)
+  - [`useThrottleEffect`](https://vueposu.now.sh/side-effect/useThrottleEffect.html)
+  - [`useThrottleFn`](https://vueposu.now.sh/side-effect/useThrottleFn.html)
+  <!-- - [`useTrace`](https://vueposu.now.sh/side-effect/useTrace.html) -->
+
+- ANIMATION
+
+  - [`useInterval`](https://vueposu.now.sh/animation/useInterval.html)
+  <!-- - [`useRaf`](https://vueposu.now.sh/animation/useRaf.html) -->
+  - [`useTimeout`](https://vueposu.now.sh/animation/useTimeout.html)
