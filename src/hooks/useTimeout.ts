@@ -1,6 +1,14 @@
-import { onBeforeUnmount, ref, readonly } from 'vue-demi';
+import {
+  ref,
+  unref,
+  readonly,
+  watchEffect,
+  getCurrentInstance,
+} from 'vue-demi';
 import { isFunction } from '../libs/helper';
+
 import type { Ref } from 'vue-demi';
+import type { RefTyped } from '../types/global';
 
 type UseTimeoutReturnType = {
   isActive: Ref<boolean>;
@@ -11,36 +19,44 @@ type UseTimeoutReturnType = {
 // TODO: COMMENT NEED
 export default function useTimeout(
   callback: () => void,
-  timeout: number = 0,
-  immediateStart: boolean = true,
+  timeout: RefTyped<number> = 0,
+  immediateStart: RefTyped<boolean> = true,
 ): UseTimeoutReturnType {
-  let timer = null;
-  let isActive = ref(immediateStart);
+  if (getCurrentInstance()) {
+    let timer = null;
+    const isActive = ref(immediateStart);
 
-  const stop = () => {
-    if (timer) {
-      clearTimeout(timer);
-      timer = null;
-      isActive.value = false;
-    }
-  };
+    const stop = () => {
+      if (timer) {
+        clearTimeout(timer);
+        timer = null;
+        isActive.value = false;
+      }
+    };
 
-  const start = () => {
-    stop();
-    isActive.value = true;
-    timer = setTimeout(() => {
-      isFunction(callback) && callback();
-      isActive.value = false;
-    }, timeout);
-  };
+    const start = () => {
+      stop();
+      isActive.value = true;
+      timer = setTimeout(() => {
+        isFunction(callback) && callback();
+        isActive.value = false;
+      }, unref(timeout));
+    };
 
-  immediateStart && start();
+    watchEffect(onInvalidate => {
+      unref(immediateStart) && start();
 
-  onBeforeUnmount(stop);
+      onInvalidate(stop);
+    });
 
-  return {
-    isActive: readonly(isActive),
-    start,
-    stop,
-  };
+    return {
+      isActive: readonly(isActive),
+      start,
+      stop,
+    };
+  } else {
+    throw new Error(
+      'Invalid hook call: `useTimeout` can only be called inside of `setup()`.',
+    );
+  }
 }

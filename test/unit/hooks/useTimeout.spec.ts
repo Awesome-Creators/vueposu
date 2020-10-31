@@ -10,17 +10,16 @@ describe('hooks/useTimeout', () => {
       defineComponent({
         template: `<template />`,
         setup() {
-          const { isActive, start, stop } = useTimeout(fn);
+          const { isActive } = useTimeout(fn);
           return {
             isActive,
-            start,
-            stop,
           };
         },
       }),
     );
 
     expect(component.vm.isActive).toBe(true);
+    
     await wait(1100);
     expect(component.vm.isActive).toBe(false);
   });
@@ -57,5 +56,11 @@ describe('hooks/useTimeout', () => {
 
     await wait(1100);
     expect(component.vm.isActive).toBe(false);
+  });
+
+  it('should throw error when `useTimeout` not be called inside of `setup()`', () => {
+    expect(() => useTimeout(() => {})).toThrowError(
+      'Invalid hook call: `useTimeout` can only be called inside of `setup()`.',
+    );
   });
 });
