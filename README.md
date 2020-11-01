@@ -29,9 +29,9 @@
 
 ## 📦 INSTALLATION
 
-Works for both Vue 3 and 2, but if you are using `vue2` must ensure installed `@vue/composition-api`
+Works for both Vue 3 and 2, but if you are using `Vue 2` must ensure installed `@vue/composition-api`
 
-### vue 3
+### Vue 3
 
 ```bash
 npm i vueposu
@@ -39,7 +39,7 @@ npm i vueposu
 yarn add vueposu
 ```
 
-### vue 2
+### Vue 2
 
 ```bash
 npm i vueposu @vue/composition-api
