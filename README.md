@@ -1,8 +1,9 @@
 <div align="center">
   <h1>
     <br />
-    VUEPOSU
+    <span style="font-size: 88px;">🧭</span>
     <br />
+    VUEPOSU
     <br />
     <br />
   </h1>
@@ -15,11 +16,11 @@
       <img src="https://codecov.io/gh/Awesome-Creators/vueposu/branch/develop/graph/badge.svg?token=FA4WQGNR20" alt="codecov" />
     </a>
     <br />
-    🧭 Vue's Eternal Pose (永久指针, 永久指針エターナルポース, Etānaru Pōsu)
+    <br />
+    Vue's Eternal Pose (永久指针, 永久指針エターナルポース, Etānaru Pōsu)
     <br />
     (A hooks library based on <b>Vue Composition-API</b>)
   </sup>
-  <br />
   <br />
   <br />
   <br />
