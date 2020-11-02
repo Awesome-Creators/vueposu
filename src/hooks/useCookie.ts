@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 export interface useCookieOptions<T> {
   key: string;
   value: T;
