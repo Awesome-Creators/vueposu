@@ -19,7 +19,7 @@ type UseTimeoutReturnType = {
 // TODO: COMMENT NEED
 export default function useTimeout(
   callback: () => void,
-  timeout: RefTyped<number> = 0,
+  timeout: RefTyped<number> = 1000,
   immediateStart: RefTyped<boolean> = true,
 ): UseTimeoutReturnType {
   if (getCurrentInstance()) {

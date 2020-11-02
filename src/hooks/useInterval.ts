@@ -19,13 +19,13 @@ type UseIntervalReturnType = {
 // TODO: COMMENT NEED
 export default function useInterval(
   callback: () => void,
-  interval: RefTyped<number> = 0,
+  interval: RefTyped<number> = 1000,
   immediateStart: RefTyped<boolean> = true,
 ): UseIntervalReturnType {
   if (getCurrentInstance()) {
     let timer = null;
     const isActive = ref(immediateStart);
-
+    
     const stop = () => {
       if (timer) {
         clearInterval(timer);
@@ -43,7 +43,9 @@ export default function useInterval(
     };
 
     watchEffect(onInvalidate => {
-      unref(immediateStart) && start();
+      if (unref(immediateStart)) {
+        start();
+      }
 
       onInvalidate(stop);
     });

@@ -3,7 +3,7 @@ import useInterval from '@hooks/useInterval';
 import { mount } from '@vue/test-utils';
 import { wait } from '../../utils/helper';
 
-// jest.setTimeout(100000);
+jest.setTimeout(100000);
 
 describe('hooks/useInterval', () => {
   it('just callback', async () => {
@@ -65,7 +65,7 @@ describe('hooks/useInterval', () => {
       defineComponent({
         template: '<template />',
         setup() {
-          const { isActive, start, stop } = useInterval(fn, 0, false);
+          const { isActive, start, stop } = useInterval(fn, 1000, false);
           return {
             isActive,
             start,
