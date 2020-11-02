@@ -9,13 +9,13 @@ const differencePlatformEvents = [
 ];
 
 /**
- * useBrowserTabChange function
+ * usePageHidden function
  * when user `leave`/`back` current tab will trigger this hook
  * always execute the last one
  *
- * @param onHiddenStatusChange change handler function for useBrowserTabChange
+ * @param onHiddenStatusChange change handler function for usePageHidden
  */
-export default function useBrowserTabChange(
+export default function usePageHidden(
   onHiddenStatusChange: (isHidden?: boolean) => void,
 ) {
   if (getCurrentInstance()) {
@@ -35,7 +35,7 @@ export default function useBrowserTabChange(
     });
   } else {
     throw new Error(
-      'Invalid hook call: `useBrowserTabChange` can only be called inside of `setup()`.',
+      'Invalid hook call: `usePageHidden` can only be called inside of `setup()`.',
     );
   }
 }

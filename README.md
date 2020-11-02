@@ -79,12 +79,12 @@ Currently supported functions
 
   <!-- - [`useAudio`](https://vueposu.now.sh/dom/useAudio.html) -->
 
-  - [`useBrowserTabChange`](https://vueposu.now.sh/dom/useBrowserTabChange.html)
   - [`useClickAway`](https://vueposu.now.sh/dom/useClickAway.html)
   - [`useClipboard`](https://vueposu.now.sh/dom/useClipboard.html)
   - [`useEventListener`](https://vueposu.now.sh/dom/useEventListener.html)
   - [`useFavicon`](https://vueposu.now.sh/dom/useFavicon.html)
   - [`useFullscreen`](https://vueposu.now.sh/dom/useFullscreen.html)
+  - [`usePageHidden`](https://vueposu.now.sh/dom/usePageHidden.html)
   - [`useTitle`](https://vueposu.now.sh/dom/useTitle.html)
 
 - SENSORS
