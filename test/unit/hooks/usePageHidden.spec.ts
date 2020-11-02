@@ -1,9 +1,9 @@
 import { mount } from '@vue/test-utils';
 import { ref, defineComponent } from 'vue-demi';
-import useBrowserTabChange from '@hooks/useBrowserTabChange';
+import usePageHidden from '@hooks/usePageHidden';
 import { triggerDomEvent, wait } from '@test/utils/helper';
 
-describe('hooks/useBrowserTabChange', () => {
+describe('hooks/usePageHidden', () => {
   beforeEach(() => {
     let val = true;
     Object.defineProperty(document, 'hidden', {
@@ -30,7 +30,7 @@ describe('hooks/useBrowserTabChange', () => {
       defineComponent({
         setup() {
           const leave = ref(false);
-          useBrowserTabChange(isHidden => {
+          usePageHidden(isHidden => {
             leave.value = isHidden;
           });
           return { leave };
