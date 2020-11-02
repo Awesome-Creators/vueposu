@@ -1,6 +1,7 @@
 import { ref, computed, getCurrentInstance } from 'vue-demi';
 import { read, write } from './serializer';
 import { localStorageMap, sessionStorageMap } from './map';
+import throttle from '../../libs/throttle';
 
 import type { StorageMap } from './map';
 type RemoveItemEvent = Event & { key: string };
@@ -88,6 +89,23 @@ window.addEventListener('sessionRemoveItemEvent', ({ key }: RemoveItemEvent) =>
 window.addEventListener('localClearEvent', () => handleClear(localStorageMap));
 window.addEventListener('sessionClearEvent', () =>
   handleClear(sessionStorageMap),
+);
+window.addEventListener(
+  'focus',
+  throttle(() => {
+    Object.keys(localStorageMap).forEach(key => {
+      const value = window.localStorage.getItem(key);
+      if (localStorageMap[key].value !== value) {
+        localStorageMap[key].value = value;
+      }
+    });
+    Object.keys(sessionStorageMap).forEach(key => {
+      const value = window.sessionStorage.getItem(key);
+      if (sessionStorage[key].value !== value) {
+        sessionStorage[key].value = value;
+      }
+    });
+  }, 100),
 );
 
 // implement
