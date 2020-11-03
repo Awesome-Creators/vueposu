@@ -1,7 +1,7 @@
 <div align="center">
   <h1>
     <br />
-    <span style="font-size: 88px;">🧭</span>
+    
     <br />
     VUEPOSU
     <br />
@@ -17,7 +17,7 @@
     </a>
     <br />
     <br />
-    Vue's Eternal Pose (永久指针, 永久指針エターナルポース, Etānaru Pōsu)
+    🧭 Vue's Eternal Pose (永久指针, 永久指針エターナルポース, Etānaru Pōsu)
     <br />
     (A hooks library based on <b>Vue Composition-API</b>)
   </sup>
@@ -137,7 +137,7 @@ Currently supported functions
 
 ## Thanks
 
-In no particular order, Vueposu is inspired by these great awesome works:
+In no particular order, vueposu is inspired by these great awesome works:
 
 - [react-use](https://github.com/streamich/react-use)
 - [vueuse](https://github.com/antfu/vueuse)
