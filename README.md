@@ -1,7 +1,6 @@
 <div align="center">
   <h1>
     <br />
-    
     <br />
     VUEPOSU
     <br />
