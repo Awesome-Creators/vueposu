@@ -16,7 +16,7 @@
     </a>
     <br />
     <br />
-    🧭 Vue's Eternal Pose (永久指针, 永久指針エターナルポース, Etānaru Pōsu)
+    🧭&nbsp;&nbsp;Vue's Eternal Pose (永久指针, 永久指針エターナルポース, Etānaru Pōsu)
     <br />
     (A hooks library based on <b>Vue Composition-API</b>)
   </sup>

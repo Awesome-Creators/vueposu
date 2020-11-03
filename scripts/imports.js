@@ -1,8 +1,11 @@
 const fs = require('fs');
 
-const hooks = fs
-  .readdirSync(__dirname + '/../src/hooks')
-  .map(hook => hook.replace('.ts', ''));
+const hooks = [];
+fs.readdirSync(__dirname + '/../src/hooks').forEach(hook => {
+  if (!/^\..*$/.test(hook)) {
+    hooks.push(hook.replace('.ts', ''));
+  }
+});
 
 fs.writeFileSync(
   __dirname + '/../src/index.ts',
