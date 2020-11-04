@@ -6,8 +6,8 @@
   </a>
 </p>
 
-<p align="center" style="font-size: 1.875rem; font-weight: bold; line-height: 1.25;">
-  VUEPOSU  
+<p>
+  <h1 align="center">VUEPOSU</h1>
 </p>
 
 <p align="center">
