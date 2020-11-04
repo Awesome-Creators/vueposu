@@ -9,15 +9,15 @@ export default function useDebounce<T>(
   value: Ref<T>,
   wait: RefTyped<number> = 0,
 ) {
-  const delayValue = ref(unref(value)) as Ref<T>;
+  const debouncedValue = ref(unref(value)) as Ref<T>;
   const debounced = useDebounceFn(
-    () => (delayValue.value = unref(value)),
+    () => (debouncedValue.value = unref(value)),
     wait,
   );
 
   watch(value, () =>
-    unref(wait) > 0 ? debounced.value() : (delayValue.value = unref(value)),
+    unref(wait) > 0 ? debounced.value() : (debouncedValue.value = unref(value)),
   );
 
-  return readonly(delayValue);
+  return readonly(debouncedValue);
 }
