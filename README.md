@@ -1,12 +1,20 @@
-<div align="center">
-  <h1>
+<p>
+  <h1 align="center">
     <br />
+    <a href="https://github.com/antfu/vueuse">
+      <img src="https://raw.githubusercontent.com/gist/glitchboyl/05f6a8abd2126b56525fa395dcaf9ad6/raw/9bb7a99f335bdef3fb9086e87502a7adcdec4e40/eposu.svg" alt="logo" width="160"/>
+    </a>
     <br />
     VUEPOSU
-    <br />
-    <br />
   </h1>
+</p>
+
+<p align="center">
   <sup>
+    🧭&nbsp;&nbsp;Vue's Eternal Pose (永久指针, 永久指針エターナルポース, Etānaru Pōsu)
+    <br />
+    (A hooks library based on <b>Vue Composition-API</b>)
+    <br />
     <br />
     <a href="https://app.circleci.com/pipelines/github/Awesome-Creators/vueposu?branch=develop">
       <img src="https://circleci.com/gh/Awesome-Creators/vueposu/tree/develop.svg?style=svg&circle-token=74859479154a741060b1bd036508b21782ae7424" alt="CircleCI" />
@@ -14,22 +22,13 @@
     <a href="https://codecov.io/gh/Awesome-Creators/vueposu">
       <img src="https://codecov.io/gh/Awesome-Creators/vueposu/branch/develop/graph/badge.svg?token=FA4WQGNR20" alt="codecov" />
     </a>
-    <br />
-    <br />
-    🧭&nbsp;&nbsp;Vue's Eternal Pose (永久指针, 永久指針エターナルポース, Etānaru Pōsu)
-    <br />
-    (A hooks library based on <b>Vue Composition-API</b>)
   </sup>
-  <br />
-  <br />
-  <br />
-  <br />
-</div>
-
+</p>
+<br />
 
 ## 📦 INSTALLATION
 
-Works for both Vue 3 and 2, but if you are using `Vue 2` must ensure installed `@vue/composition-api`
+Works for both Vue 3 and 2, but if you are using `Vue 2` must ensure installed `@vue/composition-api`.
 
 ### Vue 3
 
@@ -46,7 +45,6 @@ npm i vueposu @vue/composition-api
 # or
 yarn add vueposu @vue/composition-api
 ```
-
 
 ## 🍳 USAGE
 
@@ -69,10 +67,9 @@ const Component = defineComponent({
 });
 ```
 
-
 ## 🚀 API
 
-Currently supported functions
+Currently supported functions:
 
 - DOM
 
@@ -133,7 +130,6 @@ Currently supported functions
   <!-- - [`useRaf`](https://vueposu.now.sh/animation/useRaf.html) -->
   - [`useTimeout`](https://vueposu.now.sh/animation/useTimeout.html)
 
-
 ## Thanks
 
 In no particular order, vueposu is inspired by these great awesome works:
@@ -143,7 +139,6 @@ In no particular order, vueposu is inspired by these great awesome works:
 - [vue-composable](https://github.com/pikax/vue-composable)
 - [vercel/swr](https://github.com/vercel/swr)
 - [ahooks](https://github.com/alibaba/hooks)
-
 
 ## License
 
