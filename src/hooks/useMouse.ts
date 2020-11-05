@@ -1,10 +1,6 @@
-import {
-  reactive,
-  readonly,
-  toRefs,
-  getCurrentInstance,
-} from 'vue-demi';
+import { reactive, readonly, toRefs, getCurrentInstance } from 'vue-demi';
 import useEventListener from './useEventListener';
+import { isServer } from '../libs/helper';
 
 interface MouseCursorState {
   pageX: number;
@@ -39,7 +35,9 @@ export default function useMouse() {
       state.clientY = clientY;
     };
 
-    useEventListener(document, 'mousemove', moveHandler);
+    if (!isServer) {
+      useEventListener(document, 'mousemove', moveHandler);
+    }
 
     return toRefs(readonly(state));
   } else {
