@@ -10,7 +10,7 @@ import {
 
 const isDef = val => !isUndefined(val) && val !== null;
 const isUndef = val => isUndefined(val) || val === null;
-const isClient = isDef(typeof window);
+const isServer = typeof window === 'undefined';
 
 export {
   debounce,
@@ -20,7 +20,7 @@ export {
   isUndefined,
   isDef,
   isUndef,
-  isClient,
   isArray,
   isEqual,
+  isServer,
 };

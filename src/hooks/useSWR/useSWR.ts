@@ -35,9 +35,7 @@ import type {
   BroadcastState,
   RevalidateOptions,
 } from './types';
-import { isClient } from '../../libs/helper';
-
-const isServer = !isClient;
+import { isServer } from '../../libs/helper';
 
 // polyfill for requestIdleCallback
 const rIC = isServer

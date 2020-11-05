@@ -6,6 +6,7 @@ import {
   getCurrentInstance,
 } from 'vue-demi';
 import { getTargetElement } from '../libs/dom';
+import { isServer } from '../libs/helper';
 
 import type { RefTyped } from '../types/global';
 import type { Target } from '../libs/dom';
@@ -63,13 +64,13 @@ function useEventListener(...args) {
       watchEffect(() => {
         serialize();
       });
-      if (target) {
+      if (!isServer && target) {
         target.addEventListener(type, listener, options);
       }
     });
 
     onUnmounted(() => {
-      if (target) {
+      if (!isServer && target) {
         target.removeEventListener(type, listener, options);
       }
     });

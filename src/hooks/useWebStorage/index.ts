@@ -1,10 +1,11 @@
 import { ref, computed, getCurrentInstance } from 'vue-demi';
 import { read, write } from './serializer';
 import { localStorageMap, sessionStorageMap } from './map';
+import { noop } from 'lodash-es';
 import throttle from '../../libs/throttle';
+import { isServer } from '../../libs/helper';
 
 import type { StorageMap } from './map';
-import { noop } from 'lodash-es';
 type RemoveItemEvent = Event & { key: string };
 type SetItemEvent = RemoveItemEvent & { value: any };
 
@@ -13,13 +14,15 @@ let originalSessionSetItem = noop;
 let originalLocalRemoveItem = noop;
 let originalSessionRemoveItem = noop;
 
-if (typeof window !== 'undefined') {
-  originalLocalSetItem = localStorage.setItem.bind(localStorage);
-  originalSessionSetItem = sessionStorage.setItem.bind(sessionStorage);
-  originalLocalRemoveItem = localStorage.removeItem.bind(localStorage);
-  originalSessionRemoveItem = sessionStorage.removeItem.bind(sessionStorage);
-  const originalLocalClear = localStorage.clear.bind(localStorage);
-  const originalSessionClear = sessionStorage.clear.bind(sessionStorage);
+if (!isServer) {
+  originalLocalSetItem = window.localStorage.setItem.bind(localStorage);
+  originalSessionSetItem = window.sessionStorage.setItem.bind(sessionStorage);
+  originalLocalRemoveItem = window.localStorage.removeItem.bind(localStorage);
+  originalSessionRemoveItem = window.sessionStorage.removeItem.bind(
+    sessionStorage,
+  );
+  const originalLocalClear = window.localStorage.clear.bind(localStorage);
+  const originalSessionClear = window.sessionStorage.clear.bind(sessionStorage);
 
   // override
   window.localStorage.setItem = (key, value) => {
@@ -126,6 +129,9 @@ export default function useWebStorage<T>(
   defaultValue?: T,
   storage?: Storage,
 ) {
+  // TODO: ENHANCE SSR
+  if (isServer) return { value: null };
+
   storage = storage ?? window.localStorage;
   if (getCurrentInstance()) {
     const storageMap =

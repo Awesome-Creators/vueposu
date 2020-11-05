@@ -1,5 +1,6 @@
 import { ref, getCurrentInstance } from 'vue-demi';
 import useEventListener from './useEventListener';
+import { isServer } from '../libs/helper';
 
 import type { Ref } from 'vue-demi';
 
@@ -13,10 +14,12 @@ export type UseClipboardReturnType = {
 export default function useClipboard(): UseClipboardReturnType {
   if (getCurrentInstance()) {
     const text = ref('');
-    const supported = 'clipboard' in window.navigator;
+    const supported = !isServer && 'clipboard' in window.navigator;
 
     const getClipboardText = async () => {
-      text.value = await window.navigator.clipboard.readText();
+      if (!isServer) {
+        text.value = await window.navigator.clipboard.readText();
+      }
     };
 
     getClipboardText();
@@ -25,7 +28,9 @@ export default function useClipboard(): UseClipboardReturnType {
 
     const copy = ($text: string) => {
       text.value = $text;
-      return window.navigator.clipboard.writeText($text);
+      return isServer
+        ? new Promise<void>(() => {})
+        : window.navigator.clipboard.writeText($text);
     };
 
     return { copy, text, supported };
