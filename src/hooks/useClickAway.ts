@@ -42,9 +42,7 @@ function useClickAway(
     eventNames.map(name => document.addEventListener(unref(name), handler));
 
     onInvalidate(() => {
-      eventNames.map(name =>
-        document.removeEventListener(unref(name), handler),
-      );
+      eventNames.map(name => document.removeEventListener(unref(name), handler));
     });
   });
 }

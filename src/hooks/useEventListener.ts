@@ -16,7 +16,7 @@ function useEventListener<K extends keyof WindowEventMap>(
   listener: (this: Window, ev: WindowEventMap[K]) => any,
   options?: boolean | AddEventListenerOptions,
 ): void;
-function useEventListener<K extends keyof WindowEventMap>(
+function useEventListener(
   type: RefTyped<string>,
   listener: EventListenerOrEventListenerObject,
   options?: boolean | AddEventListenerOptions,
@@ -34,7 +34,7 @@ function useEventListener<K extends keyof HTMLElementEventMap>(
   options?: boolean | AddEventListenerOptions,
 ): void;
 function useEventListener(
-  target: Target,
+  target: Target<HTMLElement | Document>,
   type: RefTyped<string>,
   listener: EventListenerOrEventListenerObject,
   options?: boolean | AddEventListenerOptions,
@@ -63,11 +63,15 @@ function useEventListener(...args) {
       watchEffect(() => {
         serialize();
       });
-      target.addEventListener(type, listener, options);
+      if (target) {
+        target.addEventListener(type, listener, options);
+      }
     });
 
     onUnmounted(() => {
-      target.removeEventListener(type, listener, options);
+      if (target) {
+        target.removeEventListener(type, listener, options);
+      }
     });
   } else {
     throw new Error(
@@ -77,3 +81,5 @@ function useEventListener(...args) {
 }
 
 export default useEventListener;
+
+useEventListener(document, 'qweqwe', () => console.log('asdasd'));
