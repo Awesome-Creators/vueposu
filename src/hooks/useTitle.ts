@@ -41,10 +41,12 @@ function useTitle(
     },
   );
 
-  const observer = new MutationObserver(
-    m => (title.value = m[0].target.textContent),
-  );
+  let observer = null;
+
   if (!isServer) {
+    observer = new window.MutationObserver(
+      m => (title.value = m[0].target.textContent),
+    );
     observer.observe(document.querySelector('title'), { childList: true });
   }
 
@@ -56,7 +58,7 @@ function useTitle(
     if (unref(restoreOnUnmount)) {
       restoreTitle();
     }
-    observer.disconnect();
+    if (observer) observer.disconnect();
   });
 
   return { title, restoreTitle };
