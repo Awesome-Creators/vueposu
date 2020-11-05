@@ -4,7 +4,7 @@ import useTitle from '@hooks/useTitle';
 import { wait } from '@test/utils/helper';
 
 describe('hooks/useTitle', () => {
-  const $mutationObserver = window.MutationObserver;
+  const $mutationObserver = globalThis.MutationObserver;
   const constructorFn = jest.fn();
   const observeFn = jest.fn();
   const disconnectFn = jest.fn();
@@ -121,7 +121,7 @@ describe('hooks/useTitle', () => {
     expect(disconnectFn).toHaveBeenCalled();
   });
 
-  it("should not restore the title on unmount when param `restoreOnUnmount` is `false`", () => {
+  it('should not restore the title on unmount when param `restoreOnUnmount` is `false`', () => {
     const component = getComponent('e', false);
 
     expect(component.vm.title).toBe('e');

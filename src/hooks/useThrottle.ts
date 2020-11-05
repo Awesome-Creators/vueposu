@@ -9,7 +9,7 @@ export default function useThrottle<T>(
   value: Ref<T>,
   wait: RefTyped<number> = 0,
 ) {
-  const throttledValue = ref(unref(value)) as Ref<T>;
+  const throttledValue = ref(unref(value)) as any;
   const throttled = useThrottleFn(
     () => (throttledValue.value = unref(value)),
     wait,

@@ -2,7 +2,7 @@ import { ref, unref, readonly, watch } from 'vue-demi';
 import debounce from '../libs/debounce';
 import { isFunction } from '../libs/helper';
 
-import type { Fn, DebouncedFunc } from '../libs/debounce';
+import type { Fn } from '../libs/debounce';
 import type { RefTyped } from '../types/global';
 
 /**
@@ -15,17 +15,21 @@ import type { RefTyped } from '../types/global';
  * @returns debounced.value.flush function
  */
 function useDebounceFn<T extends Fn>(callback: T, wait: RefTyped<number> = 0) {
-  const debounced = ref((() => {}) as DebouncedFunc<T>);
+  const debounced = ref((() => {}) as any);
   const $wait = ref(wait);
 
-  watch($wait, () => {
-    if (isFunction(debounced.value.cancel)) {
-      debounced.value.cancel();
-    }
-    debounced.value = debounce(callback, unref(wait));
-  }, {
-    immediate: true,
-  })
+  watch(
+    $wait,
+    () => {
+      if (isFunction(debounced.value.cancel)) {
+        debounced.value.cancel();
+      }
+      debounced.value = debounce(callback, unref(wait));
+    },
+    {
+      immediate: true,
+    },
+  );
 
   return readonly(debounced);
 }

@@ -9,7 +9,7 @@ export default function useDebounce<T>(
   value: Ref<T>,
   wait: RefTyped<number> = 0,
 ) {
-  const debouncedValue = ref(unref(value)) as Ref<T>;
+  const debouncedValue = ref(unref(value)) as any;
   const debounced = useDebounceFn(
     () => (debouncedValue.value = unref(value)),
     wait,

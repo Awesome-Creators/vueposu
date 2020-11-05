@@ -23,7 +23,7 @@ import {
   isUndefined,
   isDef,
   isUndef,
-  isEqual
+  isEqual,
 } from '../../libs/helper';
 
 import type {
@@ -55,7 +55,7 @@ const mutationTS = {};
 const mutationEndTS = {};
 
 // setup DOM events listeners for `focus` and `reconnect` actions
-if (!isServer && window.addEventListener) {
+if (!isServer && globalThis.addEventListener) {
   const revalidate = revalidators => {
     if (!isDocumentVisible() || !isOnline()) return;
 
@@ -65,14 +65,18 @@ if (!isServer && window.addEventListener) {
   };
 
   // focus revalidate
-  window.addEventListener(
+  globalThis.addEventListener(
     'visibilitychange',
     () => revalidate(focusRevalidators),
     false,
   );
-  window.addEventListener('focus', () => revalidate(focusRevalidators), false);
+  globalThis.addEventListener(
+    'focus',
+    () => revalidate(focusRevalidators),
+    false,
+  );
   // reconnect revalidate
-  window.addEventListener(
+  globalThis.addEventListener(
     'online',
     () => revalidate(reconnectRevalidators),
     false,
@@ -121,7 +125,7 @@ export const mutate: Mutate = async ($key, $data, shouldRevalidate = true) => {
   const beforeConcurrentPromisesTs = concurrentPromisesTS[key];
 
   let data, error;
-  
+
   if ($data && isFunction($data)) {
     try {
       data = await $data(cache.get(key));
@@ -228,7 +232,7 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
     };
 
     const initialData = resolveData();
-    const initialError = cache.get(keyErr)
+    const initialError = cache.get(keyErr);
     const initialIsValidating = !!cache.get(keyValidating);
 
     let $data = initialData;
