@@ -10,7 +10,7 @@ import {
 
 const isDef = val => !isUndefined(val) && val !== null;
 const isUndef = val => isUndefined(val) || val === null;
-const isServer = typeof window === 'undefined';
+const isServer = typeof window === 'undefined' || typeof document === 'undefined';
 
 export {
   debounce,

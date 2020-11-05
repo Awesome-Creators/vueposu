@@ -1,5 +1,6 @@
 import { watchEffect, unref } from 'vue-demi';
 import { getTargetElement } from '../libs/dom';
+import { isServer } from '../libs/helper';
 
 import type { RefTyped } from '../types/global';
 import type { Target } from '../libs/dom';
@@ -36,14 +37,18 @@ function useClickAway(
   };
 
   watchEffect(onInvalidate => {
-    const eventNames = Array.isArray(unref(eventName))
-      ? (unref(eventName) as RefTyped<string>[])
-      : [eventName as RefTyped<string>];
-    eventNames.map(name => document.addEventListener(unref(name), handler));
+    if (!isServer) {
+      const eventNames = Array.isArray(unref(eventName))
+        ? (unref(eventName) as RefTyped<string>[])
+        : [eventName as RefTyped<string>];
+      eventNames.map(name => document.addEventListener(unref(name), handler));
 
-    onInvalidate(() => {
-      eventNames.map(name => document.removeEventListener(unref(name), handler));
-    });
+      onInvalidate(() => {
+        eventNames.map(name =>
+          document.removeEventListener(unref(name), handler),
+        );
+      });
+    }
   });
 }
 

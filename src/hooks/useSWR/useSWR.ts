@@ -24,6 +24,7 @@ import {
   isDef,
   isUndef,
   isEqual,
+  isServer
 } from '../../libs/helper';
 
 import type {
@@ -35,7 +36,6 @@ import type {
   BroadcastState,
   RevalidateOptions,
 } from './types';
-import { isServer } from '../../libs/helper';
 
 // polyfill for requestIdleCallback
 const rIC = isServer
