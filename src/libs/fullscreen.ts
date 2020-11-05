@@ -3,7 +3,7 @@
 // Based on Fullscreen API.
 // https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API
 
-import { isUndefined, isFunction } from './helper';
+import { isFunction, isServer } from './helper';
 import { isHTMLElement } from './dom';
 
 const eventsMap = <const>{
@@ -11,10 +11,11 @@ const eventsMap = <const>{
   error: 'fullscreenerror',
 };
 
-const getFullscreenElement = () => document.fullscreenElement;
+const getFullscreenElement = () =>
+  isServer ? null : document.fullscreenElement;
 
 export const request = (element: HTMLElement = document.body) => {
-  if (!isUndefined(document) && document.fullscreenEnabled) {
+  if (!isServer && document.fullscreenEnabled) {
     if (isHTMLElement(element) && element.requestFullscreen) {
       element.requestFullscreen();
     } else {
@@ -31,7 +32,7 @@ export const request = (element: HTMLElement = document.body) => {
 
 export const exit = (element: HTMLElement = document.body) => {
   if (
-    !isUndefined(document) &&
+    !isServer &&
     isFunction(document.exitFullscreen) &&
     getFullscreenElement() === element
   ) {
@@ -40,19 +41,19 @@ export const exit = (element: HTMLElement = document.body) => {
 };
 
 export const toggle = (element: HTMLElement = document.body) => {
-  getFullscreenElement() === element ? exit() : request(element);
+  !isServer && getFullscreenElement() === element ? exit() : request(element);
 };
 
 export const on = (event: keyof typeof eventsMap, fn: () => void) => {
   const eventName = eventsMap[event];
-  if (eventName) {
+  if (eventName && !isServer) {
     document.addEventListener(eventName, fn, false);
   }
 };
 
 export const off = (event: keyof typeof eventsMap, fn: () => void) => {
   const eventName = eventsMap[event];
-  if (eventName) {
+  if (eventName && !isServer) {
     document.removeEventListener(eventName, fn, false);
   }
 };

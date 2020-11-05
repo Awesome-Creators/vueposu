@@ -1,4 +1,5 @@
 import { getCurrentInstance } from 'vue-demi';
+import { isServer } from '../libs/helper';
 
 /**
  * useFavicon - change site icon
@@ -7,6 +8,8 @@ import { getCurrentInstance } from 'vue-demi';
  */
 export default function useFavicon(url?: string) {
   if (getCurrentInstance()) {
+    if (isServer) return { changeIcon: () => null, restoreIcon: () => null };
+
     let link: HTMLLinkElement = document.querySelector("link[rel*='icon']");
     let originalIcon = '';
     if (link) {

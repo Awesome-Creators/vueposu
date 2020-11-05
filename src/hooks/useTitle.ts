@@ -1,4 +1,11 @@
-import { ref, unref, watch, onBeforeUnmount, getCurrentInstance } from 'vue-demi';
+import {
+  ref,
+  unref,
+  watch,
+  onBeforeUnmount,
+  getCurrentInstance,
+} from 'vue-demi';
+import { isServer } from '../libs/helper';
 
 import type { RefTyped } from '../types/global';
 
@@ -18,13 +25,15 @@ function useTitle(
     );
   }
 
-  const originalTitle = document.title;
+  const originalTitle = isServer ? '' : document.title;
   const title = ref(overridedTitle || originalTitle);
 
   watch(
     title,
     () => {
-      document.title = title.value;
+      if (!isServer) {
+        document.title = title.value;
+      }
     },
     {
       immediate: true,
@@ -35,7 +44,9 @@ function useTitle(
   const observer = new MutationObserver(
     m => (title.value = m[0].target.textContent),
   );
-  observer.observe(document.querySelector('title'), { childList: true });
+  if (!isServer) {
+    observer.observe(document.querySelector('title'), { childList: true });
+  }
 
   const restoreTitle = () => {
     title.value = originalTitle;

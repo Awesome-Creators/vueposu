@@ -1,4 +1,5 @@
 import { onMounted, onUnmounted, getCurrentInstance } from 'vue-demi';
+import { isServer } from '../libs/helper';
 
 // the difference platfrom listen
 const differencePlatformEvents = [
@@ -20,19 +21,21 @@ export default function usePageHidden(
 ) {
   if (getCurrentInstance()) {
     const listener = () =>
-      setTimeout(() => onHiddenStatusChange(document.hidden));
+      setTimeout(() => onHiddenStatusChange(isServer ? false : document.hidden));
 
-    onMounted(() => {
-      differencePlatformEvents.forEach(event => {
-        document.addEventListener(event, listener);
+    if (!isServer) {
+      onMounted(() => {
+        differencePlatformEvents.forEach(event => {
+          document.addEventListener(event, listener);
+        });
       });
-    });
 
-    onUnmounted(() => {
-      differencePlatformEvents.forEach(event => {
-        document.removeEventListener(event, listener);
+      onUnmounted(() => {
+        differencePlatformEvents.forEach(event => {
+          document.removeEventListener(event, listener);
+        });
       });
-    });
+    }
   } else {
     throw new Error(
       'Invalid hook call: `usePageHidden` can only be called inside of `setup()`.',
