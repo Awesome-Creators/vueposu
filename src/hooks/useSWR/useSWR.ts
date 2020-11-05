@@ -35,7 +35,7 @@ import type {
   BroadcastState,
   RevalidateOptions,
 } from './types';
-import { isClient } from '../../../dist/libs/helper';
+import { isClient } from '../../libs/helper';
 
 const isServer = !isClient;
 
