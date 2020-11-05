@@ -81,5 +81,3 @@ function useEventListener(...args) {
 }
 
 export default useEventListener;
-
-useEventListener(document, 'qweqwe', () => console.log('asdasd'));
