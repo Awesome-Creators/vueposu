@@ -4,7 +4,7 @@ import useTitle from '@hooks/useTitle';
 import { wait } from '@test/utils/helper';
 
 describe('hooks/useTitle', () => {
-  const $mutationObserver = globalThis.MutationObserver;
+  const $mutationObserver = window.MutationObserver;
   const constructorFn = jest.fn();
   const observeFn = jest.fn();
   const disconnectFn = jest.fn();

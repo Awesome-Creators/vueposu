@@ -13,10 +13,10 @@ export type UseClipboardReturnType = {
 export default function useClipboard(): UseClipboardReturnType {
   if (getCurrentInstance()) {
     const text = ref('');
-    const supported = 'clipboard' in globalThis.navigator;
+    const supported = 'clipboard' in window.navigator;
 
     const getClipboardText = async () => {
-      text.value = await globalThis.navigator.clipboard.readText();
+      text.value = await window.navigator.clipboard.readText();
     };
 
     getClipboardText();
@@ -25,7 +25,7 @@ export default function useClipboard(): UseClipboardReturnType {
 
     const copy = ($text: string) => {
       text.value = $text;
-      return globalThis.navigator.clipboard.writeText($text);
+      return window.navigator.clipboard.writeText($text);
     };
 
     return { copy, text, supported };

@@ -67,8 +67,8 @@ describe('hooks/useScroll', () => {
     expect(component.vm.y).toBe(0);
 
     // WIP
-    // globalThis.scrollLeft = 100;
-    // globalThis.scrollTop = 80;
+    // window.scrollLeft = 100;
+    // window.scrollTop = 80;
     // expect(component.vm.x).toBe(100);
     // expect(component.vm.y).toBe(80);
 

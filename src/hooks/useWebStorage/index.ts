@@ -4,133 +4,138 @@ import { localStorageMap, sessionStorageMap } from './map';
 import throttle from '../../libs/throttle';
 
 import type { StorageMap } from './map';
+import { noop } from 'lodash-es';
 type RemoveItemEvent = Event & { key: string };
 type SetItemEvent = RemoveItemEvent & { value: any };
 
-const originalLocalSetItem = localStorage.setItem.bind(localStorage);
-const originalSessionSetItem = sessionStorage.setItem.bind(sessionStorage);
-const originalLocalRemoveItem = localStorage.removeItem.bind(localStorage);
-const originalSessionRemoveItem = sessionStorage.removeItem.bind(
-  sessionStorage,
-);
-const originalLocalClear = localStorage.clear.bind(localStorage);
-const originalSessionClear = sessionStorage.clear.bind(sessionStorage);
+let originalLocalSetItem = noop;
+let originalSessionSetItem = noop;
+let originalLocalRemoveItem = noop;
+let originalSessionRemoveItem = noop;
 
-// override
-globalThis.localStorage.setItem = (key, value) => {
-  const event = new Event('localSetItemEvent') as SetItemEvent;
-  event.key = key;
-  event.value = value;
-  globalThis.dispatchEvent(event);
-  originalLocalSetItem(key, value);
-};
+if (typeof window !== 'undefined') {
+  originalLocalSetItem = localStorage.setItem.bind(localStorage);
+  originalSessionSetItem = sessionStorage.setItem.bind(sessionStorage);
+  originalLocalRemoveItem = localStorage.removeItem.bind(localStorage);
+  originalSessionRemoveItem = sessionStorage.removeItem.bind(sessionStorage);
+  const originalLocalClear = localStorage.clear.bind(localStorage);
+  const originalSessionClear = sessionStorage.clear.bind(sessionStorage);
 
-globalThis.sessionStorage.setItem = (key, value) => {
-  const event = new Event('sessionSetItemEvent') as SetItemEvent;
-  event.key = key;
-  event.value = value;
-  globalThis.dispatchEvent(event);
-  originalSessionSetItem(key, value);
-};
+  // override
+  window.localStorage.setItem = (key, value) => {
+    const event = new Event('localSetItemEvent') as SetItemEvent;
+    event.key = key;
+    event.value = value;
+    window.dispatchEvent(event);
+    originalLocalSetItem(key, value);
+  };
 
-globalThis.localStorage.removeItem = key => {
-  const event = new Event('localRemoveItemEvent') as SetItemEvent;
-  event.key = key;
-  globalThis.dispatchEvent(event);
-  originalLocalRemoveItem(key);
-};
+  window.sessionStorage.setItem = (key, value) => {
+    const event = new Event('sessionSetItemEvent') as SetItemEvent;
+    event.key = key;
+    event.value = value;
+    window.dispatchEvent(event);
+    originalSessionSetItem(key, value);
+  };
 
-globalThis.sessionStorage.removeItem = key => {
-  const event = new Event('sessionRemoveItemEvent') as SetItemEvent;
-  event.key = key;
-  globalThis.dispatchEvent(event);
-  originalSessionRemoveItem(key);
-};
+  window.localStorage.removeItem = key => {
+    const event = new Event('localRemoveItemEvent') as SetItemEvent;
+    event.key = key;
+    window.dispatchEvent(event);
+    originalLocalRemoveItem(key);
+  };
 
-globalThis.localStorage.clear = () => {
-  const event = new Event('localClearEvent');
-  globalThis.dispatchEvent(event);
-  originalLocalClear();
-};
+  window.sessionStorage.removeItem = key => {
+    const event = new Event('sessionRemoveItemEvent') as SetItemEvent;
+    event.key = key;
+    window.dispatchEvent(event);
+    originalSessionRemoveItem(key);
+  };
 
-globalThis.sessionStorage.clear = () => {
-  const event = new Event('sessionClearEvent');
-  globalThis.dispatchEvent(event);
-  originalSessionClear();
-};
+  window.localStorage.clear = () => {
+    const event = new Event('localClearEvent');
+    window.dispatchEvent(event);
+    originalLocalClear();
+  };
 
-// listen for change
+  window.sessionStorage.clear = () => {
+    const event = new Event('sessionClearEvent');
+    window.dispatchEvent(event);
+    originalSessionClear();
+  };
 
-// handler
-const handleSetItem = (key: string, value: any, map: StorageMap) => {
-  if (key in map) {
-    map[key].value = value;
-  }
-};
-const handleClear = (map: StorageMap) => {
-  Object.values(map).forEach(item => (item.value = null));
-};
+  // listen for change
 
-// setItem
-globalThis.addEventListener(
-  'localSetItemEvent',
-  ({ key, value }: SetItemEvent) => handleSetItem(key, value, localStorageMap),
-);
-globalThis.addEventListener(
-  'sessionSetItemEvent',
-  ({ key, value }: SetItemEvent) =>
-    handleSetItem(key, value, sessionStorageMap),
-);
-// removeItem
-globalThis.addEventListener(
-  'localRemoveItemEvent',
-  ({ key }: RemoveItemEvent) => handleSetItem(key, null, localStorageMap),
-);
-globalThis.addEventListener(
-  'sessionRemoveItemEvent',
-  ({ key }: RemoveItemEvent) => handleSetItem(key, null, sessionStorageMap),
-);
-// clear
-globalThis.addEventListener('localClearEvent', () =>
-  handleClear(localStorageMap),
-);
-globalThis.addEventListener('sessionClearEvent', () =>
-  handleClear(sessionStorageMap),
-);
-globalThis.addEventListener(
-  'focus',
-  throttle(() => {
-    Object.keys(localStorageMap).forEach(key => {
-      const value = globalThis.localStorage.getItem(key);
-      if (localStorageMap[key].value !== value) {
-        localStorageMap[key].value = value;
-      }
-    });
-    Object.keys(sessionStorageMap).forEach(key => {
-      const value = globalThis.sessionStorage.getItem(key);
-      if (sessionStorage[key].value !== value) {
-        sessionStorage[key].value = value;
-      }
-    });
-  }, 100),
-);
+  // handler
+  const handleSetItem = (key: string, value: any, map: StorageMap) => {
+    if (key in map) {
+      map[key].value = value;
+    }
+  };
+  const handleClear = (map: StorageMap) => {
+    Object.values(map).forEach(item => (item.value = null));
+  };
+
+  // setItem
+  window.addEventListener('localSetItemEvent', ({ key, value }: SetItemEvent) =>
+    handleSetItem(key, value, localStorageMap),
+  );
+  window.addEventListener(
+    'sessionSetItemEvent',
+    ({ key, value }: SetItemEvent) =>
+      handleSetItem(key, value, sessionStorageMap),
+  );
+  // removeItem
+  window.addEventListener('localRemoveItemEvent', ({ key }: RemoveItemEvent) =>
+    handleSetItem(key, null, localStorageMap),
+  );
+  window.addEventListener(
+    'sessionRemoveItemEvent',
+    ({ key }: RemoveItemEvent) => handleSetItem(key, null, sessionStorageMap),
+  );
+  // clear
+  window.addEventListener('localClearEvent', () =>
+    handleClear(localStorageMap),
+  );
+  window.addEventListener('sessionClearEvent', () =>
+    handleClear(sessionStorageMap),
+  );
+  window.addEventListener(
+    'focus',
+    throttle(() => {
+      Object.keys(localStorageMap).forEach(key => {
+        const value = window.localStorage.getItem(key);
+        if (localStorageMap[key].value !== value) {
+          localStorageMap[key].value = value;
+        }
+      });
+      Object.keys(sessionStorageMap).forEach(key => {
+        const value = window.sessionStorage.getItem(key);
+        if (sessionStorage[key].value !== value) {
+          sessionStorage[key].value = value;
+        }
+      });
+    }, 100),
+  );
+}
 
 // implement
 // TODO: COMMENT NEED
 export default function useWebStorage<T>(
   key: string,
   defaultValue?: T,
-  storage: Storage = globalThis.localStorage,
+  storage?: Storage,
 ) {
+  storage = storage ?? window.localStorage;
   if (getCurrentInstance()) {
     const storageMap =
-      storage === globalThis.localStorage ? localStorageMap : sessionStorageMap;
+      storage === window.localStorage ? localStorageMap : sessionStorageMap;
     const setItem =
-      storage === globalThis.localStorage
+      storage === window.localStorage
         ? originalLocalSetItem
         : originalSessionSetItem;
     const removeItem =
-      storage === globalThis.localStorage
+      storage === window.localStorage
         ? originalLocalRemoveItem
         : originalSessionRemoveItem;
     const update = value => {

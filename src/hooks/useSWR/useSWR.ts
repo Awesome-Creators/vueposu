@@ -35,8 +35,9 @@ import type {
   BroadcastState,
   RevalidateOptions,
 } from './types';
+import { isClient } from '../../../dist/libs/helper';
 
-const isServer = isUndefined(window);
+const isServer = !isClient;
 
 // polyfill for requestIdleCallback
 const rIC = isServer
@@ -55,7 +56,7 @@ const mutationTS = {};
 const mutationEndTS = {};
 
 // setup DOM events listeners for `focus` and `reconnect` actions
-if (!isServer && globalThis.addEventListener) {
+if (!isServer && window.addEventListener) {
   const revalidate = revalidators => {
     if (!isDocumentVisible() || !isOnline()) return;
 
@@ -65,18 +66,14 @@ if (!isServer && globalThis.addEventListener) {
   };
 
   // focus revalidate
-  globalThis.addEventListener(
+  window.addEventListener(
     'visibilitychange',
     () => revalidate(focusRevalidators),
     false,
   );
-  globalThis.addEventListener(
-    'focus',
-    () => revalidate(focusRevalidators),
-    false,
-  );
+  window.addEventListener('focus', () => revalidate(focusRevalidators), false);
   // reconnect revalidate
-  globalThis.addEventListener(
+  window.addEventListener(
     'online',
     () => revalidate(reconnectRevalidators),
     false,
