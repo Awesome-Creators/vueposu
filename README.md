@@ -30,23 +30,35 @@
 
 ## 📦 INSTALLATION
 
-Works for both Vue 3 and 2, but if you are using `Vue 2` must ensure installed `@vue/composition-api`.
+vueposu supports both Vue 3 and 2, but if you are using `Vue 2` must ensure installed `@vue/composition-api`.
 
 ### Vue 3
 
 ```bash
+# install with npm
 npm i vueposu
-# or
+
+# install with yarn
 yarn add vueposu
 ```
 
 ### Vue 2
 
 ```bash
+# install with npm
 npm i vueposu @vue/composition-api
-# or
+
+# install with yarn
 yarn add vueposu @vue/composition-api
 ```
+
+### CDN
+
+```html
+<script src="https://unpkg.com/vueposu"></script>
+```
+
+<br />
 
 ## 🍳 USAGE
 
@@ -68,6 +80,8 @@ const Component = defineComponent({
   },
 });
 ```
+
+<br />
 
 ## 🚀 API
 
@@ -132,6 +146,9 @@ Currently supported functions:
   <!-- - [`useRaf`](https://vueposu.now.sh/animation/useRaf.html) -->
   - [`useTimeout`](https://vueposu.now.sh/animation/useTimeout.html)
 
+
+<br />
+
 ## Thanks
 
 In no particular order, vueposu is inspired by these great awesome works:
@@ -141,6 +158,8 @@ In no particular order, vueposu is inspired by these great awesome works:
 - [vue-composable](https://github.com/pikax/vue-composable)
 - [vercel/swr](https://github.com/vercel/swr)
 - [ahooks](https://github.com/alibaba/hooks)
+
+<br />
 
 ## License
 
