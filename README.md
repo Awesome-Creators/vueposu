@@ -89,62 +89,62 @@ Currently supported functions:
 
 - DOM
 
-  <!-- - [`useAudio`](https://vueposu.now.sh/dom/useAudio.html) -->
+  <!-- - [`useAudio`](https://vueposu.netlify.app/dom/useAudio.html) -->
 
-  - [`useClickAway`](https://vueposu.now.sh/dom/useClickAway.html)
-  - [`useClipboard`](https://vueposu.now.sh/dom/useClipboard.html)
-  - [`useEventListener`](https://vueposu.now.sh/dom/useEventListener.html)
-  - [`useFavicon`](https://vueposu.now.sh/dom/useFavicon.html)
-  - [`useFullscreen`](https://vueposu.now.sh/dom/useFullscreen.html)
-  - [`usePageHidden`](https://vueposu.now.sh/dom/usePageHidden.html)
-  - [`useTitle`](https://vueposu.now.sh/dom/useTitle.html)
+  - [`useClickAway`](https://vueposu.netlify.app/dom/useClickAway.html)
+  - [`useClipboard`](https://vueposu.netlify.app/dom/useClipboard.html)
+  - [`useEventListener`](https://vueposu.netlify.app/dom/useEventListener.html)
+  - [`useFavicon`](https://vueposu.netlify.app/dom/useFavicon.html)
+  - [`useFullscreen`](https://vueposu.netlify.app/dom/useFullscreen.html)
+  - [`usePageHidden`](https://vueposu.netlify.app/dom/usePageHidden.html)
+  - [`useTitle`](https://vueposu.netlify.app/dom/useTitle.html)
 
 - SENSORS
 
-  - [`useMouse`](https://vueposu.now.sh/sensors/useMouse.html)
-  - [`useScroll`](https://vueposu.now.sh/sensors/useScroll.html)
-  <!-- - [`useScrollTo`](https://vueposu.now.sh/sensors/useScrollTo.html) -->
+  - [`useMouse`](https://vueposu.netlify.app/sensors/useMouse.html)
+  - [`useScroll`](https://vueposu.netlify.app/sensors/useScroll.html)
+  <!-- - [`useScrollTo`](https://vueposu.netlify.app/sensors/useScrollTo.html) -->
 
 - STATE
 
-  <!-- - [`useCalculator`](https://vueposu.now.sh/state/useCalculator.html) -->
+  <!-- - [`useCalculator`](https://vueposu.netlify.app/state/useCalculator.html) -->
 
-  - [`useCounter`](https://vueposu.now.sh/state/useCounter.html)
-  - [`useCounterInterval`](https://vueposu.now.sh/state/useCounterInterval.html)
-  - [`useDynamicList`](https://vueposu.now.sh/state/useDynamicList.html)
-  - [`useQueue`](https://vueposu.now.sh/state/useQueue.html)
-  - [`useSet`](https://vueposu.now.sh/state/useSet.html)
-  - [`useToggle`](https://vueposu.now.sh/state/useToggle.html)
+  - [`useCounter`](https://vueposu.netlify.app/state/useCounter.html)
+  - [`useCounterInterval`](https://vueposu.netlify.app/state/useCounterInterval.html)
+  - [`useDynamicList`](https://vueposu.netlify.app/state/useDynamicList.html)
+  - [`useQueue`](https://vueposu.netlify.app/state/useQueue.html)
+  - [`useSet`](https://vueposu.netlify.app/state/useSet.html)
+  - [`useToggle`](https://vueposu.netlify.app/state/useToggle.html)
 
 - SWR
 
-  - [`useSWR`](https://vueposu.now.sh/useSWR.html)
+  - [`useSWR`](https://vueposu.netlify.app/useSWR.html)
 
 - CACHE
 
-  <!-- - [`useCookie`](https://vueposu.now.sh/cache/useCookie.html) -->
+  <!-- - [`useCookie`](https://vueposu.netlify.app/cache/useCookie.html) -->
 
-  - [`useWebStorage`](https://vueposu.now.sh/cache/useWebStorage.html)
-  - [`useLocalStorage`](https://vueposu.now.sh/cache/useLocalStorage.html)
-  - [`useSessionStorage`](https://vueposu.now.sh/cache/useSessionStorage.html)
+  - [`useWebStorage`](https://vueposu.netlify.app/cache/useWebStorage.html)
+  - [`useLocalStorage`](https://vueposu.netlify.app/cache/useLocalStorage.html)
+  - [`useSessionStorage`](https://vueposu.netlify.app/cache/useSessionStorage.html)
 
 - SIDE EFFECT
 
-  - [`useDebounce`](https://vueposu.now.sh/side-effect/useDebounce.html)
-  - [`useDebounceEffect`](https://vueposu.now.sh/side-effect/useDebounceEffect.html)
-  - [`useDebounceFn`](https://vueposu.now.sh/side-effect/useDebounceFn.html)
-  - [`useEventEmitter`](https://vueposu.now.sh/side-effect/useEventEmitter.html)
-  - [`useRequest`](https://vueposu.now.sh/side-effect/useRequest.html)
-  - [`useThrottle`](https://vueposu.now.sh/side-effect/useThrottle.html)
-  - [`useThrottleEffect`](https://vueposu.now.sh/side-effect/useThrottleEffect.html)
-  - [`useThrottleFn`](https://vueposu.now.sh/side-effect/useThrottleFn.html)
-  <!-- - [`useTrace`](https://vueposu.now.sh/side-effect/useTrace.html) -->
+  - [`useDebounce`](https://vueposu.netlify.app/side-effect/useDebounce.html)
+  - [`useDebounceEffect`](https://vueposu.netlify.app/side-effect/useDebounceEffect.html)
+  - [`useDebounceFn`](https://vueposu.netlify.app/side-effect/useDebounceFn.html)
+  - [`useEventEmitter`](https://vueposu.netlify.app/side-effect/useEventEmitter.html)
+  - [`useRequest`](https://vueposu.netlify.app/side-effect/useRequest.html)
+  - [`useThrottle`](https://vueposu.netlify.app/side-effect/useThrottle.html)
+  - [`useThrottleEffect`](https://vueposu.netlify.app/side-effect/useThrottleEffect.html)
+  - [`useThrottleFn`](https://vueposu.netlify.app/side-effect/useThrottleFn.html)
+  <!-- - [`useTrace`](https://vueposu.netlify.app/side-effect/useTrace.html) -->
 
 - ANIMATION
 
-  - [`useInterval`](https://vueposu.now.sh/animation/useInterval.html)
-  <!-- - [`useRaf`](https://vueposu.now.sh/animation/useRaf.html) -->
-  - [`useTimeout`](https://vueposu.now.sh/animation/useTimeout.html)
+  - [`useInterval`](https://vueposu.netlify.app/animation/useInterval.html)
+  <!-- - [`useRaf`](https://vueposu.netlify.app/animation/useRaf.html) -->
+  - [`useTimeout`](https://vueposu.netlify.app/animation/useTimeout.html)
 
 
 <br />
