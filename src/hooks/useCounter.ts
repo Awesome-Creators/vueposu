@@ -36,8 +36,8 @@ function useCounter(
     isNumber(initialValue) ? Number(unref(initialValue)) : 0;
   const $step = () => (isNumber(step) ? Number(unref(step)) : 1);
 
-  const fix = (num: RefTyped<number>) => {
-    let result = unref(num);
+  const fix = (num: RefTyped<NumberType>) => {
+    let result = +unref(num);
     if (isNumber(max)) {
       result = Math.min(Number(unref(max)), result);
     }
@@ -49,11 +49,11 @@ function useCounter(
 
   const current = ref(fix(initial()));
 
-  const set = v => {
+  const set: UseCounterActions['set'] = v => {
     current.value = fix(isFunction(v) ? v(current.value) : v);
   };
 
-  const inc = v => {
+  const inc: UseCounterActions['inc'] = v =>
     set(
       Number(
         format(
@@ -64,9 +64,8 @@ function useCounter(
         ),
       ),
     );
-  };
 
-  const dec = v => {
+  const dec: UseCounterActions['dec'] = v =>
     set(
       Number(
         format(
@@ -77,11 +76,8 @@ function useCounter(
         ),
       ),
     );
-  };
 
-  const reset = () => {
-    set(fix(initial()));
-  };
+  const reset: UseCounterActions['reset'] = () => set(fix(initial()));
 
   const count = computed({
     get: () => current.value,
