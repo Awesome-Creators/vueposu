@@ -52,11 +52,11 @@ npm i vueposu @vue/composition-api
 yarn add vueposu @vue/composition-api
 ```
 
-### CDN
+<!-- ### CDN
 
 ```html
 <script src="https://unpkg.com/vueposu"></script>
-```
+``` -->
 
 <br />
 
