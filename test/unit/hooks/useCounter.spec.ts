@@ -195,6 +195,13 @@ describe('hooks/useCounter', () => {
     component.vm.min = 0;
     component.vm.reset();
     expect(component.vm.count).toBe(2);
+    
+    component.vm.min = 3;
+    expect(component.vm.count).toBe(3);
+    
+    component.vm.min = 0;
+    component.vm.max = 2;
+    expect(component.vm.count).toBe(2);
 
     // Mock for js users.
     component.vm.initial = 'boy next door' as any;
