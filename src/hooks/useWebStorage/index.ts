@@ -3,7 +3,7 @@ import { read, write } from './serializer';
 import { localStorageMap, sessionStorageMap } from './map';
 import { noop } from 'lodash-es';
 import throttle from '../../libs/throttle';
-import { isServer } from '../../libs/helper';
+import { isServer, isEqual } from '../../libs/helper';
 
 import type { StorageMap } from './map';
 type RemoveItemEvent = Event & { key: string };
@@ -107,15 +107,17 @@ if (!isServer) {
     'focus',
     throttle(() => {
       Object.keys(localStorageMap).forEach(key => {
-        const value = window.localStorage.getItem(key);
-        if (localStorageMap[key].value !== value) {
-          localStorageMap[key].value = value;
+        const oldValue = localStorageMap[key].value;
+        const newValue = read(window.localStorage.getItem(key), oldValue);
+        if (!isEqual(oldValue, newValue)) {
+          localStorageMap[key].value = newValue;
         }
       });
       Object.keys(sessionStorageMap).forEach(key => {
-        const value = window.sessionStorage.getItem(key);
-        if (sessionStorage[key].value !== value) {
-          sessionStorage[key].value = value;
+        const oldValue = sessionStorage[key].value;
+        const newValue = read(window.sessionStorage.getItem(key), oldValue);
+        if (!isEqual(oldValue, newValue)) {
+          sessionStorage[key].value = newValue;
         }
       });
     }, 100),
