@@ -1,6 +1,6 @@
 // https://github.com/antfu/vueuse/blob/master/packages/core/useStorage/index.ts
 
-import { isDef, isUndefined, isObject, isArray } from '../../libs/helper';
+import { isDef, isUndef, isUndefined, isObject, isArray } from '../../libs/helper';
 
 const getType = value =>
   value === null
@@ -33,7 +33,7 @@ export const Serializers = {
     write: (v: any) => JSON.stringify(v),
   },
   string: {
-    read: (v: any, d: any) => v ?? d,
+    read: (v: any, d: any) => isDef(v) ? v : d,
     write: (v: any) => String(v),
   },
   null: {
@@ -44,20 +44,13 @@ export const Serializers = {
 
 export const read = (value, defaultValue) => {
   let type;
+  const $value = isUndef(value) ? defaultValue : value;
   try {
-    type = getType(JSON.parse(defaultValue));
+    type = getType(JSON.parse($value));
   } catch (err) {
-    type = getType(defaultValue);
+    type = getType($value);
   }
   return Serializers[type].read(value, defaultValue);
 };
 
-export const write = value => {
-  let type;
-  try {
-    type = getType(JSON.parse(value));
-  } catch (err) {
-    type = getType(value);
-  }
-  return Serializers[type].write(value);
-};
+export const write = value => Serializers[getType(value)].write(value);

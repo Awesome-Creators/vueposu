@@ -1,4 +1,4 @@
-import { ref, computed, getCurrentInstance } from 'vue-demi';
+import { ref, computed, getCurrentInstance, watch } from 'vue-demi';
 import { read, write } from './serializer';
 import { localStorageMap, sessionStorageMap } from './map';
 import { noop } from 'lodash-es';
@@ -131,11 +131,11 @@ export default function useWebStorage<T>(
   defaultValue?: T,
   storage?: Storage,
 ) {
-  // TODO: ENHANCE SSR
-  if (isServer) return { value: null };
-
-  storage = storage ?? window.localStorage;
   if (getCurrentInstance()) {
+    // TODO: ENHANCE SSR
+    if (isServer) return { value: null };
+    storage = storage ?? window.localStorage;
+
     const storageMap =
       storage === window.localStorage ? localStorageMap : sessionStorageMap;
     const setItem =
@@ -156,8 +156,19 @@ export default function useWebStorage<T>(
     };
 
     const item =
-      storageMap[key] ||
+      storageMap[key] ??
       (storageMap[key] = ref(update(read(storage.getItem(key), defaultValue))));
+
+    watch(
+      item,
+      () => {
+        update(item.value);
+      },
+      {
+        flush: 'post',
+        deep: true,
+      },
+    );
 
     return computed({
       get: () => item.value,
