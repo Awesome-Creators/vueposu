@@ -2,7 +2,7 @@
 
 import { isDef, isUndefined, isObject, isArray } from '../../libs/helper';
 
-const type = value =>
+const getType = value =>
   value === null
     ? 'null'
     : typeof value === 'boolean'
@@ -42,7 +42,22 @@ export const Serializers = {
   },
 };
 
-export const read = (value, defaultValue) =>
-  Serializers[type(defaultValue)].read(value, defaultValue);
+export const read = (value, defaultValue) => {
+  let type;
+  try {
+    type = getType(JSON.parse(defaultValue));
+  } catch (err) {
+    type = getType(defaultValue);
+  }
+  return Serializers[type].read(value, defaultValue);
+};
 
-export const write = value => Serializers[type(value)].write(value);
+export const write = value => {
+  let type;
+  try {
+    type = getType(JSON.parse(value));
+  } catch (err) {
+    type = getType(value);
+  }
+  return Serializers[type].write(value);
+};
