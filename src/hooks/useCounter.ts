@@ -1,4 +1,4 @@
-import { ref, unref, computed } from 'vue-demi';
+import { ref, unref, computed, watchEffect } from 'vue-demi';
 import { add, subtract, bignumber, format } from 'mathjs';
 import { isDef, isFunction } from '../libs/helper';
 
@@ -92,6 +92,16 @@ function useCounter(
         );
       }
     },
+  });
+
+  watchEffect(() => {
+    // if `min`/`max` is RefTyped, collect dependencies:
+    unref(min);
+    unref(max);
+
+    set(current.value);
+  }, {
+    flush: 'sync'
   });
 
   return {
