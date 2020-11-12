@@ -1,6 +1,6 @@
 {
   "name": "vueposu",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A hooks library based on Vue Composition-API",
   "repository": "git@github.com:Awesome-Creators/vueposu.git",
   "homepage": "https://vueposu.now.sh",
