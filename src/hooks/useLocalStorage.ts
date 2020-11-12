@@ -1,5 +1,5 @@
-import useWebStorage from './useWebStorage';
+import useStorage from './useStorage';
 
-const useLocalStorage = (key, defaultValue) => useWebStorage(key, defaultValue);
+const useLocalStorage = (key, defaultValue) => useStorage(key, defaultValue);
 
 export default useLocalStorage;

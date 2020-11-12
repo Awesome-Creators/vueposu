@@ -1,6 +1,6 @@
-import useWebStorage from './useWebStorage';
+import useStorage from './useStorage';
 
 const useSessionStorage = (key, defaultValue) =>
-  useWebStorage(key, defaultValue, sessionStorage);
+  useStorage(key, defaultValue, window?.sessionStorage);
 
 export default useSessionStorage;

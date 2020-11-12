@@ -124,7 +124,7 @@ Currently supported functions:
 
   <!-- - [`useCookie`](https://vueposu.netlify.app/cache/useCookie.html) -->
 
-  - [`useWebStorage`](https://vueposu.netlify.app/cache/useWebStorage.html)
+  - [`useStorage`](https://vueposu.netlify.app/cache/useStorage.html)
   - [`useLocalStorage`](https://vueposu.netlify.app/cache/useLocalStorage.html)
   - [`useSessionStorage`](https://vueposu.netlify.app/cache/useSessionStorage.html)
 

@@ -1,4 +1,4 @@
-import { ref, computed, getCurrentInstance, watch } from 'vue-demi';
+import { ref, computed, watch } from 'vue-demi';
 import { read, write } from './serializer';
 import { localStorageMap, sessionStorageMap } from './map';
 import { noop } from 'lodash-es';
@@ -126,59 +126,54 @@ if (!isServer) {
 
 // implement
 // TODO: COMMENT NEED
-export default function useWebStorage<T>(
+export default function useStorage<T>(
   key: string,
   defaultValue?: T,
   storage?: Storage,
 ) {
-  if (getCurrentInstance()) {
-    // TODO: ENHANCE SSR
-    if (isServer) return { value: null };
-    storage = storage ?? window.localStorage;
+  // TODO: ENHANCE SSR
+  if (isServer) return { value: null };
 
-    const storageMap =
-      storage === window.localStorage ? localStorageMap : sessionStorageMap;
-    const setItem =
-      storage === window.localStorage
-        ? originalLocalSetItem
-        : originalSessionSetItem;
-    const removeItem =
-      storage === window.localStorage
-        ? originalLocalRemoveItem
-        : originalSessionRemoveItem;
-    const update = value => {
-      if (value === null) {
-        removeItem(key);
-      } else {
-        setItem(key, write(value));
-      }
-      return value;
-    };
+  storage = storage ?? window.localStorage;
 
-    const item =
-      storageMap[key] ??
-      (storageMap[key] = ref(update(read(storage.getItem(key), defaultValue))));
+  const storageMap =
+    storage === window.localStorage ? localStorageMap : sessionStorageMap;
+  const setItem =
+    storage === window.localStorage
+      ? originalLocalSetItem
+      : originalSessionSetItem;
+  const removeItem =
+    storage === window.localStorage
+      ? originalLocalRemoveItem
+      : originalSessionRemoveItem;
+  const update = value => {
+    if (value === null) {
+      removeItem(key);
+    } else {
+      setItem(key, write(value));
+    }
+    return value;
+  };
 
-    watch(
-      item,
-      () => {
-        update(item.value);
-      },
-      {
-        flush: 'post',
-        deep: true,
-      },
-    );
+  const item =
+    storageMap[key] ??
+    (storageMap[key] = ref(update(read(storage.getItem(key), defaultValue))));
 
-    return computed({
-      get: () => item.value,
-      set: value => {
-        item.value = update(value);
-      },
-    });
-  } else {
-    throw new Error(
-      'Invalid hook call: `useWebStorage` can only be called inside of `setup()`.',
-    );
-  }
+  watch(
+    item,
+    () => {
+      update(item.value);
+    },
+    {
+      flush: 'post',
+      deep: true,
+    },
+  );
+
+  return computed({
+    get: () => item.value,
+    set: value => {
+      item.value = update(value);
+    },
+  });
 }

@@ -1,10 +1,10 @@
 import { mount } from '@vue/test-utils';
 import { defineComponent } from 'vue-demi';
-import useWebStorage from '@hooks/useWebStorage';
-import { Serializers } from '@hooks/useWebStorage/serializer';
+import useStorage from '@hooks/useStorage';
+import { Serializers } from '@hooks/useStorage/serializer';
 
 // TODO: remvoe value
-describe('hooks/useWebStorage', () => {
+describe('hooks/useStorage', () => {
   beforeEach(() => {
     localStorage.clear();
     sessionStorage.clear();
@@ -77,7 +77,7 @@ describe('hooks/useWebStorage', () => {
     const CompA = defineComponent({
       template: `{{ val }}`,
       setup() {
-        const val = useWebStorage('a', '233');
+        const val = useStorage('a', '233');
         return { val };
       },
     });
@@ -85,7 +85,7 @@ describe('hooks/useWebStorage', () => {
     const CompB = defineComponent({
       template: `{{ val }}`,
       setup() {
-        const val = useWebStorage('a', '666');
+        const val = useStorage('a', '666');
         return { val };
       },
     });
@@ -135,14 +135,14 @@ describe('hooks/useWebStorage', () => {
     const CompA = defineComponent({
       template: `{{ val }}`,
       setup() {
-        const val = useWebStorage('b', null);
+        const val = useStorage('b', null);
         return { val };
       },
     });
     const CompB = defineComponent({
       template: `{{ val }}`,
       setup() {
-        const val = useWebStorage('b', null);
+        const val = useStorage('b', null);
         return { val };
       },
     });
@@ -173,7 +173,7 @@ describe('hooks/useWebStorage', () => {
     const CompA = defineComponent({
       template: `{{ val }}`,
       setup() {
-        const val = useWebStorage('a', '1', sessionStorage);
+        const val = useStorage('a', '1', sessionStorage);
         return { val };
       },
     });
@@ -181,7 +181,7 @@ describe('hooks/useWebStorage', () => {
     const CompB = defineComponent({
       template: `{{ val }}`,
       setup() {
-        const val = useWebStorage('a', '1', sessionStorage);
+        const val = useStorage('a', '1', sessionStorage);
         return { val };
       },
     });
@@ -216,14 +216,14 @@ describe('hooks/useWebStorage', () => {
     const CompA = defineComponent({
       template: `{{ val }}`,
       setup() {
-        const val = useWebStorage('b', null, sessionStorage);
+        const val = useStorage('b', null, sessionStorage);
         return { val };
       },
     });
     const CompB = defineComponent({
       template: `{{ val }}`,
       setup() {
-        const val = useWebStorage('b', null, sessionStorage);
+        const val = useStorage('b', null, sessionStorage);
         return { val };
       },
     });
@@ -249,11 +249,5 @@ describe('hooks/useWebStorage', () => {
     expect(compB.val).toBe('1');
     expect(sessionStorage.getItem('b')).toBe('1');
     component.unmount();
-  });
-
-  it('should throw error when `useWebStorage` not be called inside of `setup()`', () => {
-    expect(() => useWebStorage('a')).toThrowError(
-      'Invalid hook call: `useWebStorage` can only be called inside of `setup()`.',
-    );
   });
 });
