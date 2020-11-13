@@ -1,18 +1,19 @@
 import { mount } from '@vue/test-utils';
 import { defineComponent, ref } from 'vue-demi';
 import useEventEmitter from '@hooks/useEventEmitter';
+import { wait } from '../../utils/helper';
 
 describe('hooks/useEventEmitter', () => {
-  it('should subscriptions all work when emit', () => {
+  it('should subscriptions all work when emit', async () => {
     const component = mount(
       defineComponent({
-        template: '<div></div>',
+        template: '<template />',
         setup() {
           const count = ref(0);
           const text = ref('');
-          const { emit, useSubscription } = useEventEmitter();
+          const { emit, on } = useEventEmitter();
 
-          useSubscription(value => {
+          on(value => {
             text.value = value;
             count.value++;
           });
@@ -21,7 +22,7 @@ describe('hooks/useEventEmitter', () => {
             count,
             text,
             emit,
-            useSubscription,
+            on,
           };
         },
       }),
@@ -31,22 +32,26 @@ describe('hooks/useEventEmitter', () => {
     expect(component.vm.text).toBe('');
 
     component.vm.emit('a');
+    await wait();
     expect(component.vm.count).toBe(1);
     expect(component.vm.text).toBe('a');
 
     component.vm.emit('b');
+    await wait();
     expect(component.vm.count).toBe(2);
     expect(component.vm.text).toBe('b');
 
-    component.vm.useSubscription(value => {
+    component.vm.on(value => {
       component.vm.text += value;
       component.vm.count++;
     });
     component.vm.emit('c');
+    await wait();
     expect(component.vm.count).toBe(4);
     expect(component.vm.text).toBe('cc');
 
     component.vm.emit('d');
+    await wait();
     expect(component.vm.count).toBe(6);
     expect(component.vm.text).toBe('dd');
   });
