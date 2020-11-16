@@ -20,11 +20,11 @@ type UseTimeoutReturnType = {
 export default function useTimeout(
   callback: () => void,
   timeout: RefTyped<number> = 1000,
-  immediateStart: RefTyped<boolean> = true,
+  immediate: RefTyped<boolean> = true,
 ): UseTimeoutReturnType {
   if (getCurrentInstance()) {
     let timer = null;
-    const isActive = ref(immediateStart);
+    const isActive = ref(immediate);
 
     const stop = () => {
       if (timer) {
@@ -44,8 +44,7 @@ export default function useTimeout(
     };
 
     watchEffect(onInvalidate => {
-      unref(immediateStart) && start();
-
+      unref(immediate) && start();
       onInvalidate(stop);
     });
 
