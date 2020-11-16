@@ -1,7 +1,6 @@
 import {
   unref,
   onMounted,
-  onUnmounted,
   watchEffect,
   getCurrentInstance,
 } from 'vue-demi';
@@ -60,23 +59,29 @@ function useEventListener(...args) {
       }
     };
 
-    onMounted(() => {
-      watchEffect(() => {
-        serialize();
-      });
+    const register = () => {
       if (!isServer && target) {
         target.addEventListener(type, listener, options);
       }
-    });
+    };
 
-    onUnmounted(() => {
+    const unregister = () => {
       if (!isServer && target) {
         target.removeEventListener(type, listener, options);
       }
+    };
+
+    onMounted(() => {
+      watchEffect(onInvalidate => {
+        serialize();
+        register();
+
+        onInvalidate(unregister);
+      });
     });
   } else {
     throw new Error(
-      'Invalid hook call: `useClipboard` can only be called inside of `setup()`.',
+      'Invalid hook call: `useEventListener` can only be called inside of `setup()`.',
     );
   }
 }
