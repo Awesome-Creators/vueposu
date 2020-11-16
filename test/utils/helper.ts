@@ -18,7 +18,10 @@ export const times = (times = 0, cb: Function) => {
 };
 
 // trigger dom event
-export const triggerDomEvent = (evt, elm?) => {
+export const triggerDomEvent = (
+  evt,
+  elm: Window | Document | HTMLElement = document,
+) => {
   const $elm = elm ?? document;
   $elm.dispatchEvent(new Event(evt));
 };

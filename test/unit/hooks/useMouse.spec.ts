@@ -62,4 +62,10 @@ describe('hooks/useMouse', () => {
     component.unmount();
     expect(fn).toBeCalledTimes(1);
   });
+
+  it('should throw error when `useMouse` not be called inside of `setup()`', () => {
+    expect(() => useMouse()).toThrowError(
+      'Invalid hook call: `useMouse` can only be called inside of `setup()`.',
+    );
+  });
 });

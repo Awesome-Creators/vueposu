@@ -76,4 +76,10 @@ describe('hooks/useScroll', () => {
     component.unmount();
     expect(removeFn).toBeCalledTimes(1);
   });
+
+  it('should throw error when `useScroll` not be called inside of `setup()`', () => {
+    expect(() => useScroll()).toThrowError(
+      'Invalid hook call: `useScroll` can only be called inside of `setup()`.',
+    );
+  });
 });

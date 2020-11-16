@@ -3,15 +3,8 @@ import { mount } from '@vue/test-utils';
 import { defineComponent } from 'vue-demi';
 
 describe('hooks/useFavicon', () => {
-  const icon =
-    (document.querySelector("link[rel*='icon']") as HTMLLinkElement) ||
-    (() => {
-      const link = document.createElement('link');
-      link.type = 'image/x-icon';
-      link.rel = 'shortcut icon';
-      document.getElementsByTagName('head')[0].appendChild(link);
-      return link;
-    })();
+  const getIcon = () => document.querySelector("link[rel*='icon']") as HTMLLinkElement;
+  getIcon().parentNode.removeChild(getIcon());
 
   it('should not set the favicon when param `url` is undef', () => {
     mount(
@@ -21,7 +14,7 @@ describe('hooks/useFavicon', () => {
       }),
     );
 
-    expect(icon.href).toBe('');
+    expect(getIcon().href).toBe('');
   });
 
   it('should set the favicon when param `url` is def', () => {
@@ -32,10 +25,11 @@ describe('hooks/useFavicon', () => {
       }),
     );
 
-    expect(icon.href).toBe('https://test.com/icon.ico');
+    expect(getIcon().href).toBe('https://test.com/icon.ico');
   });
 
   it('should can change the favicon and restore the favicon', () => {
+    const icon = getIcon();
     icon.href = 'https://favicon.com/icon.ico';
 
     const component = mount(
