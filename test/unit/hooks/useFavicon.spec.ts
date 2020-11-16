@@ -4,7 +4,7 @@ import { defineComponent } from 'vue-demi';
 
 describe('hooks/useFavicon', () => {
   const getIcon = () => document.querySelector("link[rel*='icon']") as HTMLLinkElement;
-  getIcon().parentNode.removeChild(getIcon());
+  getIcon()?.parentNode.removeChild(getIcon());
 
   it('should not set the favicon when param `url` is undef', () => {
     mount(

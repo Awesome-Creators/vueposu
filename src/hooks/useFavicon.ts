@@ -16,9 +16,10 @@ export default function useFavicon(url?: string) {
       originalIcon = link.href;
     } else {
       link = document.createElement('link');
+      link.type = 'image/x-icon';
+      link.rel = 'shortcut icon';
+      document.head.appendChild(link);
     }
-    link.type = 'image/x-icon';
-    link.rel = 'shortcut icon';
 
     // change site favicon
     const changeIcon = ($url: string) => {
