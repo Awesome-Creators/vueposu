@@ -27,10 +27,10 @@ export default function useInterval(
     const isActive = ref(immediate);
     
     const stop = () => {
+      isActive.value = false;
       if (timer) {
         clearInterval(timer);
         timer = null;
-        isActive.value = false;
       }
     };
 

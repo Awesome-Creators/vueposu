@@ -27,10 +27,10 @@ export default function useTimeout(
     const isActive = ref(immediate);
 
     const stop = () => {
+      isActive.value = false;
       if (timer) {
         clearTimeout(timer);
         timer = null;
-        isActive.value = false;
       }
     };
 
