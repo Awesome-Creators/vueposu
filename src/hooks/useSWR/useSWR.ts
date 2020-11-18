@@ -382,7 +382,10 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
 
     watchEffect(onInvalidate => {
       [key] = serialize();
-      if (!key) return;
+      if (!key) {
+        isValidating.value = false;
+        return;
+      }
 
       unmounted = false;
 

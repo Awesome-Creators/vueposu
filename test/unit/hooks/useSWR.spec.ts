@@ -1652,7 +1652,7 @@ describe('useSWR - local mutation', () => {
             resolve(value);
           }, 200),
         ),
-        false
+        false,
       ),
     ).resolves.toBe('on');
 
@@ -1670,7 +1670,7 @@ describe('useSWR - local mutation', () => {
             resolve(value);
           }, 400),
         ),
-        false
+        false,
       ),
     ).resolves.toBe('off');
 
@@ -2000,6 +2000,37 @@ describe('useSWR - key', () => {
     await component.vm.$nextTick();
     await component.vm.$nextTick();
     expect(component.text()).toMatchInlineSnapshot(`"data-second"`);
+  });
+
+  it('should cleanup state when key turns to empty', async () => {
+    const component = mount(
+      defineComponent({
+        template: `{{ isValidating }} <button @click="() => (count = count === 2 ? -1 : count + 1)"></button>`,
+        setup() {
+          const count = ref(1);
+          const key = computed(() =>
+            count.value === -1 ? '' : `key-empty-${count.value}`,
+          );
+          const { isValidating } = useSWR(
+            key,
+            () => new Promise(resolve => setTimeout(resolve, 1000)),
+          );
+
+          return { isValidating, count };
+        },
+      }),
+    );
+
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"true"`);
+
+    await component.find('button').trigger('click');
+    await wait(10);
+    expect(component.text()).toMatchInlineSnapshot(`"true"`);
+
+    await component.find('button').trigger('click');
+    await wait(10);
+    expect(component.text()).toMatchInlineSnapshot(`"false"`);
   });
 });
 
