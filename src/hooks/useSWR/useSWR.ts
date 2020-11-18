@@ -24,7 +24,7 @@ import {
   isDef,
   isUndef,
   isEqual,
-  isServer
+  isServer,
 } from '../../libs/helper';
 
 import type {
@@ -83,7 +83,6 @@ export const trigger = ($key, shouldRevalidate = true) => {
   if (!key) return Promise.resolve();
 
   const updaters = cacheRevalidators[key];
-
   if (key && updaters) {
     const currentState = [
       cache.get(key),
@@ -282,7 +281,7 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
         cache.set(keyValidating, true);
         if (!shouldDeduping) {
           // also update other hooks
-          broadcastState(key, undefined, undefined, true);
+          broadcastState(key, cache.get(key), cache.get(keyErr), true);
         }
 
         let newData;
@@ -331,17 +330,16 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
         cache.set(keyValidating, false);
 
         if (!isEqual($data, newData)) {
-          $data = newData;
+          data.value = $data = newData;
         }
         if (!isUndefined(error.value)) {
           error.value = undefined;
         }
-        data.value = $data;
         isValidating.value = false;
 
         if (!shouldDeduping) {
           // also update other hooks
-          broadcastState(key, newData, undefined, false);
+          broadcastState(key, data.value, error.value, false);
         }
       } catch (err) {
         delete concurrentPromises[key];
@@ -427,7 +425,6 @@ function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
         if (!isUndefined(updatedData) && !isEqual($data, updatedData)) {
           data.value = $data = updatedData;
         }
-
         if (error.value !== updatedError) {
           error.value = updatedError;
         }

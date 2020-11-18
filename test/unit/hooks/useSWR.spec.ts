@@ -1,10 +1,12 @@
 import { mount } from '@vue/test-utils';
 import {
   ref,
+  unref,
   computed,
   toRefs,
   defineComponent,
   // defineAsyncComponent,
+  watchEffect,
   onMounted,
   onUpdated,
   onUnmounted,
@@ -227,7 +229,7 @@ describe('hooks/useSWR', () => {
     let count = 0;
 
     const Block = defineComponent({
-      template: `{{ error ? error.message : data }}`,
+      template: `{{ error?.message || data }}`,
       setup() {
         const { data, error } = useSWR(
           'broadcast-2',
@@ -832,7 +834,7 @@ describe('useSWR - error', () => {
   it('should handle erros', async () => {
     const component = mount(
       defineComponent({
-        template: `hello, {{ error ? error.message : data }}`,
+        template: `hello, {{ error?.message || data }}`,
         setup() {
           const { data, error } = useSWR(
             'error-1',
@@ -859,7 +861,7 @@ describe('useSWR - error', () => {
 
     const component = mount(
       defineComponent({
-        template: `hello, {{ error ? error.message : data }}`,
+        template: `hello, {{ error?.message || data }}`,
         setup() {
           const { data, error } = useSWR(
             'error-2',
@@ -888,7 +890,7 @@ describe('useSWR - error', () => {
 
     const component = mount(
       defineComponent({
-        template: `hello, {{ error ? error.message : data }}`,
+        template: `hello, {{ error?.message || data }}`,
         setup() {
           const { data, error } = useSWR(
             'error-3',
@@ -897,6 +899,7 @@ describe('useSWR - error', () => {
                 setTimeout(() => reject(new Error('error: ' + count++)), 100),
               ),
             {
+              errorRetryCount: 3,
               onErrorRetry: (_, __, ___, revalidate, revalidateOpts) => {
                 setTimeout(() => revalidate(revalidateOpts), 100);
               },
@@ -965,15 +968,14 @@ describe('useSWR - error', () => {
 
     const component = mount(
       defineComponent({
-        template: `hello, {{ error ? error.message : data }}`,
+        template: `hello, {{ error?.message || data }}`,
         setup() {
           const { data, error } = useSWR(
             'error-5',
-            () => {
-              return new Promise((_, reject) =>
+            () =>
+              new Promise((_, reject) =>
                 setTimeout(() => reject(new Error('error: ' + count++)), 100),
-              );
-            },
+              ),
             {
               errorRetryCount: 1,
               errorRetryInterval: 50,
@@ -1103,7 +1105,7 @@ describe('useSWR - error', () => {
 
     const component = mount(
       defineComponent({
-        template: `hello, {{ error ? error.message : data }}`,
+        template: `hello, {{ error?.message || data }}`,
         setup() {
           const { data, error } = useSWR(
             'error-8',
@@ -1132,6 +1134,40 @@ describe('useSWR - error', () => {
     await wait(210);
     await component.vm.$nextTick(); // retry
     expect(component.text()).toMatchInlineSnapshot(`"hello, error: 0"`);
+  });
+
+  it('should not clear error during revalidating until fetcher is finished successfully', async () => {
+    const errors = [];
+
+    const component = mount(
+      defineComponent({
+        template: `hello, {{ error?.message || null }}`,
+        setup() {
+          const { error, mutate: boundMutate } = useSWR(
+            'error-9',
+            () => new Promise((_, reject) => reject(new Error('error'))),
+            {
+              errorRetryCount: 0,
+              errorRetryInterval: 0,
+              dedupingInterval: 0,
+            },
+          );
+
+          watchEffect(() => {
+            errors.push(unref(error)?.message || null);
+          });
+
+          return { error, boundMutate };
+        },
+      }),
+    );
+
+    await component.vm.$nextTick();
+
+    component.vm.boundMutate(undefined, true);
+    await wait();
+    await component.vm.$nextTick();
+    expect(errors).toEqual([null, 'error', 'error']);
   });
 });
 
@@ -1751,7 +1787,7 @@ describe('useSWR - local mutation', () => {
 
     const component = mount(
       defineComponent({
-        template: `{{ error ? error.message : data }}`,
+        template: `{{ error?.message || data }}`,
         setup() {
           const { data, error } = useSWR(key, () => value, {
             dedupingInterval: 0,
@@ -1837,7 +1873,7 @@ describe('useSWR - local mutation', () => {
 
 //     const component = mount(
 //       defineComponent({
-//         template: `{{ error ? error.message : data }}`,
+//         template: `{{ error?.message || data }}`,
 //         setup() {
 //           const { data, error } = useSWR('cache-1', () => value, {
 //             dedupingInterval: 0,
@@ -2096,7 +2132,7 @@ describe('useSWR - config callbacks', () => {
 
     const Block = defineComponent({
       template: `<template>
-        hello, {{ error ? error.message : data }}, {{ text }} <button @click="revalidate"></button>
+        hello, {{ error?.message || data }}, {{ text }} <button @click="revalidate"></button>
       </template>`,
       props: {
         text: String,
@@ -2154,7 +2190,7 @@ describe('useSWR - config callbacks', () => {
 
     const Block = defineComponent({
       template: `<template>
-        hello, {{ error ? error.message : data }}, {{ text }}
+        hello, {{ error?.message || data }}, {{ text }}
       </template>`,
       props: {
         text: String,
@@ -2216,7 +2252,7 @@ describe('useSWR - config callbacks', () => {
 
     const Block = defineComponent({
       template: `<template>
-        hello, {{ error ? error.message : data }}, {{ text }}
+        hello, {{ error?.message || data }}, {{ text }}
       </template>`,
       props: {
         text: String,

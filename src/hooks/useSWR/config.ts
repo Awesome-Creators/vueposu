@@ -27,7 +27,7 @@ const config = shallowRef<SWRConfig>({
     ) {
       return;
     }
-
+    
     const count = Math.min(retryCount || 0, 8);
     const timeout =
       ~~((Math.random() + 0.5) * (1 << count)) *
