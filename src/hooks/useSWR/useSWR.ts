@@ -109,13 +109,14 @@ const broadcastState: BroadcastState = (key, data, error, isValidating) => {
 
 export const mutate: Mutate = async ($key, $data, shouldRevalidate = true) => {
   const [key, , keyErr] = cache.serializeKey($key);
+  if(!key) return;
 
   if (isUndefined($data)) return trigger($key, shouldRevalidate);
 
   mutationTS[key] = Date.now() - 1;
   mutationEndTS[key] = 0;
 
-  const beforeMutaionTs = mutationTS[key];
+  const beforeMutationTs = mutationTS[key];
   const beforeConcurrentPromisesTs = concurrentPromisesTS[key];
 
   let data, error;
@@ -137,7 +138,7 @@ export const mutate: Mutate = async ($key, $data, shouldRevalidate = true) => {
   }
 
   if (
-    beforeMutaionTs !== mutationTS[key] ||
+    beforeMutationTs !== mutationTS[key] ||
     beforeConcurrentPromisesTs !== concurrentPromisesTS[key]
   ) {
     if (error) throw error;
