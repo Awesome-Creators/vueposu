@@ -425,6 +425,12 @@ describe('hooks/useSWR', () => {
     await component.vm.$nextTick();
     expect(component.text()).toMatchInlineSnapshot(`"hello, SWR"`);
   });
+
+  it('should throw error when `useSWR` not be called inside of `setup()`', () => {
+    expect(() => useSWR('')).toThrowError(
+      'Invalid hook call: `useSWR` can only be called inside of `setup()`.',
+    );
+  });
 });
 
 describe('useSWR - loading', () => {
