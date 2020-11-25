@@ -1,4 +1,4 @@
-import { ref, computed, watch } from 'vue-demi';
+import { ref, computed, watch, getCurrentInstance } from 'vue-demi';
 import { read, write } from './serializer';
 import { localStorageMap, sessionStorageMap } from './map';
 import { noop } from 'lodash-es';
@@ -131,6 +131,12 @@ export default function useStorage<T>(
   defaultValue?: T,
   storage?: Storage,
 ) {
+  if (!getCurrentInstance()) {
+    throw new Error(
+      'Invalid hook call: `useStorage` can only be called inside of `setup()`.',
+    );
+  }
+
   // TODO: ENHANCE SSR
   if (isServer) return { value: null };
 

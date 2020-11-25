@@ -105,5 +105,11 @@ describe('hooks/useLocalStorage', () => {
     expect(compB.val).toBe('1');
     expect(localStorage.getItem('b')).toBe('1');
   });
+
+  it('should throw error when `useLocalStorage` not be called inside of `setup()`', () => {
+    expect(() => useLocalStorage('key')).toThrowError(
+      'Invalid hook call: `useLocalStorage` can only be called inside of `setup()`.',
+    );
+  });
 });
 
