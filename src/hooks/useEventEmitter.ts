@@ -5,39 +5,43 @@ type Listener = (...stream) => void;
 
 // TODO: COMMENT NEED
 export default function useEventEmitter() {
-  if (getCurrentInstance()) {
-    const emitID = ref(0);
-    const stream = ref([]);
-
-    const subscriptions = new Set<Listener>();
-
-    const emit = (...args) => {
-      emitID.value++;
-      stream.value = args;
-    };
-
-    const on = (listener: Listener) => {
-      if (isFunction(listener)) {
-        subscriptions.add(listener);
-      }
-    };
-
-    watch(emitID, () => {
-      for (let listener of subscriptions) {
-        listener(...stream.value);
-      }
-    }, {
-      flush: 'post'
-    });
-
-    onUnmounted(() => {
-      subscriptions.clear();
-    });
-
-    return { emit, on };
-  } else {
+  if (!getCurrentInstance()) {
     throw new Error(
       'Invalid hook call: `useEventEmitter` can only be called inside of `setup()`.',
     );
   }
+
+  const emitID = ref(0);
+  const stream = ref([]);
+
+  const subscriptions = new Set<Listener>();
+
+  const emit = (...args) => {
+    emitID.value++;
+    stream.value = args;
+  };
+
+  const on = (listener: Listener) => {
+    if (isFunction(listener)) {
+      subscriptions.add(listener);
+    }
+  };
+
+  watch(
+    emitID,
+    () => {
+      for (let listener of subscriptions) {
+        listener(...stream.value);
+      }
+    },
+    {
+      flush: 'post',
+    },
+  );
+
+  onUnmounted(() => {
+    subscriptions.clear();
+  });
+
+  return { emit, on };
 }

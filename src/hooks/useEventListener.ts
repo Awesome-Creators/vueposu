@@ -42,48 +42,48 @@ function useEventListener(
 
 // TODO: COMMENT NEED
 function useEventListener(...args) {
-  if (getCurrentInstance()) {
-    let target, type, listener, options;
-
-    const serialize = () => {
-      if (typeof unref(args[0]) === 'string') {
-        target = window;
-        type = unref(args[0]);
-        listener = args[1];
-        options = args[2] || false;
-      } else {
-        target = getTargetElement(args[0]);
-        type = unref(args[1]);
-        listener = args[2];
-        options = args[3] || false;
-      }
-    };
-
-    const register = () => {
-      if (!isServer && target) {
-        target.addEventListener(type, listener, options);
-      }
-    };
-
-    const unregister = () => {
-      if (!isServer && target) {
-        target.removeEventListener(type, listener, options);
-      }
-    };
-
-    onMounted(() => {
-      watchEffect(onInvalidate => {
-        serialize();
-        register();
-
-        onInvalidate(unregister);
-      });
-    });
-  } else {
+  if (!getCurrentInstance()) {
     throw new Error(
       'Invalid hook call: `useEventListener` can only be called inside of `setup()`.',
     );
   }
+
+  let target, type, listener, options;
+
+  const serialize = () => {
+    if (typeof unref(args[0]) === 'string') {
+      target = window;
+      type = unref(args[0]);
+      listener = args[1];
+      options = args[2] || false;
+    } else {
+      target = getTargetElement(args[0]);
+      type = unref(args[1]);
+      listener = args[2];
+      options = args[3] || false;
+    }
+  };
+
+  const register = () => {
+    if (!isServer && target) {
+      target.addEventListener(type, listener, options);
+    }
+  };
+
+  const unregister = () => {
+    if (!isServer && target) {
+      target.removeEventListener(type, listener, options);
+    }
+  };
+
+  onMounted(() => {
+    watchEffect(onInvalidate => {
+      serialize();
+      register();
+
+      onInvalidate(unregister);
+    });
+  });
 }
 
 export default useEventListener;

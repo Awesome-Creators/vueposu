@@ -19,26 +19,26 @@ const differencePlatformEvents = [
 export default function usePageHidden(
   onHiddenStatusChange: (isHidden?: boolean) => void,
 ) {
-  if (getCurrentInstance()) {
-    const listener = () =>
-      setTimeout(() => onHiddenStatusChange(isServer ? false : document.hidden));
-
-    if (!isServer) {
-      onMounted(() => {
-        differencePlatformEvents.forEach(event => {
-          document.addEventListener(event, listener);
-        });
-      });
-
-      onUnmounted(() => {
-        differencePlatformEvents.forEach(event => {
-          document.removeEventListener(event, listener);
-        });
-      });
-    }
-  } else {
+  if (!getCurrentInstance()) {
     throw new Error(
       'Invalid hook call: `usePageHidden` can only be called inside of `setup()`.',
     );
+  }
+  
+  const listener = () =>
+    setTimeout(() => onHiddenStatusChange(isServer ? false : document.hidden));
+
+  if (!isServer) {
+    onMounted(() => {
+      differencePlatformEvents.forEach(event => {
+        document.addEventListener(event, listener);
+      });
+    });
+
+    onUnmounted(() => {
+      differencePlatformEvents.forEach(event => {
+        document.removeEventListener(event, listener);
+      });
+    });
   }
 }

@@ -147,7 +147,7 @@ describe('hooks/useEventListener', () => {
   });
 
   it('should throw error when `useEventListener` not be called inside of `setup()`', () => {
-    expect(() => useEventListener('error', () => {})).toThrowError(
+    expect(() => useEventListener('error', () => null)).toThrowError(
       'Invalid hook call: `useEventListener` can only be called inside of `setup()`.',
     );
   });

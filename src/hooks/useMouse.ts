@@ -22,27 +22,27 @@ const initialState: MouseCursorState = {
 
 // TODO: COMMENT NEED
 export default function useMouse() {
-  if (getCurrentInstance()) {
-    const state = reactive(initialState);
-
-    const moveHandler = (event: MouseEvent) => {
-      const { pageX, pageY, screenX, screenY, clientX, clientY } = event;
-      state.pageX = pageX;
-      state.pageY = pageY;
-      state.screenX = screenX;
-      state.screenY = screenY;
-      state.clientX = clientX;
-      state.clientY = clientY;
-    };
-
-    if (!isServer) {
-      useEventListener(document, 'mousemove', moveHandler);
-    }
-
-    return toRefs(readonly(state));
-  } else {
+  if (!getCurrentInstance()) {
     throw new Error(
       'Invalid hook call: `useMouse` can only be called inside of `setup()`.',
     );
   }
+  
+  const state = reactive(initialState);
+
+  const moveHandler = (event: MouseEvent) => {
+    const { pageX, pageY, screenX, screenY, clientX, clientY } = event;
+    state.pageX = pageX;
+    state.pageY = pageY;
+    state.screenX = screenX;
+    state.screenY = screenY;
+    state.clientX = clientX;
+    state.clientY = clientY;
+  };
+
+  if (!isServer) {
+    useEventListener(document, 'mousemove', moveHandler);
+  }
+
+  return toRefs(readonly(state));
 }

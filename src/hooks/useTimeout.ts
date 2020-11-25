@@ -22,40 +22,40 @@ export default function useTimeout(
   timeout: RefTyped<number> = 1000,
   immediate: RefTyped<boolean> = true,
 ): UseTimeoutReturnType {
-  if (getCurrentInstance()) {
-    let timer = null;
-    const isActive = ref(immediate);
-
-    const stop = () => {
-      isActive.value = false;
-      if (timer) {
-        clearTimeout(timer);
-        timer = null;
-      }
-    };
-
-    const start = () => {
-      stop();
-      isActive.value = true;
-      timer = setTimeout(() => {
-        isFunction(callback) && callback();
-        isActive.value = false;
-      }, unref(timeout));
-    };
-
-    watchEffect(onInvalidate => {
-      unref(immediate) && start();
-      onInvalidate(stop);
-    });
-
-    return {
-      isActive: readonly(isActive),
-      start,
-      stop,
-    };
-  } else {
+  if (!getCurrentInstance()) {
     throw new Error(
       'Invalid hook call: `useTimeout` can only be called inside of `setup()`.',
     );
   }
+
+  let timer = null;
+  const isActive = ref(immediate);
+
+  const stop = () => {
+    isActive.value = false;
+    if (timer) {
+      clearTimeout(timer);
+      timer = null;
+    }
+  };
+
+  const start = () => {
+    stop();
+    isActive.value = true;
+    timer = setTimeout(() => {
+      isFunction(callback) && callback();
+      isActive.value = false;
+    }, unref(timeout));
+  };
+
+  watchEffect(onInvalidate => {
+    unref(immediate) && start();
+    onInvalidate(stop);
+  });
+
+  return {
+    isActive: readonly(isActive),
+    start,
+    stop,
+  };
 }

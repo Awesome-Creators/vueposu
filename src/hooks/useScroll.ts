@@ -23,28 +23,28 @@ const initialState: ScrollState = {
 
 // TODO: COMMENT NEED
 export default function useScroll(target?: Target<ScrollTarget>) {
-  if (getCurrentInstance()) {
-    const state = reactive(initialState);
-
-    const scrollHandler = (event: Event) => {
-      const currentTarget = event.target;
-      if (currentTarget === document) {
-        state.x = document?.scrollingElement.scrollLeft;
-        state.y = document?.scrollingElement.scrollTop;
-      } else {
-        state.x = (currentTarget as HTMLElement).scrollLeft;
-        state.y = (currentTarget as HTMLElement).scrollTop;
-      }
-    };
-    
-    useEventListener((() => getTargetElement(target, document)) as Target, 'scroll', scrollHandler, {
-      passive: true,
-    })
-
-    return toRefs(readonly(state));
-  } else {
+  if (!getCurrentInstance()) {
     throw new Error(
       'Invalid hook call: `useScroll` can only be called inside of `setup()`.',
     );
   }
+
+  const state = reactive(initialState);
+
+  const scrollHandler = (event: Event) => {
+    const currentTarget = event.target;
+    if (currentTarget === document) {
+      state.x = document?.scrollingElement.scrollLeft;
+      state.y = document?.scrollingElement.scrollTop;
+    } else {
+      state.x = (currentTarget as HTMLElement).scrollLeft;
+      state.y = (currentTarget as HTMLElement).scrollTop;
+    }
+  };
+  
+  useEventListener((() => getTargetElement(target, document)) as Target, 'scroll', scrollHandler, {
+    passive: true,
+  })
+
+  return toRefs(readonly(state));
 }
