@@ -49,7 +49,7 @@ describe('hooks/useThrottle', () => {
           return {
             value,
             throttled,
-            wait
+            wait,
           };
         },
       }),
@@ -92,5 +92,11 @@ describe('hooks/useThrottle', () => {
 
     await wait(200);
     expect(component.find('#throttled').text()).toBe('7');
+  });
+
+  it('should throw error when `useThrottle` not be called inside of `setup()`', () => {
+    expect(() => useThrottle(ref(0))).toThrowError(
+      'Invalid hook call: `useThrottle` can only be called inside of `setup()`.',
+    );
   });
 });

@@ -91,4 +91,10 @@ describe('hooks/useDebounce', () => {
     expect(component.find('#value').text()).toBe('6');
     expect(component.find('#debounced').text()).toBe('6');
   });
+
+  it('should throw error when `useDebounce` not be called inside of `setup()`', () => {
+    expect(() => useDebounce(ref(0))).toThrowError(
+      'Invalid hook call: `useDebounce` can only be called inside of `setup()`.',
+    );
+  });
 });

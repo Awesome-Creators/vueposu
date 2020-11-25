@@ -1,4 +1,4 @@
-import { ref, unref, readonly, watch } from 'vue-demi';
+import { ref, unref, readonly, watch, getCurrentInstance } from 'vue-demi';
 import debounce from '../libs/debounce';
 import { isFunction } from '../libs/helper';
 
@@ -15,6 +15,12 @@ import type { RefTyped } from '../types/global';
  * @returns debounced.value.flush function
  */
 function useDebounceFn<T extends Fn>(callback: T, wait: RefTyped<number> = 0) {
+  if (!getCurrentInstance()) {
+    throw new Error(
+      'Invalid hook call: `useDebounceFn` can only be called inside of `setup()`.',
+    );
+  }
+
   const debounced = ref((() => {}) as any);
   const $wait = ref(wait);
 

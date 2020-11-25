@@ -39,17 +39,19 @@ function useThrottleEffect<T = any>(
   deps: T | WatchSource<T>,
   wait: RefTyped<number> = 0,
 ) {
-  if (getCurrentInstance()) {
-    const throttled = useThrottleFn(listener, wait);
-
-    watch(deps as any, (value, oldValue) =>
-      unref(wait) > 0 ? throttled.value(value, oldValue) : listener(value, oldValue),
-    );
-  } else {
+  if (!getCurrentInstance()) {
     throw new Error(
       'Invalid hook call: `useThrottleEffect` can only be called inside of `setup()`.',
     );
   }
+
+  const throttled = useThrottleFn(listener, wait);
+
+  watch(deps as any, (value, oldValue) =>
+    unref(wait) > 0
+      ? throttled.value(value, oldValue)
+      : listener(value, oldValue),
+  );
 }
 
 export default useThrottleEffect;

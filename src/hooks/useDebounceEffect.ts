@@ -39,17 +39,17 @@ function useDebounceEffect<T = any>(
   deps: T | WatchSource<T>,
   wait: RefTyped<number> = 0,
 ) {
-  if (getCurrentInstance()) {
-    const debounced = useDebounceFn(listener, wait);
-
-    watch(deps as any, (value, oldValue) =>
-      unref(wait) > 0 ? debounced.value(value, oldValue) : listener(value, oldValue),
-    );
-  } else {
+  if (!getCurrentInstance()) {
     throw new Error(
       'Invalid hook call: `useDebounceEffect` can only be called inside of `setup()`.',
     );
   }
+  
+  const debounced = useDebounceFn(listener, wait);
+
+  watch(deps as any, (value, oldValue) =>
+    unref(wait) > 0 ? debounced.value(value, oldValue) : listener(value, oldValue),
+  );
 }
 
 export default useDebounceEffect;

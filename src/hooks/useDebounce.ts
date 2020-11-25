@@ -1,4 +1,4 @@
-import { ref, unref, readonly, watch } from 'vue-demi';
+import { ref, unref, readonly, watch, getCurrentInstance } from 'vue-demi';
 import useDebounceFn from '../hooks/useDebounceFn';
 
 import type { Ref } from 'vue-demi';
@@ -9,6 +9,12 @@ export default function useDebounce<T>(
   value: Ref<T>,
   wait: RefTyped<number> = 0,
 ) {
+  if (!getCurrentInstance()) {
+    throw new Error(
+      'Invalid hook call: `useDebounce` can only be called inside of `setup()`.',
+    );
+  }
+
   const debouncedValue = ref(unref(value)) as any;
   const debounced = useDebounceFn(
     () => (debouncedValue.value = unref(value)),

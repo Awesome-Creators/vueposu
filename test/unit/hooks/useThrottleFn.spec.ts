@@ -97,4 +97,10 @@ describe('hooks/useThrottleFn', () => {
 
     expect(spy).toBeCalledTimes(4);
   });
+
+  it('should throw error when `useThrottleFn` not be called inside of `setup()`', () => {
+    expect(() => useThrottleFn(() => null)).toThrowError(
+      'Invalid hook call: `useThrottleFn` can only be called inside of `setup()`.',
+    );
+  });
 });

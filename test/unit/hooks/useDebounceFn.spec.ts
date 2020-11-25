@@ -66,4 +66,10 @@ describe('hooks/useDebounceFn', () => {
     await wait(2);
     expect(spy).toBeCalledTimes(2);
   });
+
+  it('should throw error when `useDebounceFn` not be called inside of `setup()`', () => {
+    expect(() => useDebounceFn(() => null)).toThrowError(
+      'Invalid hook call: `useDebounceFn` can only be called inside of `setup()`.',
+    );
+  });
 });
