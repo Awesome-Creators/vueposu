@@ -163,4 +163,4 @@ In no particular order, vueposu is inspired by these great awesome works:
 
 ## License
 
-The MIT License.
+[The MIT License](https://github.com/Awesome-Creators/vueposu/blob/develop/LICENSE).
