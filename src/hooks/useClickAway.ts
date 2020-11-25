@@ -1,4 +1,4 @@
-import { watchEffect, unref } from 'vue-demi';
+import { watchEffect, unref, getCurrentInstance } from 'vue-demi';
 import { getTargetElement } from '../libs/dom';
 import { isServer } from '../libs/helper';
 
@@ -21,6 +21,12 @@ function useClickAway(
   eventHandler: RefTyped<(event: EventType) => void>,
   eventName: RefTyped<string | string[]> = defaultEvent,
 ): void {
+  if (!getCurrentInstance()) {
+    throw new Error(
+      'Invalid hook call: `useClickAway` can only be called inside of `setup()`.',
+    );
+  }
+
   const handler = event => {
     const targets = Array.isArray(target) ? target : [target];
 

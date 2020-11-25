@@ -188,4 +188,12 @@ describe('hooks/useClickAway', () => {
 
     component.unmount();
   });
+
+  it('should throw error when `useClickAway` not be called inside of `setup()`', () => {
+    expect(() =>
+      useClickAway(document.createElement('div'), () => null),
+    ).toThrowError(
+      'Invalid hook call: `useClickAway` can only be called inside of `setup()`.',
+    );
+  });
 });
