@@ -17,7 +17,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 
   git add -A
 
-  yarn version "$VERSION" -m "chore: release $VERSION"
+  npm version "$VERSION" -m "chore: release $VERSION"
 
   # git tag $VERSION
 
