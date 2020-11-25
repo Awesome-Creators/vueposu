@@ -60,4 +60,10 @@ describe('hooks/usePageHidden', () => {
     component.unmount();
     expect(fn).toBeCalledTimes(4);
   });
+
+  it('should throw error when `usePageHidden` not be called inside of `setup()`', () => {
+    expect(() => usePageHidden(() => null)).toThrowError(
+      'Invalid hook call: `usePageHidden` can only be called inside of `setup()`.',
+    );
+  });
 });
