@@ -214,4 +214,10 @@ describe('hooks/useCounter', () => {
 
     component.unmount();
   });
+
+  it('should throw error when `useCounter` not be called inside of `setup()`', () => {
+    expect(() => useCounter()).toThrowError(
+      'Invalid hook call: `useCounter` can only be called inside of `setup()`.',
+    );
+  });
 });

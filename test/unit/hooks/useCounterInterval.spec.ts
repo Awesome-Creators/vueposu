@@ -202,4 +202,10 @@ describe('hooks/useCounterInterval', () => {
     await wait();
     expect(component.vm.isActive).toBe(false);
   });
+
+  it('should throw error when `useCounterInterval` not be called inside of `setup()`', () => {
+    expect(() => useCounterInterval()).toThrowError(
+      'Invalid hook call: `useCounterInterval` can only be called inside of `setup()`.',
+    );
+  });
 });

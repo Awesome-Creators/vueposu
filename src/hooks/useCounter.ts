@@ -1,4 +1,10 @@
-import { ref, unref, computed, watchEffect } from 'vue-demi';
+import {
+  ref,
+  unref,
+  computed,
+  watchEffect,
+  getCurrentInstance,
+} from 'vue-demi';
 import { add, subtract, bignumber, format } from 'mathjs';
 import { isDef, isFunction } from '../libs/helper';
 
@@ -28,9 +34,15 @@ interface CounterOptions {
 const isNumber = (n: any) => isDef(n) && !isNaN(unref(n));
 
 function useCounter(
-  initialValue: RefTyped<NumberType>,
+  initialValue?: RefTyped<NumberType>,
   options: CounterOptions = {},
 ): UseCounterReturnType {
+  if (!getCurrentInstance()) {
+    throw new Error(
+      'Invalid hook call: `useCounter` can only be called inside of `setup()`.',
+    );
+  }
+
   const { min, max, step } = options;
   const initial = () =>
     isNumber(initialValue) ? Number(unref(initialValue)) : 0;
@@ -94,15 +106,18 @@ function useCounter(
     },
   });
 
-  watchEffect(() => {
-    // if `min`/`max` is RefTyped, collect dependencies:
-    unref(min);
-    unref(max);
+  watchEffect(
+    () => {
+      // if `min`/`max` is RefTyped, collect dependencies:
+      unref(min);
+      unref(max);
 
-    set(current.value);
-  }, {
-    flush: 'sync'
-  });
+      set(current.value);
+    },
+    {
+      flush: 'sync',
+    },
+  );
 
   return {
     count,

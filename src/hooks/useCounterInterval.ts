@@ -1,4 +1,4 @@
-import { ref, unref, readonly, watch } from 'vue-demi';
+import { ref, unref, readonly, watch, getCurrentInstance } from 'vue-demi';
 import useCounter from '../hooks/useCounter';
 import useInterval from '../hooks/useInterval';
 
@@ -28,6 +28,12 @@ type UseCounterIntervalReturnType = {
 export default function useCounterInterval(
   options: UseCounterIntervalOptions = {},
 ): UseCounterIntervalReturnType {
+  if (!getCurrentInstance()) {
+    throw new Error(
+      'Invalid hook call: `useCounterInterval` can only be called inside of `setup()`.',
+    );
+  }
+
   const {
     initialValue = 60,
     type = 'dec',
