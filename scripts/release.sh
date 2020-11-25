@@ -1,7 +1,10 @@
 #!/bin/bash
 set -e
 
-echo "Enter new version: "
+CURRENT="$(node -pe "require('./package.json')['version']")"
+
+echo "📌 Current version is: v${CURRENT/v/}"
+echo "🔫 Enter new version: "
 read -r VERSION
 VERSION="v${VERSION/v/}"
 
@@ -14,7 +17,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 
   git add -A
 
-  npm version "$VERSION" -m "chore: release $VERSION"
+  yarn version "$VERSION" -m "chore: release $VERSION"
 
   # git tag $VERSION
 
