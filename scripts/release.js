@@ -62,5 +62,9 @@
     await run('git', ['tag', `v${RELEASE}`]);
     await run('git', ['push']);
     await run('git', ['push', '--tags']);
+
+    console.log(
+      chalk.hex('#3eaf7c')(`🌈 Successfully published ${pkg.name}@${RELEASE}`),
+    );
   }
 })();
