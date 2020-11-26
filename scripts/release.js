@@ -12,6 +12,11 @@
   const log = content => console.log(chalk.bold(content));
 
   const CURRENT = process.env.npm_package_version || '0.0.0';
+
+  clear();
+
+  log(`📌 Current version is: v${CURRENT}\n`);
+
   let option = process.argv[2];
   if (!option) {
     ({ option } = await prompts({
@@ -29,18 +34,14 @@
 
   const spawn = async (...args) =>
     new Promise(resolve => {
-      const process = _spawn(...args, {
+      const child_process = _spawn(...args, {
         cwd: path.resolve(__dirname, '..'),
       });
 
-      process.on('close', () => {
+      child_process.on('close', () => {
         resolve();
       });
     });
-
-  clear();
-
-  log(`📌 Current version is: v${CURRENT}\n`);
 
   const { reply } = await prompts({
     type: 'text',
@@ -50,14 +51,15 @@
     ),
   });
   if (reply === 'y' || reply === 'Y') {
-    const process = ora(`release v${RELEASE} and publishing......`);
-    process.start();
+    const spinner = ora(`release v${RELEASE} and publishing......`);
+    spinner.start();
 
     await spawn('git', ['add', '-A']);
-    await spawn('npm', ['version', `"${RELEASE}"`, '-m', `"chore: release v${RELEASE}"`]);
+    await spawn('npm', ['version', `"v${RELEASE}"`, '-m', `"chore: release v${RELEASE}"`]);
     // git tag $VERSION
     await spawn('git', ['push']);
     await spawn('git', ['push', '--tags']);
-    process.succeed();
+    
+    spinner.succeed();
   }
 })();
