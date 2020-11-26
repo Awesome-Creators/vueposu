@@ -61,5 +61,6 @@
 
     await run('git', ['tag', `v${RELEASE}`]);
     await run('git', ['push']);
+    await run('git', ['push', '--tags']);
   }
 })();
