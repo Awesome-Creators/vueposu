@@ -8,7 +8,6 @@
   const chalk = require('chalk');
   const semver = require('semver');
   const prompts = require('prompts');
-  const ora = require('ora');
   const execa = require('execa');
   const pkg = require('../package.json');
 
@@ -48,11 +47,6 @@
     message: chalk.hex('#3eaf7c')(`🔫 Will release v${RELEASE}, are you sure?`),
   });
   if (yes) {
-    const process = ora(
-      chalk.bold(`releasing v${RELEASE} and publishing......`),
-    );
-    process.start();
-
     pkg.version = RELEASE;
     fs.writeFileSync(
       path.resolve(__dirname, '../package.json'),
@@ -67,7 +61,5 @@
 
     await run('git', ['tag', `v${RELEASE}`]);
     await run('git', ['push']);
-
-    process.succeed();
   }
 })();

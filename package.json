@@ -1,6 +1,6 @@
 {
   "name": "vueposu",
-  "version": "0.3.7-8",
+  "version": "0.3.7",
   "description": "A hooks library based on Vue Composition-API",
   "repository": "git@github.com:Awesome-Creators/vueposu.git",
   "homepage": "https://vueposu.netlify.app",
@@ -46,7 +46,6 @@
     "jest": "^26.4.2",
     "lint-staged": "^10.2.11",
     "open": "^7.2.1",
-    "ora": "^5.1.0",
     "prettier": "^2.0.5",
     "prompts": "^2.4.0",
     "rimraf": "^3.0.2",
