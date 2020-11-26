@@ -1,17 +1,32 @@
 #!/usr/bin/env node
 
 (async () => {
+  const args = require('minimist')(process.argv.slice(2));
+  const path = require('path');
   const clear = require('clear');
   const chalk = require('chalk');
+  const semver = require('semver');
   const prompts = require('prompts');
   const ora = require('ora');
-  const semver = require('semver');
-  const _spawn = require('child_process').spawn;
-  const path = require('path');
+  const execa = require('execa');
 
-  const log = content => console.log(chalk.bold(content));
+  const run = (bin, args, opts = {}) =>
+    execa(bin, args, { stdio: 'inherit', ...opts });
 
-  const CURRENT = process.env.npm_package_version || '0.0.0';
+  clear();
+
+  const CURRENT = require('../package.json').version || '0.0.0';
+  console.log(chalk.bold(`📌 Current version is: v${CURRENT}\n`));
+
+  const preId =
+    args.preid ||
+    (semver.prerelease(CURRENT) && semver.prerelease(CURRENT)[0]);
+  const versionIncrements = [
+    'patch',
+    'minor',
+    'major',
+    ...(preId ? ['prepatch', 'preminor', 'premajor', 'prerelease'] : []),
+  ];
   let option = process.argv[2];
   if (!option) {
     ({ option } = await prompts({
@@ -22,42 +37,32 @@
     }));
   }
 
-  const RELEASE =
-    option === 'major' || option === 'minor' || option === 'patch'
-      ? semver.inc(CURRENT, option)
-      : option;
+  const RELEASE = versionIncrements.includes(option)
+    ? semver.inc(CURRENT, option, preId)
+    : option;
 
-  const spawn = async (...args) =>
-    new Promise(resolve => {
-      const process = _spawn(...args, {
-        cwd: path.resolve(__dirname, '..'),
-      });
-
-      process.on('close', () => {
-        resolve();
-      });
-    });
-
-  clear();
-
-  log(`📌 Current version is: v${CURRENT}\n`);
-
-  const { reply } = await prompts({
-    type: 'text',
-    name: 'reply',
-    message: chalk.hex('#3eaf7c')(
-      `🔫 Will release v${RELEASE}, are you sure? (y/n)`,
-    ),
+  const { yes } = await prompts({
+    type: 'confirm',
+    name: 'yes',
+    message: chalk.hex('#3eaf7c')(`🔫 Will release v${RELEASE}, are you sure?`),
   });
-  if (reply === 'y' || reply === 'Y') {
-    const process = ora(`release v${RELEASE} and publishing......`);
+  if (yes) {
+    const process = ora(
+      chalk.bold(`releasing v${RELEASE} and publishing......`),
+    );
     process.start();
 
-    await spawn('git', ['add', '-A']);
-    await spawn('npm', ['version', `"${RELEASE}"`, '-m', `"chore: release v${RELEASE}"`]);
+    await run('git', ['add', '-A']);
+    await run('npm', [
+      'version',
+      `"${RELEASE}"`,
+      '-m',
+      `"chore: release v${RELEASE}"`,
+    ]);
     // git tag $VERSION
-    await spawn('git', ['push']);
-    await spawn('git', ['push', '--tags']);
+    await run('git', ['push']);
+    await run('git', ['push', '--tags']);
+
     process.succeed();
   }
 })();
