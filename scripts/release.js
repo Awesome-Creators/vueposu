@@ -2,6 +2,7 @@
 
 (async () => {
   const args = require('minimist')(process.argv.slice(2));
+  const fs = require('fs');
   const path = require('path');
   const clear = require('clear');
   const chalk = require('chalk');
@@ -9,18 +10,18 @@
   const prompts = require('prompts');
   const ora = require('ora');
   const execa = require('execa');
+  const pkg = require('../package.json');
 
   const run = (bin, args, opts = {}) =>
     execa(bin, args, { stdio: 'inherit', ...opts });
 
   clear();
 
-  const CURRENT = require('../package.json').version || '0.0.0';
+  const CURRENT = pkg.version || '0.0.0';
   console.log(chalk.bold(`📌 Current version is: v${CURRENT}\n`));
 
   const preId =
-    args.preid ||
-    (semver.prerelease(CURRENT) && semver.prerelease(CURRENT)[0]);
+    args.preid || (semver.prerelease(CURRENT) && semver.prerelease(CURRENT)[0]);
   const versionIncrements = [
     'patch',
     'minor',
@@ -52,16 +53,20 @@
     );
     process.start();
 
+    pkg.version = RELEASE;
+    fs.writeFileSync(
+      path.resolve(__dirname, '../package.json'),
+      JSON.stringify(pkg, null, 2) + '\n',
+    );
+
+    // generate changelog
+    // await run(`yarn`, ['changelog']);
+
     await run('git', ['add', '-A']);
-    await run('npm', [
-      'version',
-      `"${RELEASE}"`,
-      '-m',
-      `"chore: release v${RELEASE}"`,
-    ]);
-    // git tag $VERSION
+    await run('git', ['commit', '-m', `chore: release v${RELEASE}`]);
+
+    await run('git', ['tag', `v${RELEASE}`]);
     await run('git', ['push']);
-    await run('git', ['push', '--tags']);
 
     process.succeed();
   }
