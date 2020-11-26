@@ -54,7 +54,7 @@
     process.start();
 
     await spawn('git', ['add', '-A']);
-    await spawn('npm', ['version', `"${RELEASE}"`, '-m', `chore: release ${RELEASE}`]);
+    await spawn('npm', ['version', `"${RELEASE}"`, '-m', `"chore: release v${RELEASE}"`]);
     // git tag $VERSION
     await spawn('git', ['push']);
     await spawn('git', ['push', '--tags']);
