@@ -15,8 +15,7 @@
     "format:dist": "prettier --write \"dist/**/*.{js,d.ts}\"",
     "test": "jest -w 1",
     "prerelease": "yarn test",
-    "release": "./scripts/release.sh",
-    "tr": "node ./scripts/release.js",
+    "release": "node ./scripts/release.js",
     "test:ci": "jest -w 1 --coverage --collectCoverage=true --verbose --collectCoverageFrom='<rootDir>/src/**/*.{js,ts}'",
     "test:ci-open": "yarn test:ci && open ./coverage/lcov-report/index.html"
   },
