@@ -11,6 +11,7 @@
   "scripts": {
     "gen:index": "node ./scripts/imports.js",
     "build": "rimraf dist && yarn gen:index && tsc --build tsconfig.build.json && yarn format:dist && cp -R src/types dist/types && cp package.json dist && cp README.md dist",
+    "tb": "rimraf dist && yarn gen:index && rollup -c",
     "format": "prettier --write \"src/**/*.{ts,vue,tsx}\" \"test/**/*.{ts,vue,tsx}\" --vue-indent-script-and-styl",
     "format:dist": "prettier --write \"dist/**/*.{js,d.ts}\"",
     "test": "jest -w 1",
@@ -48,6 +49,10 @@
     "prettier": "^2.0.5",
     "prompts": "^2.4.0",
     "rimraf": "^3.0.2",
+    "rollup": "^2.34.1",
+    "rollup-plugin-dts": "^2.0.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript": "^1.0.1",
     "typescript": "^4.0.2",
     "vue": "^3",
     "whatwg-fetch": "^3.4.0"
