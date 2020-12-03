@@ -5,22 +5,22 @@ import type { WatchSource, WatchCallback } from 'vue-demi';
 import type { RefTyped } from '../types/global';
 
 // TODO: COMMENT NEED
-type MapSources<T> = {
-  [K in keyof T]: T[K] extends WatchSource<infer V>
-    ? V
-    : T[K] extends object
-    ? T[K]
-    : never;
-};
+// type MapSources<T> = {
+//   [K in keyof T]: T[K] extends WatchSource<infer V>
+//     ? V
+//     : T[K] extends object
+//     ? T[K]
+//     : never;
+// };
 
 // TODO: COMMENT NEED
-function useDebounceEffect<
-  T extends Readonly<Array<WatchSource<unknown> | object>>
->(
-  listener: WatchCallback<MapSources<T>, MapSources<T>>,
-  deps: T,
-  wait?: RefTyped<number>,
-);
+// function useDebounceEffect<
+//   T extends Readonly<Array<WatchSource<unknown> | object>>
+// >(
+//   listener: WatchCallback<MapSources<T>, MapSources<T>>,
+//   deps: T,
+//   wait?: RefTyped<number>,
+// );
 
 function useDebounceEffect<T>(
   listener: WatchCallback<T, T>,
@@ -44,11 +44,13 @@ function useDebounceEffect<T = any>(
       'Invalid hook call: `useDebounceEffect` can only be called inside of `setup()`.',
     );
   }
-  
+
   const debounced = useDebounceFn(listener, wait);
 
   watch(deps as any, (value, oldValue) =>
-    unref(wait) > 0 ? debounced.value(value, oldValue) : listener(value, oldValue),
+    unref(wait) > 0
+      ? debounced.value(value, oldValue)
+      : listener(value, oldValue),
   );
 }
 
