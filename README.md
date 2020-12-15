@@ -115,6 +115,7 @@ Currently supported functions:
   - [`useQueue`](https://vueposu.netlify.app/state/useQueue.html)
   - [`useSet`](https://vueposu.netlify.app/state/useSet.html)
   - [`useToggle`](https://vueposu.netlify.app/state/useToggle.html)
+  - [`useVModel`](https://vueposu.netlify.app/state/useVModel.html)
 
 - SWR
 
@@ -145,7 +146,6 @@ Currently supported functions:
   - [`useInterval`](https://vueposu.netlify.app/animation/useInterval.html)
   <!-- - [`useRaf`](https://vueposu.netlify.app/animation/useRaf.html) -->
   - [`useTimeout`](https://vueposu.netlify.app/animation/useTimeout.html)
-
 
 <br />
 
