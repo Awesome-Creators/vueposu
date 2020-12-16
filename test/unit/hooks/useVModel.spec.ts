@@ -21,8 +21,8 @@ describe('hooks/useVModel', () => {
       props: {
         modelValue: Boolean,
       },
-      setup(props, { emit }) {
-        const checked = useVModel(props, 'modelValue', emit);
+      setup(props) {
+        const checked = useVModel(props, 'modelValue');
         const update = event => {
           const checkbox = event.target as HTMLInputElement;
           checked.value = checkbox.checked;

@@ -13,10 +13,11 @@ export function useVModel<P extends object>(
   emit?: (name: string, value: any) => void,
 ) {
   let _emit = emit;
+  const instance = getCurrentInstance();
   if (!emit && isVue3) {
-    _emit = getCurrentInstance()?.emit;
+    _emit = instance?.emit;
   } else {
-    emit = (getCurrentInstance() as any)?.$emit;
+    emit = (instance as any)?.$emit.bind(instance);
   }
   return computed({
     get() {
