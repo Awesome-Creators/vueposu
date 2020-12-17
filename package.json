@@ -5,20 +5,7 @@
     "packages/*"
   ],
   "version": "0.3.8-3",
-  "description": "A hooks library based on Vue Composition-API",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:Awesome-Creators/vueposu.git"
-  },
-  "author": {
-    "name": "Awesome Creators",
-    "email": "awesomeweb@hotmail.com",
-    "url": "https://github.com/Awesome-Creators"
-  },
-  "homepage": "https://vueposu.netlify.app",
-  "bugs": {
-    "url": "https://github.com/Awesome-Creators/vueposu/issues"
-  },
+  "description": "Monorepo by Vueposu",
   "license": "MIT",
   "scripts": {
     "gen:index": "node ./scripts/imports.js",

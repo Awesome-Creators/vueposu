@@ -15,8 +15,5 @@
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
     "allowJs": true,
-    "paths": {
-      "@/*": ["src/*"],
-    }
   }
 }
