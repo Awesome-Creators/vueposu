@@ -16,9 +16,7 @@
     "noUnusedLocals": true,
     "allowJs": true,
     "paths": {
-      "@hooks/*": ["src/hooks/*"],
-      "@libs/*": ["src/libs/*"],
-      "@test/*": ["test/*"]
+      "@/*": ["src/*"],
     }
   }
 }

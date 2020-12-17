@@ -1,19 +1,25 @@
 {
-  "name": "vueposu",
+  "name": "vueposu-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "version": "0.3.8-3",
   "description": "A hooks library based on Vue Composition-API",
-  "repository": "git@github.com:Awesome-Creators/vueposu.git",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Awesome-Creators/vueposu.git"
+  },
   "author": {
     "name": "Awesome Creators",
     "email": "awesomeweb@hotmail.com",
     "url": "https://github.com/Awesome-Creators"
   },
   "homepage": "https://vueposu.netlify.app",
+  "bugs": {
+    "url": "https://github.com/Awesome-Creators/vueposu/issues"
+  },
   "license": "MIT",
-  "main": "./index.js",
-  "modules": "./index.js",
-  "types": "./index.d.ts",
-  "sideEffects": false,
   "scripts": {
     "gen:index": "node ./scripts/imports.js",
     "build": "rimraf dist && yarn gen:index && tsc --build tsconfig.build.json && yarn format:dist && cp -R src/types dist/types && cp package.json dist && cp README.md dist",
@@ -59,8 +65,7 @@
     "typescript": "^4.0.2",
     "vue": "^3",
     "webpack": "^5.10.0",
-    "webpack-cli": "^4.2.0",
-    "whatwg-fetch": "^3.4.0"
+    "webpack-cli": "^4.2.0"
   },
   "husky": {
     "hooks": {
@@ -76,29 +81,5 @@
   "peerDependencies": {
     "@vue/composition-api": "^latest",
     "vue": "^2.0.0 || >=3.0.0"
-  },
-  "keywords": [
-    "vueposu",
-    "vue",
-    "hook",
-    "hooks",
-    "use",
-    "usehook",
-    "usehooks",
-    "use-hook",
-    "use-hooks",
-    "vue use",
-    "vue-use",
-    "vue hook",
-    "vue-hook",
-    "vue hooks",
-    "vue-hooks",
-    "composition api",
-    "composition-api",
-    "vue-composition-api",
-    "vue composition api",
-    "swr",
-    "vue swr",
-    "vue-swr"
-  ]
+  }
 }

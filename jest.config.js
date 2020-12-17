@@ -7,10 +7,8 @@ module.exports = {
     ],
   },
   moduleNameMapper: {
-    '@hooks/(.*)': '<rootDir>/src/hooks/$1',
-    '@libs/(.*)': '<rootDir>/src/libs/$1',
-    '@test/(.*)': '<rootDir>/test/$1',
+    '@/(.*)': '<rootDir>/src/$1',
   },
-  setupFilesAfterEnv: ['<rootDir>/test/unit/jest.setup.ts'],
+  // setupFilesAfterEnv: ['<rootDir>/test/unit/jest.setup.ts'],
   transformIgnorePatterns: ['<rootDir>/node_modules/(?!lodash-es/.*)'],
 };
