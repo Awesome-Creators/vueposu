@@ -5,13 +5,13 @@ import {
   watchEffect,
   getCurrentInstance,
 } from 'vue-demi';
-import { add, subtract, bignumber, format } from 'mathjs';
+import { add, subtract } from '@vueposu/shared/utils/math';
 import { isDef, isFunction } from '@vueposu/shared/utils/helper';
 
 import type { Ref } from 'vue-demi';
 import type { RefTyped } from '@vueposu/shared/types/global';
+import type { NumberType } from '@vueposu/shared/utils/math';
 
-type NumberType = number | string;
 export type CounterNumber = RefTyped<NumberType>;
 
 type UseCounterActions = {
@@ -67,27 +67,11 @@ function useCounter(
 
   const inc: UseCounterActions['inc'] = v =>
     set(
-      Number(
-        format(
-          add(
-            bignumber(current.value),
-            bignumber(isDef(v) && isNumber(v) ? unref(v) : $step()),
-          ),
-        ),
-      ),
+      Number(add(current.value, isDef(v) && isNumber(v) ? unref(v) : $step())),
     );
 
   const dec: UseCounterActions['dec'] = v =>
-    set(
-      Number(
-        format(
-          subtract(
-            bignumber(current.value),
-            bignumber(isDef(v) && isNumber(v) ? unref(v) : $step()),
-          ),
-        ),
-      ),
-    );
+    set(subtract(current.value, isDef(v) && isNumber(v) ? unref(v) : $step()));
 
   const reset: UseCounterActions['reset'] = () => set(fix(initial()));
 
