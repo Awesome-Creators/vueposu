@@ -1,7 +1,7 @@
 import debounce from '../debounce';
 import { times, wait } from '../helper';
 
-describe('libs/debounce', () => {
+describe('utils/debounce', () => {
   it('should be call once', async () => {
     const callback = jest.fn();
     const fn = debounce(callback, 300);

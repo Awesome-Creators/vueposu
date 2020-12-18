@@ -1,6 +1,6 @@
 import Emitter from '../emitter';
 
-describe('libs/emitter', () => {
+describe('utils/emitter', () => {
   it('on', () => {
     const emitter = new Emitter();
     emitter.on('hello', jest.fn());
