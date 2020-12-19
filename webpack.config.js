@@ -1,13 +1,11 @@
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 
-const masterVersion = require('./package.json').version;
 const packagesDir = path.resolve(__dirname, 'packages');
 const packageDir = path.resolve(packagesDir, 'vueposu');
 const name = path.basename(packageDir);
 const resolve = p => path.resolve(packageDir, p);
 const pkg = require(resolve(`package.json`));
-const packageOptions = pkg.buildOptions || {};
 
 module.exports = {
   entry: resolve('src/index.ts'),
@@ -22,7 +20,7 @@ module.exports = {
       {
         test: /\.ts$/,
         use: 'ts-loader',
-        exclude: /node_modules/,
+        exclude: [/node_modules/, /__test__/],
       },
     ],
   },

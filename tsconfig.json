@@ -1,10 +1,14 @@
 {
-  "include": ["packages/**/*.ts", "packages/**/*.js"],
+  "include": [
+    "packages/**/*.ts",
+    "packages/**/*.js",
+    "packages/vueposu/indextjs"
+  ],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "outDir": "dist",
     "allowSyntheticDefaultImports": true,
-    "declaration": true,
+    "declaration": false,
     "module": "esnext",
     "target": "es2017",
     "lib": ["esnext", "dom", "ES2019"],
@@ -19,6 +23,6 @@
     "rootDir": ".",
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "removeComments": false,
+    "removeComments": false
   }
 }
