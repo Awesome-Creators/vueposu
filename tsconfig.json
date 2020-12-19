@@ -1,13 +1,14 @@
 {
-  "include": ["**/*.ts", "**/*.vue"],
+  "include": ["packages/**/*.ts", "packages/**/*.js"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "outDir": "dist",
     "allowSyntheticDefaultImports": true,
+    "declaration": true,
     "module": "esnext",
     "target": "es2017",
     "lib": ["esnext", "dom", "ES2019"],
-    "sourceMap": true,
+    "sourceMap": false,
     "baseUrl": ".",
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true,
@@ -15,5 +16,9 @@
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
     "allowJs": true,
+    "rootDir": ".",
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "removeComments": false,
   }
 }

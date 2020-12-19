@@ -14,10 +14,10 @@
   },
   "license": "MIT",
   "main": "index.js",
-  "module": "dist/index.esm-bundler.js",
-  "unpkg": "dist/index.global.js",
-  "types": "dist/index.d.ts",
-  "sideEffects": false,
+  "module": "dist/vueposu.esm-bundler.js",
+  "unpkg": "dist/vueposu.global.js",
+  "jsdelivr": "dist/vueposu.global.js",
+  "types": "dist/vueposu.d.ts",
   "dependencies": {
     "vue-demi": "^0.4.5",
     "@vueposu/shared": "0.3.8-3"
