@@ -2,8 +2,7 @@ import { ref, unref, readonly, watch, getCurrentInstance } from 'vue-demi';
 import throttle from '@vueposu/shared/utils/throttle';
 import { isFunction } from '@vueposu/shared/utils/helper';
 
-import type { Fn } from '@vueposu/shared/utils/throttle';
-import type { RefTyped } from '@vueposu/shared/types/global';
+import type { RefTyped, Fn } from '@vueposu/shared/types/global';
 
 /**
  * useThrottleFn function

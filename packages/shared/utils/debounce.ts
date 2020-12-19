@@ -1,7 +1,6 @@
 import { debounce as $debounce } from './helper';
 
-// debounce function type
-export type Fn = (...args: any) => any;
+import type { Fn } from '../types/global';
 
 export interface DebouncedFunc<T extends (...args: any[]) => any> {
   /**

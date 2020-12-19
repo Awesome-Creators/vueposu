@@ -1,11 +1,26 @@
 const path = require('path');
+const TerserPlugin = require('terser-webpack-plugin');
+
+const masterVersion = require('./package.json').version;
+const packagesDir = path.resolve(__dirname, 'packages');
+const packageDir = path.resolve(packagesDir, 'vueposu');
+const name = path.basename(packageDir);
+const resolve = p => path.resolve(packageDir, p);
+const pkg = require(resolve(`package.json`));
+const packageOptions = pkg.buildOptions || {};
 
 module.exports = {
-  entry: './src/index.ts',
+  entry: resolve('src/index.ts'),
+  output: {
+    path: resolve('dist'),
+    filename: 'index.js',
+    library: name,
+    libraryExport: 'default',
+  },
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.ts$/,
         use: 'ts-loader',
         exclude: /node_modules/,
       },
@@ -14,22 +29,24 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.js'],
   },
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'index.js',
-    library: 'Vueposu',
-    libraryTarget: 'umd',
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        test: /\.min\.js$/,
+      }),
+    ],
   },
-  cache: {
-    // 1. Set cache type to filesystem
-    type: 'filesystem',
+  // cache: {
+  //   // 1. Set cache type to filesystem
+  //   type: 'filesystem',
 
-    buildDependencies: {
-      // 2. Add your config as buildDependency to get cache invalidation on config change
-      config: [__filename],
+  //   buildDependencies: {
+  //     // 2. Add your config as buildDependency to get cache invalidation on config change
+  //     config: [__filename],
 
-      // 3. If you have other things the build depends on you can add them here
-      // Note that webpack, loaders and all modules referenced from your config are automatically added
-    },
-  },
+  //     // 3. If you have other things the build depends on you can add them here
+  //     // Note that webpack, loaders and all modules referenced from your config are automatically added
+  //   },
+  // },
 };

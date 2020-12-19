@@ -1,7 +1,6 @@
 import { throttle as $throttle } from './helper';
 
-// throttle function type
-export type Fn = (...args: any) => any;
+import type { Fn } from '../types/global';
 
 export interface ThrottleFunc<T extends (...args: any[]) => any> {
   /**
