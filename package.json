@@ -8,15 +8,16 @@
   "description": "Monorepo by Vueposu",
   "license": "MIT",
   "scripts": {
-    "build": "rimraf dist && tsc --build tsconfig.build.json && yarn format:dist && cp -R src/types dist/types && cp package.json dist && cp README.md dist",
     "tb": "webpack",
     "format": "prettier --write \"src/**/*.{ts,vue,tsx}\" \"test/**/*.{ts,vue,tsx}\" --vue-indent-script-and-styl",
     "format:dist": "prettier --write \"dist/**/*.{js,d.ts}\"",
-    "test": "jest -w 1",
+    "build": "rimraf dist && yarn gen:index && tsc --build tsconfig.build.json && yarn format:dist && cp -R src/types dist/types && cp package.json dist && cp README.md dist",
     "prerelease": "yarn test",
     "release": "node ./scripts/release.js",
+    "test": "jest -w 1",
     "test:ci": "jest -w 1 --coverage --collectCoverage=true --verbose --collectCoverageFrom='<rootDir>/packages/**/*.{js,ts}'",
-    "test:ci-open": "yarn test:ci && open ./coverage/lcov-report/index.html"
+    "test:ci-open": "yarn test:ci && open ./coverage/lcov-report/index.html",
+    "docker:start": "docker run -it -v $(pwd):/app -w /app node bash"
   },
   "dependencies": {
     "vue-demi": "^0.4.5"
