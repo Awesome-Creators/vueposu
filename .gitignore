@@ -1,15 +1,7 @@
-# dependencies
-node_modules/
-storybook-static/
-coverage/
-
-# misc
+node_modules
+coverage
 .DS_Store
-npm-debug.log*
-yarn-error.log
-
 .vscode
-
 dist
-
+*.log
 *.zip
