@@ -5,16 +5,15 @@
     "packages/*"
   ],
   "version": "0.3.8-3",
-  "description": "Monorepo by Vueposu",
   "license": "MIT",
   "scripts": {
-    "build": "rimraf dist && rimraf vueposu/dist && webpack -c ./webpack.config.js",
+    "build": "rimraf packages/*/dist && node -r esm ./scripts/build.js",
     "format": "prettier --write \"src/**/*.{ts,vue,tsx}\" \"test/**/*.{ts,vue,tsx}\" --vue-indent-script-and-styl",
     "format:dist": "prettier --write \"dist/**/*.{js,d.ts}\"",
     "prerelease": "yarn test",
     "release": "node ./scripts/release.js",
     "test": "jest -w 1",
-    "test:ci": "jest -w 1 --coverage --collectCoverage=true --verbose --collectCoverageFrom='<rootDir>/packages/**/*.{js,ts}'",
+    "test:ci": "yarn test --coverage --collectCoverage=true --verbose",
     "test:ci-open": "yarn test:ci && open ./coverage/lcov-report/index.html",
     "docker:start": "docker run -it -v $(pwd):/app -w /app node bash"
   },
@@ -37,6 +36,7 @@
     "babel-core": "^7.0.0-bridge.0",
     "chalk": "^4.1.0",
     "clear": "^0.1.0",
+    "esm": "^3.2.25",
     "execa": "^4.1.0",
     "husky": "^4.2.5",
     "jest": "^26.4.2",
