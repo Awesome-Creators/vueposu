@@ -1,6 +1,6 @@
-import * as swr from '@vueposu/swr';
+// import * as swr from '@vueposu/swr';
 
-const { useSWR, useSWRGlobalConfig, ...swrActions } = swr;
+// const { useSWR, useSWRGlobalConfig, ...swrActions } = swr;
 
 export * from './dom';
 export * from './sensors';
@@ -9,4 +9,4 @@ export * from './cache';
 export * from './side-effect';
 export * from './animation';
 
-export { useSWR, useSWRGlobalConfig, swrActions as swr };
+// export { useSWR, useSWRGlobalConfig, swrActions as swr };

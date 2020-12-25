@@ -19,6 +19,10 @@
   "jsdelivr": "dist/index.js",
   "types": "dist/index.d.ts",
   "sideEffects": false,
+  "buildOptions": {
+    "globalName": "VueposuShared",
+    "priority": 999
+  },
   "dependencies": {
     "vue-demi": "^0.4.5"
   },

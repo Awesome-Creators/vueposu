@@ -4,9 +4,7 @@ const { packagesDir } = require('./scripts/build');
 
 module.exports = env => {
   const packageDir = path.resolve(packagesDir, env.TARGET);
-  const name = path.basename(packageDir);
   const resolve = p => path.resolve(packageDir, p);
-  const pkg = require(resolve(`package.json`));
 
   return {
     entry: {
@@ -16,7 +14,7 @@ module.exports = env => {
     output: {
       path: resolve('dist'),
       filename: '[name].js',
-      library: name,
+      library: env.LIBRARY,
       libraryTarget: 'umd',
       libraryExport: 'default',
     },
@@ -29,6 +27,11 @@ module.exports = env => {
               loader: 'ts-loader',
               options: {
                 configFile: path.resolve(__dirname, 'tsconfig.json'),
+                compilerOptions: {
+                  outDir: resolve('dist'),
+                  // declaration: true,
+                  // declarationMap: true,
+                },
               },
             },
           ],
@@ -39,11 +42,6 @@ module.exports = env => {
     resolve: {
       extensions: ['.ts', '.js'],
       alias: {
-        '@vueposu/test-utils': path.resolve(
-          __dirname,
-          'packages/shared/__tests__/utils.ts',
-        ),
-        '@vueposu/*': path.resolve(__dirname, 'packages/*/src'),
         vueposu: path.resolve(__dirname, 'packages/vueposu/src'),
       },
     },

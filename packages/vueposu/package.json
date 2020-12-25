@@ -19,6 +19,9 @@
   "jsdelivr": "dist/index.js",
   "types": "dist/index.d.ts",
   "sideEffects": false,
+  "buildOptions": {
+    "globalName": "Vueposu"
+  },
   "dependencies": {
     "vue-demi": "^0.4.5",
     "@vueposu/swr": "0.3.8-3",
