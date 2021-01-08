@@ -1,0 +1,63 @@
+{
+  "name": "@vueposu/swr",
+  "version": "0.3.8-3",
+  "description": "Stale while revalidate hook by Vueposu",
+  "repository": "git@github.com:Awesome-Creators/vueposu.git",
+  "author": {
+    "name": "Awesome Creators",
+    "email": "awesomeweb@hotmail.com",
+    "url": "https://github.com/Awesome-Creators"
+  },
+  "homepage": "https://vueposu.netlify.app/swr/useSWR.html",
+  "bugs": {
+    "url": "https://github.com/Awesome-Creators/vueposu/issues"
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "module": "dist/index.js",
+  "unpkg": "dist/index.js",
+  "jsdelivr": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
+  "buildOptions": {
+    "globalName": "VueposuSWR",
+    "priority": 10
+  },
+  "dependencies": {
+    "vue-demi": "^0.4.5",
+    "@vueposu/shared": "0.3.8-3"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,vue}": [
+      "yarn format"
+    ]
+  },
+  "peerDependencies": {
+    "@vue/composition-api": "^latest",
+    "vue": "^2.0.0 || >=3.0.0"
+  },
+  "keywords": [
+    "vueposu",
+    "vue",
+    "hook",
+    "hooks",
+    "use",
+    "usehook",
+    "usehooks",
+    "use-hook",
+    "use-hooks",
+    "vue use",
+    "vue-use",
+    "vue hook",
+    "vue-hook",
+    "vue hooks",
+    "vue-hooks",
+    "composition api",
+    "composition-api",
+    "vue-composition-api",
+    "vue composition api",
+    "swr",
+    "vue swr",
+    "vue-swr"
+  ]
+}

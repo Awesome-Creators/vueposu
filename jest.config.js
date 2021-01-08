@@ -7,10 +7,13 @@ module.exports = {
     ],
   },
   moduleNameMapper: {
-    '@hooks/(.*)': '<rootDir>/src/hooks/$1',
-    '@libs/(.*)': '<rootDir>/src/libs/$1',
-    '@test/(.*)': '<rootDir>/test/$1',
+    '^@vueposu/test-utils$': '<rootDir>/packages/shared/__tests__/utils.ts',
+    '^@vueposu/(.*?)$': '<rootDir>/packages/$1/src',
+    'vueposu': '<rootDir>/packages/vueposu/src',
   },
-  setupFilesAfterEnv: ['<rootDir>/test/unit/jest.setup.ts'],
+  collectCoverageFrom: ['<rootDir>/packages/**/*.ts'],
+  coveragePathIgnorePatterns: ['/__tests__/'],
+  watchPathIgnorePatterns: ['/node_modules/'],
   transformIgnorePatterns: ['<rootDir>/node_modules/(?!lodash-es/.*)'],
+  testMatch: ['<rootDir>/packages/**/__tests__/**/*spec.[jt]s?(x)'],
 };

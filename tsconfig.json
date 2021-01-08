@@ -1,24 +1,23 @@
 {
-  "include": ["**/*.ts", "**/*.vue"],
-  "exclude": ["node_modules"],
+  "include": ["packages/*/src", "packages/*/__tests__"],
   "compilerOptions": {
-    "outDir": "dist",
-    "allowSyntheticDefaultImports": true,
-    "module": "esnext",
+    "lib": ["es2017", "dom", "esnext.asynciterable"],
     "target": "es2017",
-    "lib": ["esnext", "dom", "ES2019"],
-    "sourceMap": true,
+    "module": "esnext",
+    "sourceMap": false,
     "baseUrl": ".",
     "moduleResolution": "node",
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitReturns": true,
-    "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
-    "allowJs": true,
+    "allowJs": false,
+    "rootDir": ".",
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "removeComments": false,
+    "skipLibCheck": true,
     "paths": {
-      "@hooks/*": ["src/hooks/*"],
-      "@libs/*": ["src/libs/*"],
-      "@test/*": ["test/*"]
+      "@vueposu/test-utils": ["packages/shared/__tests__/utils.ts"],
+      "@vueposu/*": ["packages/*/src"],
+      "vueposu": ["packages/vueposu/src"],
     }
   }
 }
