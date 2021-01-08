@@ -38,9 +38,9 @@ import type {
 } from './types';
 
 // polyfill for requestIdleCallback
-const rIC = isServer
+const rAF = isServer
   ? null
-  : window['requestIdleCallback'] || (f => setTimeout(f, 1));
+  : window['requestAnimationFrame'] || (f => setTimeout(f, 1));
 
 // global state managers
 const concurrentPromises = {};
@@ -183,7 +183,7 @@ export function useSWR<D = any, E = any>(
 ): UseSWRReturnType<D, E>;
 
 // TODO: COMMENT NEED
-export function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
+export function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> | Promise<UseSWRReturnType<D, E>> {
   if (!getCurrentInstance()) {
     throw new Error(
       'Invalid hook call: `useSWR` can only be called inside of `setup()`.',
@@ -401,7 +401,7 @@ export function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
     const softRevalidate = () => revalidate({ dedupe: true });
 
     if (!isUndefined(latestKeyedData)) {
-      rIC(softRevalidate);
+      rAF(softRevalidate);
     } else {
       softRevalidate();
     }
@@ -482,11 +482,23 @@ export function useSWR<D = any, E = any>(...args): UseSWRReturnType<D, E> {
     });
   });
 
-  return {
+  const memoizedState = {
     data: readonly(data),
     error: readonly(error),
     isValidating: readonly(isValidating),
     revalidate,
     mutate: boundMutate,
   };
+
+  if (config.suspense) {
+    if (
+      concurrentPromises[key] &&
+      typeof concurrentPromises[key].then === 'function'
+    ) {
+      // if it is a promise
+      return Promise.all([concurrentPromises[key]]).then(() => memoizedState);
+    }
+  }
+
+  return memoizedState;
 }

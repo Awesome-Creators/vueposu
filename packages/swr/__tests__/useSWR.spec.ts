@@ -5,13 +5,18 @@ import {
   computed,
   toRefs,
   defineComponent,
-  // defineAsyncComponent,
   watchEffect,
   onMounted,
   onUpdated,
   onUnmounted,
 } from 'vue-demi';
-import { useSWR, cache, mutate, trigger, useSWRGlobalConfig } from '@vueposu/swr';
+import {
+  useSWR,
+  cache,
+  mutate,
+  trigger,
+  useSWRGlobalConfig,
+} from '@vueposu/swr';
 import { triggerDomEvent, wait } from '@vueposu/test-utils';
 
 describe('swr/useSWR', () => {
@@ -1820,8 +1825,8 @@ describe('useSWR - local mutation', () => {
 
     const [, , keyErr] = cache.serializeKey(key);
     let cacheError = cache.get(keyErr);
-    expect(cacheError.message).toMatchInlineSnapshot(`"${message}"`);
-    expect(component.text()).toMatchInlineSnapshot(`"${message}"`);
+    expect(cacheError.message).toMatchInlineSnapshot(`"mutate-error"`);
+    expect(component.text()).toMatchInlineSnapshot(`"mutate-error"`);
 
     await mutate(key, value, false);
     cacheError = cache.get(keyErr);
@@ -1830,46 +1835,97 @@ describe('useSWR - local mutation', () => {
 });
 
 // WIP
-// describe('useSWR - suspense', () => {
-//   it('should render fallback', async () => {
-//     const Block = defineComponent({
-//       template: `{{ data }}`,
-//       setup() {
-//         const { data } = useSWR(
-//           'suspense-1',
-//           () => new Promise(resolve => setTimeout(() => resolve('SWR'), 100)),
-//           {
-//             suspense: true,
-//           },
-//         );
+describe('useSWR - suspense', () => {
+  it('should render fallback', async () => {
+    const AsyncBlock = defineComponent({
+      template: `{{ data }}`,
+      async setup() {
+        const { data } = await useSWR(
+          'suspense-1',
+          () => new Promise(resolve => setTimeout(() => resolve('SWR'), 100)),
+          {
+            suspense: true,
+          },
+        );
+        return { data };
+      },
+    });
 
-//         return { data };
-//       },
-//     });
+    const component = mount(
+      defineComponent({
+        components: { AsyncBlock },
+        template: `
+          <Suspense>
+            <template #default>
+              <AsyncBlock />
+            </template>
+            <template #fallback>
+              fallback
+            </template>
+          </Suspense>
+        `,
+      }),
+    );
 
-//     const component = mount(
-//       defineComponent({
-//         components: { Block },
-//         template: `
-//           <Suspense>
-//             <template #default>
-//               <Block />
-//             </template>
-//             <template #fallback>
-//               fallback
-//             </template>
-//           </Suspense>
-//         `,
-//       }),
-//     );
+    expect(component.text()).toMatchInlineSnapshot(`"fallback"`);
+    await wait(100);
+    await component.vm.$nextTick();
+    await component.vm.$nextTick();
+    await wait(1);
+    await component.vm.$nextTick();
+    expect(component.text()).toMatchInlineSnapshot(`"SWR"`);
+  });
 
-//     expect(component.text()).toMatchInlineSnapshot(`"fallback"`)
+  // it('should render multiple SWR fallbacks', async () => {
+  //   const AsyncBlock = defineComponent({
+  //     template: `{{ a + b }}`,
+  //     async setup() {
+  //       try {
+  //         const { data: a } = await useSWR(
+  //           'suspense-2',
+  //           () => new Promise(resolve => setTimeout(() => resolve(1), 100)),
+  //           {
+  //             suspense: true,
+  //           },
+  //         );
+  //         const { data: b } = await useSWR(
+  //           'suspense-3',
+  //           () => new Promise(resolve => setTimeout(() => resolve(2), 100)),
+  //           {
+  //             suspense: true,
+  //           },
+  //         );
+  //         return { a, b };
+  //       } catch (err) {}
+  //     },
+  //   });
 
-//     await wait(110);
-//     await component.vm.$nextTick();
-//     expect(component.text()).toMatchInlineSnapshot(`"SWR"`)
-//   });
-// });
+  //   const component = mount(
+  //     defineComponent({
+  //       components: { AsyncBlock },
+  //       template: `
+  //         <Suspense>
+  //           <template #default>
+  //             <AsyncBlock />
+  //           </template>
+  //           <template #fallback>
+  //             fallback
+  //           </template>
+  //         </Suspense>
+  //       `,
+  //     }),
+  //   );
+
+  //   expect(component.text()).toMatchInlineSnapshot(`"fallback"`);
+  //   await wait(200);
+  //   await component.vm.$nextTick();
+  //   await component.vm.$nextTick();
+  //   expect(component.text()).toMatchInlineSnapshot(`"fallback"`);
+  //   await wait(1);
+  //   await component.vm.$nextTick();
+  //   expect(component.text()).toMatchInlineSnapshot(`"3"`);
+  // })
+});
 
 // WIP
 // describe('useSWR - cache', () => {

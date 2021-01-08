@@ -19,7 +19,7 @@ export interface SWRConfig<
   revalidateOnFocus?: RefTyped<boolean>;
   revalidateOnReconnect?: RefTyped<boolean>;
   shouldRetryOnError?: RefTyped<boolean>;
-  suspense?: RefTyped<boolean>;
+  suspense?: boolean;
   fetcher?: F;
   initialData?: RefTyped<D>;
 
