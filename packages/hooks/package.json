@@ -1,0 +1,66 @@
+{
+  "name": "@vueposu/hooks",
+  "version": "0.4.0",
+  "description": "A hooks library based on Vue Composition-API",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Awesome-Creators/vueposu.git",
+    "directory": "packages/hooks"
+  },
+  "author": {
+    "name": "Awesome Creators",
+    "email": "awesomeweb@hotmail.com",
+    "url": "https://github.com/Awesome-Creators"
+  },
+  "homepage": "https://vueposu.netlify.app",
+  "bugs": {
+    "url": "https://github.com/Awesome-Creators/vueposu/issues"
+  },
+  "license": "MIT",
+  "main": "./index.cjs",
+  "module": "./index.mjs",
+  "types": "./index.d.ts",
+  "unpkg": "./index.iife.js",
+  "jsdelivr": "./index.iife.js",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.cjs",
+      "types": "./index.d.ts"
+    }
+  },
+  "sideEffects": false,
+  "dependencies": {
+    "vue-demi": "^0.12.5",
+    "@vueposu/swr": "workspace:*",
+    "@vueposu/utils": "workspace:*"
+  },
+  "peerDependencies": {
+    "@vue/composition-api": "^1.6.1",
+    "vue": "^2.6.14 || >=3.0.0"
+  },
+  "keywords": [
+    "vueposu",
+    "vue",
+    "hook",
+    "hooks",
+    "use",
+    "usehook",
+    "usehooks",
+    "use-hook",
+    "use-hooks",
+    "vue use",
+    "vue-use",
+    "vue hook",
+    "vue-hook",
+    "vue hooks",
+    "vue-hooks",
+    "composition api",
+    "composition-api",
+    "vue-composition-api",
+    "vue composition api",
+    "swr",
+    "vue swr",
+    "vue-swr"
+  ]
+}
