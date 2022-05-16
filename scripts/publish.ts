@@ -9,7 +9,7 @@ const META_FILES = ["LICENSE"];
 async function copyMetaFiles(name: string) {
   if (name === "hooks") {
     await fs.copyFile(
-      path.join(root, "READEME.md"),
+      path.join(root, "README.md"),
       path.join(packagesDir, `${name}/dist/README.md`)
     );
   }
