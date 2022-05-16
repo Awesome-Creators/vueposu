@@ -12,7 +12,7 @@
     "build:types": "tsc",
     "format": "prettier --write \"src/**/*.{ts,vue,tsx}\" \"test/**/*.{ts,vue,tsx}\" --vue-indent-script-and-styl",
     "format:dist": "prettier --write \"dist/**/*.{js,d.ts}\"",
-    "push-tag": "test && esno ./scripts/push-tag.ts",
+    "push-tag": "npm run test && esno ./scripts/push-tag.ts",
     "publish:ci": "esno ./scripts/publish.ts",
     "test": "vitest -w",
     "test:ui": "vitest -w --ui",
