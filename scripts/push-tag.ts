@@ -32,9 +32,14 @@ async function pushTag() {
     ({ option } = await prompts({
       type: "text",
       name: "option",
-      message: "🏷️ Enter new version:",
+      message: "🏷️  Enter new version:",
       validate: (v) => (!v ? "🤕 Please input the correct version!" : true),
     }));
+  }
+
+  if (!option) {
+    console.log(logger.error("😵‍💫 Something went wrong! Please retry."));
+    return;
   }
 
   const PUBLISH_VERSION = versionIncrements.includes(option)
@@ -48,6 +53,11 @@ async function pushTag() {
   });
 
   if (yes) {
+    pkg.version = PUBLISH_VERSION;
+    await fs.writeFile(
+      path.resolve(__dirname, `../package.json`),
+      JSON.stringify(pkg, null, 2) + "\n"
+    );
     for (const { name } of packages) {
       const packageJsonPath = path.join(packagesDir, `${name}/package.json`);
       const packageJson = await fs.readFile(packageJsonPath);
@@ -73,4 +83,8 @@ async function pushTag() {
   }
 }
 
-pushTag();
+try {
+  pushTag();
+} catch (err) {
+  console.log(logger.error(err));
+}
