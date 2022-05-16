@@ -20,9 +20,14 @@ jobs:
         with:
           node-version: "16.x"
           cache: 'pnpm'
+          
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2.2.1
+        with:
+          run_install: true
         
-      - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+#       - name: Install dependencies
+#         run: pnpm install --no-frozen-lockfile
 
       - name: Coverage
         run: pnpm coverage
