@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://github.com/Awesome-Creators/vueposu">
-    <img src="https://raw.githubusercontent.com/gist/glitchboyl/05f6a8abd2126b56525fa395dcaf9ad6/raw/d102e036ddfb240039dd0bbac913ae2d02bc5515/eposu.svg" alt="logo" width="160"/>
+    <img src="https://raw.githubusercontent.com/gist/glitchboyl/05f6a8abd2126b56525fa395dcaf9ad6/raw/b22ae1845867959dc249c78f14a5f3bd6e003e04/vueposu.svg" alt="logo" width="160"/>
   </a>
 </p>
 
@@ -17,8 +17,8 @@
     (A hooks library based on <b>Vue Composition-API</b>)
     <br />
     <br />
-    <a href="https://app.circleci.com/pipelines/github/Awesome-Creators/vueposu?branch=develop">
-      <img src="https://circleci.com/gh/Awesome-Creators/vueposu/tree/develop.svg?style=svg&circle-token=74859479154a741060b1bd036508b21782ae7424" alt="CircleCI" />
+    <a href="https://github.com/Awesome-Creators/vueposu/actions/workflows/coverage.yml">
+      <img src="https://github.com/awesome-creators/vueposu/actions/workflows/coverage.yml/badge.svg?branch=main" alt="workflow" />
     </a>
     <a href="https://codecov.io/gh/Awesome-Creators/vueposu">
       <img src="https://codecov.io/gh/Awesome-Creators/vueposu/branch/develop/graph/badge.svg?token=FA4WQGNR20" alt="codecov" />
@@ -63,7 +63,7 @@ yarn add vueposu @vue/composition-api
 ## 🍳 USAGE
 
 ```ts
-import { useCounter } from 'vueposu';
+import { useCounter } from "vueposu";
 
 const Component = defineComponent({
   setup() {
@@ -145,7 +145,6 @@ Currently supported functions:
   - [`useInterval`](https://vueposu.netlify.app/animation/useInterval.html)
   <!-- - [`useRaf`](https://vueposu.netlify.app/animation/useRaf.html) -->
   - [`useTimeout`](https://vueposu.netlify.app/animation/useTimeout.html)
-
 
 <br />
 
