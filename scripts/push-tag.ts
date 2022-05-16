@@ -53,6 +53,11 @@ async function pushTag() {
   });
 
   if (yes) {
+    pkg.version = PUBLISH_VERSION;
+    await fs.writeFile(
+      path.resolve(__dirname, `../package.json`),
+      JSON.stringify(pkg, null, 2) + "\n"
+    );
     for (const { name } of packages) {
       const packageJsonPath = path.join(packagesDir, `${name}/package.json`);
       const packageJson = await fs.readFile(packageJsonPath);
