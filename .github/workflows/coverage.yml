@@ -22,8 +22,9 @@ jobs:
           
       - name: Setup PNPM
         uses: pnpm/action-setup@v2.2.1
-        with:
-          run_install: true
+        
+      - name: Install
+        run: pnpm install
 
       - name: Coverage
         run: pnpm coverage
