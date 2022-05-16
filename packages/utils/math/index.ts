@@ -1,4 +1,7 @@
+import { RefTyped } from "@vueposu/utils";
+
 export type NumberType = number | string;
+export type CounterNumber = RefTyped<NumberType>;
 
 type FixNumbers = [NumberType, NumberType, ...NumberType[]];
 
@@ -8,7 +11,7 @@ const fix = (...numbers: FixNumbers) => {
     if (isNaN(num)) {
       numbers[index] = num = 0;
     }
-    return (num.toString().split('.')[1] || '').length;
+    return (num.toString().split(".")[1] || "").length;
   });
   const f = Math.pow(10, Math.max(...fs));
   return {

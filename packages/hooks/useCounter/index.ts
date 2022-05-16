@@ -2,9 +2,7 @@ import { ref, unref, computed, watchEffect } from "vue-demi";
 import { isDef, isFunction, add, subtract } from "@vueposu/utils";
 
 import type { Ref } from "vue-demi";
-import type { RefTyped, NumberType } from "@vueposu/utils";
-
-export type CounterNumber = RefTyped<NumberType>;
+import type { NumberType, CounterNumber } from "@vueposu/utils";
 
 type UseCounterActions = {
   inc: (n?: CounterNumber) => void;
@@ -26,7 +24,7 @@ interface CounterOptions {
 const isNumber = (n: any) => isDef(n) && !isNaN(unref(n));
 
 export function useCounter(
-  initialValue?: RefTyped<NumberType>,
+  initialValue?: CounterNumber,
   options: CounterOptions = {}
 ): UseCounterReturnType {
   const { min, max, step } = options;
@@ -34,7 +32,7 @@ export function useCounter(
     isNumber(initialValue) ? Number(unref(initialValue)) : 0;
   const $step = () => (isNumber(step) ? Number(unref(step)) : 1);
 
-  const fix = (num: RefTyped<NumberType>) => {
+  const fix = (num: CounterNumber) => {
     let result = +unref(num);
     if (isNumber(max)) {
       result = Math.min(Number(unref(max)), result);
@@ -53,11 +51,15 @@ export function useCounter(
 
   const inc: UseCounterActions["inc"] = (v) =>
     set(
-      Number(add(current.value, isNumber(v) ? unref(v) as NumberType : $step()))
+      Number(
+        add(current.value, isNumber(v) ? (unref(v) as NumberType) : $step())
+      )
     );
 
   const dec: UseCounterActions["dec"] = (v) =>
-    set(subtract(current.value, isNumber(v) ? unref(v) as NumberType : $step()));
+    set(
+      subtract(current.value, isNumber(v) ? (unref(v) as NumberType) : $step())
+    );
 
   const reset: UseCounterActions["reset"] = () => set(fix(initial()));
 
@@ -81,7 +83,6 @@ export function useCounter(
       // if `min`/`max` is RefTyped, collect dependencies:
       unref(min);
       unref(max);
-
       set(current.value);
     },
     {

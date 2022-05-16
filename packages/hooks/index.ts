@@ -1,7 +1,3 @@
-import swr from "./useSWR";
-
-const { useSWR, useSWRGlobalConfig, swrActions } = swr;
-
 //  DOM
 // export * from './useAudio';
 export * from "./useClickAway";
@@ -49,4 +45,7 @@ export * from "./useInterval";
 export * from "./useTimeout";
 
 //  SWR
+import { useSWR, useSWRGlobalConfig } from "@vueposu/swr";
+import * as swr from "@vueposu/swr";
+const { useSWR: _, useSWRGlobalConfig: __, ...swrActions } = swr;
 export { useSWR, useSWRGlobalConfig, swrActions as swr };

@@ -1,13 +1,12 @@
-import { ref, unref, readonly, watch } from 'vue-demi';
-import { useCounter, useInterval } from 'vueposu';
+import { ref, unref, readonly, watch } from "vue-demi";
+import { useCounter, useInterval } from "vueposu";
 
-import type { Ref } from 'vue-demi';
-import type { CounterNumber } from 'vueposu';
-import type { RefTyped } from '@vueposu/utils';
+import type { Ref } from "vue-demi";
+import type { RefTyped, CounterNumber } from "@vueposu/utils";
 
 interface UseCounterIntervalOptions {
   initialValue?: CounterNumber;
-  type?: RefTyped<'inc' | 'dec'>;
+  type?: RefTyped<"inc" | "dec">;
   step?: RefTyped<number>;
   total?: RefTyped<number>;
   interval?: RefTyped<number>;
@@ -25,11 +24,11 @@ type UseCounterIntervalReturnType = {
 
 // TODO: COMMENT NEED
 export function useCounterInterval(
-  options: UseCounterIntervalOptions = {},
+  options: UseCounterIntervalOptions = {}
 ): UseCounterIntervalReturnType {
   const {
     initialValue = 60,
-    type = 'dec',
+    type = "dec",
     step = 1,
     total = 0,
     interval = 1000,
@@ -39,16 +38,20 @@ export function useCounterInterval(
   const { count, inc, dec } = useCounter(initialValue);
 
   // TODO: check total is gt or lt than initialValue
-  const { isActive: $isActive, start, stop } = useInterval(
+  const {
+    isActive: $isActive,
+    start,
+    stop,
+  } = useInterval(
     () => {
-      if (unref(type) === 'dec' && count.value > unref(total)) {
+      if (unref(type) === "dec" && count.value > unref(total)) {
         dec(step);
-      } else if (unref(type) === 'inc' && count.value < unref(total)) {
+      } else if (unref(type) === "inc" && count.value < unref(total)) {
         inc(step);
       }
     },
     interval,
-    immediateStart,
+    immediateStart
   );
 
   const isActive = ref(unref($isActive));

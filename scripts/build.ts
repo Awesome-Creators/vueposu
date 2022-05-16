@@ -95,6 +95,11 @@ async function buildTypes(name: string) {
       ),
       compiler: {
         tsconfigFilePath: path.join(root, "tsconfig.json"),
+        overrideTsconfig: {
+          paths: {
+            vueposu: [path.join(packagesDir, "hooks/index.ts")],
+          },
+        },
       },
       apiReport: {
         enabled: false,

@@ -170,18 +170,18 @@ export const mutate: Mutate = async ($key, $data, shouldRevalidate = true) => {
   return data;
 };
 
-export function useSWR<D = any, E = any>(key: SWRKey): UseSWRReturnType<D, E>;
-export function useSWR<D = any, E = any>(
+function useSWR<D = any, E = any>(key: SWRKey): UseSWRReturnType<D, E>;
+function useSWR<D = any, E = any>(
   key: SWRKey,
   config?: SWRConfig<D, E>
 ): UseSWRReturnType<D, E>;
-export function useSWR<D = any, E = any>(
+function useSWR<D = any, E = any>(
   key: SWRKey,
   fetcher?: Fetcher<D>,
   config?: SWRConfig<D, E>
 ): UseSWRReturnType<D, E>;
 // TODO: COMMENT NEED
-export function useSWR<D = any, E = any>(
+function useSWR<D = any, E = any>(
   ...args: any[]
 ): UseSWRReturnType<D, E> | Promise<UseSWRReturnType<D, E>> {
   let $key: SWRKey,
@@ -508,3 +508,5 @@ export function useSWR<D = any, E = any>(
 
   return memoizedState;
 }
+
+export { useSWR };
