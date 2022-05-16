@@ -32,7 +32,7 @@ async function pushTag() {
     ({ option } = await prompts({
       type: "text",
       name: "option",
-      message: "✏️  Enter new version:",
+      message: "🏷️ Enter new version:",
       validate: (v) => (!v ? "🤕 Please input the correct version!" : true),
     }));
   }
@@ -68,7 +68,7 @@ async function pushTag() {
     await run("git", ["push", "--tags"]);
 
     console.log(
-      logger.success(`🌈 Successfully pushed ${pkg.name} v${PUBLISH_VERSION}`)
+      logger.success(`👀 Successfully pushed ${pkg.name} v${PUBLISH_VERSION}`)
     );
   }
 }
