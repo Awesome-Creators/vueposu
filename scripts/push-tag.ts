@@ -61,7 +61,6 @@ async function pushTag() {
     for (const { name } of packages) {
       const packageJsonPath = path.join(packagesDir, `${name}/package.json`);
       const packageJson = require(packageJsonPath);
-      console.log(packageJson);
       packageJson.version = PUBLISH_VERSION;
       await writeFile(
         packageJsonPath,
