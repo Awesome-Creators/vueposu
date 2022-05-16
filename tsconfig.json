@@ -1,24 +1,43 @@
 {
-  "include": ["**/*.ts", "**/*.vue"],
-  "exclude": ["node_modules"],
   "compilerOptions": {
-    "outDir": "dist",
-    "allowSyntheticDefaultImports": true,
-    "module": "esnext",
-    "target": "es2017",
-    "lib": ["esnext", "dom", "ES2019"],
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": ["ESNext", "DOM"],
+    "moduleResolution": "Node",
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "declaration": true,
+    "declarationDir": "./types",
+    "outDir": "./types",
+    "emitDeclarationOnly": true,
     "sourceMap": true,
-    "baseUrl": ".",
-    "moduleResolution": "node",
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitReturns": true,
-    "suppressImplicitAnyIndexErrors": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipDefaultLibCheck": true,
     "noUnusedLocals": true,
-    "allowJs": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "rootDir": ".",
     "paths": {
-      "@hooks/*": ["src/hooks/*"],
-      "@libs/*": ["src/libs/*"],
-      "@test/*": ["test/*"]
-    }
-  }
+      "vueposu": ["packages/hooks/index.ts"],
+      "@vueposu/swr": ["packages/swr/index.ts"],
+      "@vueposu/utils": ["packages/utils/index.ts"],
+      "@vueposu/test-utils": ["packages/.test/index.ts"]
+    },
+    "types": ["vitest/globals"],
+    "isolatedModules": true
+  },
+  "include": ["packages"],
+  "exclude": [
+    "node_modules",
+    "**/**/*.md",
+    "**/dist",
+    "packages/.test",
+    "**/**/*.test.ts"
+  ]
 }

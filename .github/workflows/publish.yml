@@ -1,0 +1,46 @@
+name: Publish packages
+
+on:
+  push:
+    tags:
+      - v*
+jobs:
+  publish-NPM:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3.2.0
+        with:
+          node-version: 16.x
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2.2.1
+        with:
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build
+        run: pnpm build
+
+      - name: Publish packages to NPM
+        run: pnpm publish:ci
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+          NODE_OPTIONS: --max-old-space-size=6144
