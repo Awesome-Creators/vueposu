@@ -1,5 +1,5 @@
 import parseArgs from "minimist";
-import fs from "fs-extra";
+import { writeFile } from "fs-extra";
 import path from "path";
 import clear from "clear";
 import semver from "semver";
@@ -54,15 +54,16 @@ async function pushTag() {
 
   if (yes) {
     pkg.version = PUBLISH_VERSION;
-    await fs.writeFile(
+    await writeFile(
       path.resolve(__dirname, `../package.json`),
       JSON.stringify(pkg, null, 2) + "\n"
     );
     for (const { name } of packages) {
       const packageJsonPath = path.join(packagesDir, `${name}/package.json`);
-      const packageJson = await fs.readFile(packageJsonPath);
+      const packageJson = require(packageJsonPath);
+      console.log(packageJson);
       packageJson.version = PUBLISH_VERSION;
-      await fs.writeFile(
+      await writeFile(
         packageJsonPath,
         JSON.stringify(packageJson, null, 2) + "\n"
       );

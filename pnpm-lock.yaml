@@ -69,28 +69,13 @@ importers:
       vue-demi: 0.12.5_vue@3.2.33
 
   packages/hooks:
-    specifiers:
-      '@vueposu/swr': workspace:*
-      '@vueposu/utils': workspace:*
-      vue-demi: ^0.12.5
-    dependencies:
-      '@vueposu/swr': link:../swr
-      '@vueposu/utils': link:../utils
-      vue-demi: 0.12.5
+    specifiers: {}
 
   packages/swr:
-    specifiers:
-      '@vueposu/utils': workspace:*
-      vue-demi: ^0.12.5
-    dependencies:
-      '@vueposu/utils': link:../utils
-      vue-demi: 0.12.5
+    specifiers: {}
 
   packages/utils:
-    specifiers:
-      vue-demi: ^0.12.5
-    dependencies:
-      vue-demi: 0.12.5
+    specifiers: {}
 
 packages:
 
@@ -2435,19 +2420,6 @@ packages:
       - sass
       - stylus
     dev: true
-
-  /vue-demi/0.12.5:
-    resolution: {integrity: sha512-BREuTgTYlUr0zw0EZn3hnhC3I6gPWv+Kwh4MCih6QcAeaTlaIX0DwOVN0wHej7hSvDPecz4jygy/idsgKfW58Q==}
-    engines: {node: '>=12'}
-    hasBin: true
-    requiresBuild: true
-    peerDependencies:
-      '@vue/composition-api': ^1.0.0-rc.1
-      vue: ^3.0.0-0 || ^2.6.0
-    peerDependenciesMeta:
-      '@vue/composition-api':
-        optional: true
-    dev: false
 
   /vue-demi/0.12.5_vue@3.2.33:
     resolution: {integrity: sha512-BREuTgTYlUr0zw0EZn3hnhC3I6gPWv+Kwh4MCih6QcAeaTlaIX0DwOVN0wHej7hSvDPecz4jygy/idsgKfW58Q==}
