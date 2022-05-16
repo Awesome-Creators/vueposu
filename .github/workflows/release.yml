@@ -5,6 +5,8 @@ name: CI
 on:
   push:
     tags: [v*]
+  pull_request:
+    branches: [develop]
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -28,6 +30,9 @@ jobs:
 
       - name: Codacy Coverage Reporter
         uses: codacy/codacy-coverage-reporter-action@v1.3.0
+        with:
+          project-token: ${{ secrets.CODACY_REPOSITORY_API_TOKEN }}
+          api-token: ${{ secrets.CODACY_ACCOUNT_API_TOKEN }}
 
       - name: Install
         run: pnpm install
