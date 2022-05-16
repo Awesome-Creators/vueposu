@@ -19,7 +19,7 @@ async function copyMetaFiles(name: string) {
   );
   for (const file of META_FILES) {
     await fs.copyFile(
-      path.join(__dirname, `${file}`),
+      path.join(root, `${file}`),
       path.join(packagesDir, `${name}/dist/${file}`)
     );
   }
