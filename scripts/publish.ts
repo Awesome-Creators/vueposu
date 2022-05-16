@@ -38,4 +38,8 @@ async function publishPackages() {
   }
 }
 
-publishPackages();
+try {
+  publishPackages();
+} catch (err) {
+  console.log(logger.error(err));
+}

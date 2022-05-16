@@ -32,9 +32,14 @@ async function pushTag() {
     ({ option } = await prompts({
       type: "text",
       name: "option",
-      message: "🏷️ Enter new version:",
+      message: "🏷️  Enter new version:",
       validate: (v) => (!v ? "🤕 Please input the correct version!" : true),
     }));
+  }
+
+  if (!option) {
+    console.log(logger.error("😵‍💫 Something went wrong! Please retry."));
+    return;
   }
 
   const PUBLISH_VERSION = versionIncrements.includes(option)
@@ -73,4 +78,8 @@ async function pushTag() {
   }
 }
 
-pushTag();
+try {
+  pushTag();
+} catch (err) {
+  console.log(logger.error(err));
+}
