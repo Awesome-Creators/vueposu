@@ -15,9 +15,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "16.x"
-
-      - name: Install
-        run: pnpm install
+          
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2.2.1
+        with:
+          run_install: true
 
       - name: Coverage
         run: pnpm coverage
