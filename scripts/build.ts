@@ -11,25 +11,24 @@ import {
 } from "@microsoft/api-extractor";
 import logger from "./logger";
 
-const root = path.resolve(__dirname, "..");
+export const root = path.resolve(__dirname, "..");
 export const packagesDir = path.join(root, "packages");
 
-const META_FILES = ["LICENSE"];
-
-const packages = fs
+export const packages = fs
   .readdirSync(packagesDir)
   .filter(
     (file) =>
       file[0] !== "." && fs.statSync(path.join(packagesDir, file)).isDirectory()
   )
   .map((file) => {
-    const { name = "" } = require(path.join(
+    const { name, version } = require(path.join(
       packagesDir,
       `${file}/package.json`
     ));
     return {
       pkgName: name,
       name: file,
+      version,
     };
   });
 
@@ -47,7 +46,6 @@ async function buildAllPackages() {
       await run("cross-env", [`TARGET=${name}`, "vite", "build"], {
         stdio: ["pipe", null],
       });
-      await buildMetaFiles(name);
       await buildTypes(name);
       spinner.succeed(logger.success(`🚀 Successfully build ${pkgName}`));
     } catch (err) {
@@ -60,28 +58,6 @@ async function buildAllPackages() {
   await run("rimraf", ["types"]);
   console.log("");
   console.log(logger.info(`😎 Build is done !`));
-}
-
-async function buildMetaFiles(name: string) {
-  if (name === "hooks") {
-    await fs.copyFile(
-      path.join(root, "READEME.md"),
-      path.join(packagesDir, `${name}/dist/README.md`),
-      () => {}
-    );
-  }
-  await fs.copyFile(
-    path.join(packagesDir, `${name}/package.json`),
-    path.join(packagesDir, `${name}/dist/package.json`),
-    () => {}
-  );
-  for (const file of META_FILES) {
-    await fs.copyFile(
-      path.join(__dirname, `${file}`),
-      path.join(packagesDir, `${name}/dist/${file}`),
-      () => {}
-    );
-  }
 }
 
 async function buildTypes(name: string) {
