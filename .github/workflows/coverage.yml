@@ -1,0 +1,33 @@
+name: Collect coverage
+
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [develop]
+jobs:
+  collect-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: "16.x"
+
+      - name: Install
+        run: pnpm install
+
+      - name: Coverage
+        run: pnpm coverage
+
+      - name: Codecov
+        uses: codecov/codecov-action@v3.1.0
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./coverage/tmp
+          file: ./coverage/coverage-final.json
+          move_coverage_to_trash: true
+          name: Vueposu
+          verbose: true

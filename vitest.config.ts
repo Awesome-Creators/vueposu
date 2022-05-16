@@ -18,5 +18,8 @@ export default defineConfig({
       inline: ["vue-demi"],
     },
     clearMocks: true,
+    coverage: {
+      reporter: ["text", "json", "html"],
+    },
   },
 });

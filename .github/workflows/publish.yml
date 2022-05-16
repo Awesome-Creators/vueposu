@@ -1,15 +1,13 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
+name: Publish CI
 
 on:
   push:
     tags: [v*]
-    branches: [develop]
+    branches: [main]
   pull_request:
-    branches: [develop]
+    branches: [main]
 jobs:
-  release:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -29,20 +27,14 @@ jobs:
 #           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
 #           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Codacy Coverage Reporter
-        uses: codacy/codacy-coverage-reporter-action@v1.3.0
-        with:
-          project-token: ${{ secrets.CODACY_REPOSITORY_API_TOKEN }}
-          api-token: ${{ secrets.CODACY_ACCOUNT_API_TOKEN }}
-
       - name: Install
         run: pnpm install
 
       - name: Build
         run: pnpm build
 
-#       - name: Release to npm
-#         uses: JS-DevTools/npm-publish@v1
-#         with:
-#           package: './dist/package.json'
-#           token: ${{ secrets.NPM_TOKEN }}
+      - name: Publish packages to NPM
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          package: './dist/package.json'
+          token: ${{ secrets.NPM_TOKEN }}
