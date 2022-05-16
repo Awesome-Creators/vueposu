@@ -71,7 +71,7 @@ async function pushTag() {
     // WIP: generate changelog
 
     await run("git", ["add", "-A"]);
-    await run("git", ["commit", "-m", `chore: push v${PUBLISH_VERSION}`]);
+    await run("git", ["commit", "-m", `chore: publish v${PUBLISH_VERSION}`]);
 
     await run("git", ["tag", `v${PUBLISH_VERSION}`]);
     await run("git", ["push"]);

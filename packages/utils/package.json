@@ -1,6 +1,6 @@
 {
   "name": "@vueposu/utils",
-  "version": "0.4.1-6",
+  "version": "0.4.1-7",
   "description": "Utils and types shared by Vueposu",
   "repository": {
     "type": "git",
