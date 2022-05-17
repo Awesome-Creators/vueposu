@@ -26,11 +26,11 @@ async function copyMetaFiles(name: string) {
 }
 
 async function publishPackages() {
-  const args = ["publish", "--access", "public"];
-
   for (const { name, pkgName } of packages) {
     await copyMetaFiles(name);
-    await run("npm", args, { cwd: path.join(packagesDir, `${name}/dist`) });
+    await run("npm", ["publish", "--access", "public"], {
+      cwd: path.join(packagesDir, `${name}/dist`),
+    });
 
     console.log(
       logger.success(`🌈 Successfully published ${pkgName} v${version}`)
