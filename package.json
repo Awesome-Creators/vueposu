@@ -1,7 +1,7 @@
 {
   "name": "@vueposu/monorepo",
   "private": true,
-  "version": "0.4.3",
+  "version": "0.4.3-1",
   "packageManager": "pnpm@7.0.0",
   "author": "Awesome Creators <awesomeweb@hotmail.com> (https://github.com/Awesome-Creators)",
   "description": "A hooks library based on Vue Composition-API",
