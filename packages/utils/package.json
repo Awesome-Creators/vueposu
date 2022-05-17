@@ -1,17 +1,13 @@
 {
   "name": "@vueposu/utils",
-  "version": "0.4.2-1",
+  "version": "0.4.2-2",
   "description": "Utils and types shared by Vueposu",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Awesome-Creators/vueposu.git",
     "directory": "packages/utils"
   },
-  "author": {
-    "name": "Awesome Creators",
-    "email": "awesomeweb@hotmail.com",
-    "url": "https://github.com/Awesome-Creators"
-  },
+  "author": "Awesome Creators <awesomeweb@hotmail.com> (https://github.com/Awesome-Creators)",
   "homepage": "https://vueposu.netlify.app",
   "bugs": {
     "url": "https://github.com/Awesome-Creators/vueposu/issues"

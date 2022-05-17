@@ -1,11 +1,12 @@
 {
   "name": "@vueposu/monorepo",
   "private": true,
-  "version": "0.4.2-1",
+  "version": "0.4.2-2",
   "packageManager": "pnpm@7.0.0",
-  "author": "Awesome Creators<https://github.com/awesome-creators>",
+  "author": "Awesome Creators <awesomeweb@hotmail.com> (https://github.com/Awesome-Creators)",
   "description": "A hooks library based on Vue Composition-API",
   "license": "MIT",
+  "homepage": "https://github.com/Awesome-Creators/vueposu#readme",
   "scripts": {
     "clean": "rimraf dist types packages/*/dist",
     "build": "esno ./scripts/build.ts",
