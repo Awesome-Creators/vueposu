@@ -14,7 +14,13 @@ import logger from "./logger";
 export const root = path.resolve(__dirname, "..");
 export const packagesDir = path.join(root, "packages");
 
-export const packages = fs
+type Package = {
+  pkgName: string;
+  name: string;
+  version: string;
+};
+
+export const packages: Package[] = fs
   .readdirSync(packagesDir)
   .filter(
     (file) =>
