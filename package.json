@@ -1,0 +1,92 @@
+{
+  "name": "@vueposu/monorepo",
+  "private": true,
+  "version": "0.4.3-1",
+  "packageManager": "pnpm@7.0.0",
+  "author": "Awesome Creators <awesomeweb@hotmail.com> (https://github.com/Awesome-Creators)",
+  "description": "A hooks library based on Vue Composition-API",
+  "license": "MIT",
+  "homepage": "https://github.com/Awesome-Creators/vueposu#readme",
+  "scripts": {
+    "clean": "rimraf dist types packages/*/dist",
+    "build": "esno ./scripts/build.ts",
+    "build:types": "tsc",
+    "format": "prettier --write \"src/**/*.{ts,vue,tsx}\" \"test/**/*.{ts,vue,tsx}\" --vue-indent-script-and-styl",
+    "format:dist": "prettier --write \"dist/**/*.{js,d.ts}\"",
+    "push-tag": "esno ./scripts/push-tag.ts",
+    "publish:ci": "esno ./scripts/publish.ts",
+    "test": "vitest --run",
+    "test:ui": "vitest -w --ui",
+    "coverage": "vitest run --coverage",
+    "coverage:open": "npm run coverage && open ./coverage/index.html",
+    "docker:start": "docker run -it -v $(pwd):/app -w /app node bash"
+  },
+  "devDependencies": {
+    "@microsoft/api-extractor": "^7.24.0",
+    "@sinonjs/fake-timers": "^9.1.2",
+    "@types/lodash-es": "^4.17.6",
+    "@types/node": "^17.0.31",
+    "@types/sinonjs__fake-timers": "^8.1.2",
+    "@vitest/ui": "^0.12.3",
+    "@vue/test-utils": "2.0.0-rc.21",
+    "c8": "^7.11.3",
+    "chalk": "^5.0.1",
+    "clear": "^0.1.0",
+    "cross-env": "^7.0.3",
+    "esbuild-register": "^3.3.2",
+    "esno": "^0.14.1",
+    "execa": "^6.1.0",
+    "fs-extra": "^10.1.0",
+    "husky": "^8.0.1",
+    "jsdom": "^19.0.0",
+    "lint-staged": "^12.4.1",
+    "lodash-es": "^4.17.21",
+    "minimist": "^1.2.6",
+    "ora": "^6.1.0",
+    "prettier": "^2.6.2",
+    "prompts": "^2.4.2",
+    "rimraf": "^3.0.2",
+    "semver": "^7.3.7",
+    "typescript": "^4.5.4",
+    "vite": "^2.9.7",
+    "vitepress": "^0.22.4",
+    "vitest": "^0.12.0",
+    "vue": "^2.6.14 || >=3.0.0",
+    "vue-demi": "^0.12.5"
+  },
+  "husky": {
+    "hooks": {
+      "precommit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx,vue}": [
+      "npm run format"
+    ]
+  },
+  "keywords": [
+    "vueposu",
+    "vue",
+    "hook",
+    "hooks",
+    "use",
+    "usehook",
+    "usehooks",
+    "use-hook",
+    "use-hooks",
+    "vue use",
+    "vue-use",
+    "vue hook",
+    "vue-hook",
+    "vue hooks",
+    "vue-hooks",
+    "composition api",
+    "composition-api",
+    "vue-composition-api",
+    "vue composition api",
+    "swr",
+    "vue swr",
+    "vue-swr"
+  ]
+}
