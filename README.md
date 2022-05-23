@@ -30,7 +30,7 @@
 
 ## 📦 INSTALLATION
 
-vueposu supports both Vue 3 and 2, but if you are using `Vue 2` must ensure installed `@vue/composition-api`.
+Vueposu supports both Vue 3 and 2, but if you are using `Vue 2` must ensure installed `@vue/composition-api`.
 
 ### Vue 3
 
