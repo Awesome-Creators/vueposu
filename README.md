@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://github.com/Awesome-Creators/vueposu">
-    <img src="https://raw.githubusercontent.com/gist/glitchboyl/05f6a8abd2126b56525fa395dcaf9ad6/raw/b22ae1845867959dc249c78f14a5f3bd6e003e04/vueposu.svg" alt="logo" width="160"/>
+    <img src="https://raw.githubusercontent.com/gist/glitchboyl/05f6a8abd2126b56525fa395dcaf9ad6/raw/157d517d36f7f63c100714c1cc5bbce95e1c3aa4/vueposu.svg" alt="logo" width="160"/>
   </a>
 </p>
 
