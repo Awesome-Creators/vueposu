@@ -1,4 +1,4 @@
-import { onMounted, onUnmounted } from "vue-demi";
+import { ref, onMounted, onUnmounted } from "vue-demi";
 import { isServer } from "@vueposu/utils";
 
 // the difference platfrom listen
@@ -16,11 +16,10 @@ const differencePlatformEvents = [
  *
  * @param onHiddenStatusChange change handler function for usePageHidden
  */
-export function usePageHidden(
-  onHiddenStatusChange: (isHidden?: boolean) => void
-) {
+export function usePageHidden() {
+  const isHidden = ref(isServer ? false : document.hidden);
   const listener = () =>
-    setTimeout(() => onHiddenStatusChange(isServer ? false : document.hidden));
+    setTimeout(() => (isHidden.value = isServer ? false : document.hidden));
 
   if (!isServer) {
     onMounted(() => {
@@ -35,4 +34,6 @@ export function usePageHidden(
       });
     });
   }
+
+  return isHidden;
 }
