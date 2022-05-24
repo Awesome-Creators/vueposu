@@ -1,11 +1,16 @@
 import { isServer } from '@vueposu/utils';
 
+type UseFaviconReturnType = {
+  changeIcon: (url: string) => void;
+  restoreIcon: () => void;
+}
+
 /**
  * useFavicon - change site icon
  *
  * @param url favicon url
  */
-export function useFavicon(url?: string) {
+export function useFavicon(url?: string): UseFaviconReturnType {
   if (isServer) return { changeIcon: () => null, restoreIcon: () => null };
 
   let link: HTMLLinkElement | null = document.querySelector("link[rel*='icon']");
