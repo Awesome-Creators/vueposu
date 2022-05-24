@@ -1,7 +1,7 @@
 import { watchEffect, unref } from "vue-demi";
 import { getTargetElement, isServer } from "@vueposu/utils";
 
-import type { StopHandle } from "vue-demi";
+import type { WatchStopHandle } from "vue-demi";
 import type { RefTyped, Target } from "@vueposu/utils";
 
 const defaultEvent = "click";
@@ -19,7 +19,7 @@ export function useClickOutside(
   target: Target | Target[],
   eventHandler: RefTyped<(event: EventType) => void>,
   eventName: RefTyped<string | string[]> = defaultEvent
-): StopHandle {
+): WatchStopHandle {
   const handler: EventListener = (event) => {
     const targets = Array.isArray(target) ? target : [target];
 
