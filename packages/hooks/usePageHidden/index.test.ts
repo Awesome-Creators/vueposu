@@ -1,11 +1,11 @@
 import { mount } from "@vue/test-utils";
-import { ref, defineComponent } from "vue-demi";
+import { defineComponent } from "vue-demi";
 import { usePageHidden } from ".";
 import { triggerDomEvent, wait } from "@vueposu/test-utils";
 
 describe("hooks/usePageHidden", () => {
   beforeEach(() => {
-    let val = true;
+    let val = false;
     Object.defineProperty(document, "hidden", {
       configurable: true,
       set($val) {
@@ -31,17 +31,14 @@ describe("hooks/usePageHidden", () => {
     const component = mount(
       defineComponent({
         setup() {
-          const leave = ref(false);
-          usePageHidden((isHidden) => {
-            leave.value = !!isHidden;
-          });
-          return { leave };
+          const isHidden = usePageHidden();
+          return { isHidden };
         },
         template: `<template />`,
       })
     );
 
-    expect(component.vm.leave).toBe(false);
+    expect(component.vm.isHidden).toBe(false);
 
     // leave
     triggerDomEvent("visibilitychange");
@@ -49,7 +46,7 @@ describe("hooks/usePageHidden", () => {
 
     // wait dom change
     await wait();
-    expect(component.vm.leave).toBe(true);
+    expect(component.vm.isHidden).toBe(true);
 
     // back
     triggerDomEvent("visibilitychange");
@@ -57,7 +54,7 @@ describe("hooks/usePageHidden", () => {
 
     // wait dom change
     await wait();
-    expect(component.vm.leave).toBe(false);
+    expect(component.vm.isHidden).toBe(false);
 
     component.unmount();
     expect(fn).toHaveBeenCalledTimes(4);

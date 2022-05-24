@@ -1,25 +1,25 @@
 import { watchEffect, unref } from "vue-demi";
 import { getTargetElement, isServer } from "@vueposu/utils";
 
-import type { RefTyped } from "@vueposu/utils";
-import type { Target } from "@vueposu/utils";
+import type { WatchStopHandle } from "vue-demi";
+import type { RefTyped, Target } from "@vueposu/utils";
 
 const defaultEvent = "click";
 
 type EventType = MouseEvent | TouchEvent;
 
 /**
- * useClickAway function
+ * useClickOutside function
  *
  * @param target Execution handler target.
  * @param eventHandler Handler function on external click.
  * @param eventName Event trigger. default `click`.
  */
-export function useClickAway(
+export function useClickOutside(
   target: Target | Target[],
   eventHandler: RefTyped<(event: EventType) => void>,
   eventName: RefTyped<string | string[]> = defaultEvent
-): void {
+): WatchStopHandle {
   const handler: EventListener = (event) => {
     const targets = Array.isArray(target) ? target : [target];
 
@@ -35,7 +35,7 @@ export function useClickAway(
     unref(eventHandler)(event as EventType);
   };
 
-  watchEffect((onInvalidate) => {
+  const removeHandler = watchEffect((onInvalidate) => {
     if (!isServer) {
       const eventNames = Array.isArray(unref(eventName))
         ? (unref(eventName) as RefTyped<string>[])
@@ -49,4 +49,6 @@ export function useClickAway(
       });
     }
   });
+
+  return removeHandler;
 }
