@@ -1,6 +1,6 @@
 {
   "name": "@vueposu/swr",
-  "version": "0.4.3-1",
+  "version": "0.4.4",
   "description": "Stale while revalidate hook by Vueposu",
   "repository": {
     "type": "git",
