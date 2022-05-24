@@ -1,7 +1,13 @@
 import { ref, unref, watch, onBeforeUnmount } from "vue-demi";
 import { isServer } from "@vueposu/utils";
 
+import type { Ref } from "vue-demi";
 import type { RefTyped } from "@vueposu/utils";
+
+type UseTitleReturnType = {
+  title: Ref<string>;
+  restoreTitle: () => void;
+};
 
 /**
  * set the string to the page title.
@@ -12,10 +18,10 @@ import type { RefTyped } from "@vueposu/utils";
 export function useTitle(
   overridedTitle?: RefTyped<string>,
   restoreOnUnmount: RefTyped<boolean> = true
-) {
+): UseTitleReturnType {
   const originalTitle = isServer ? "" : document.title;
   const title = ref(overridedTitle || originalTitle);
-  
+
   if (!document.querySelector("title")) {
     document.head.appendChild(document.createElement("title"));
   }

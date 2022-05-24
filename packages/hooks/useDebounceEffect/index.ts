@@ -2,7 +2,7 @@ import { unref, watch } from "vue-demi";
 import { useDebounceFn } from "vueposu";
 
 import type { WatchSource, WatchCallback } from "vue-demi";
-import type { RefTyped } from "@vueposu/utils";
+import type { RefTyped, Fn } from "@vueposu/utils";
 
 // TODO: COMMENT NEED
 // type MapSources<T> = {
@@ -33,7 +33,7 @@ export function useDebounceEffect<T extends object>(
   wait?: RefTyped<number>
 ): void;
 export function useDebounceEffect<T = any>(
-  listener: any,
+  listener: Fn,
   deps: T | WatchSource<T>,
   wait: RefTyped<number> = 0
 ) {

@@ -1,6 +1,8 @@
-import { reactive, readonly, toRefs } from 'vue-demi';
-import { useEventListener } from 'vueposu';
-import { isServer } from '@vueposu/utils';
+import { reactive, readonly, toRefs } from "vue-demi";
+import { useEventListener } from "vueposu";
+import { isServer } from "@vueposu/utils";
+
+import type { ToRefs } from "vue-demi";
 
 interface MouseCursorState {
   pageX: number;
@@ -21,7 +23,7 @@ const initialState: MouseCursorState = {
 };
 
 // TODO: COMMENT NEED
-export function useMouse() {
+export function useMouse(): ToRefs<Readonly<MouseCursorState>> {
   const state = reactive(initialState);
 
   const moveHandler = (event: MouseEvent) => {
@@ -35,7 +37,7 @@ export function useMouse() {
   };
 
   if (!isServer) {
-    useEventListener(document, 'mousemove', moveHandler);
+    useEventListener(document, "mousemove", moveHandler);
   }
 
   return toRefs(readonly(state));

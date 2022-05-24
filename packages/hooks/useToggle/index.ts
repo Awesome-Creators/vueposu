@@ -21,7 +21,8 @@ type UseToggleReturnType<D, R> = {
  *
  * @param defaultValue Truth value, default is `true`  - an optional parameter
  * @param reverseValue False value, default is `false` - an optional parameter
- * @returns [ status, { toggle, setLeft, setRight } ]
+ * 
+ * @returns { status, toggle, setLeft, setRight } ]
  */
 export function useToggle<
   D extends RefTyped<UseToggleState>,

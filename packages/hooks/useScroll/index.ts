@@ -1,8 +1,9 @@
-import { reactive, readonly, toRefs } from 'vue-demi';
-import { useEventListener } from 'vueposu';
-import { getTargetElement } from '@vueposu/utils';
+import { reactive, readonly, toRefs } from "vue-demi";
+import { useEventListener } from "vueposu";
+import { getTargetElement } from "@vueposu/utils";
 
-import type { Target } from '@vueposu/utils';
+import type { ToRefs } from "vue-demi";
+import type { Target } from "@vueposu/utils";
 
 type ScrollTarget = HTMLElement | Document;
 
@@ -17,7 +18,9 @@ const initialState: ScrollState = {
 };
 
 // TODO: COMMENT NEED
-export function useScroll(target?: Target<ScrollTarget>) {
+export function useScroll(
+  target?: Target<ScrollTarget>
+): ToRefs<Readonly<ScrollState>> {
   const state = reactive(initialState);
 
   const scrollHandler = (event: Event) => {
@@ -33,11 +36,11 @@ export function useScroll(target?: Target<ScrollTarget>) {
 
   useEventListener(
     (() => getTargetElement(target, document)) as Target,
-    'scroll',
+    "scroll",
     scrollHandler,
     {
       passive: true,
-    },
+    }
   );
 
   return toRefs(readonly(state));

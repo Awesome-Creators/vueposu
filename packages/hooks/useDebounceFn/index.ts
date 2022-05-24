@@ -18,7 +18,7 @@ export function useDebounceFn<T extends Fn>(
   callback: T,
   wait: RefTyped<number> = 0
 ) {
-  const debounced = ref((() => {}) as DebouncedFunc<any>);
+  const debounced = ref((() => {}) as DebouncedFunc<T>);
   const $wait = ref(wait);
 
   watch(

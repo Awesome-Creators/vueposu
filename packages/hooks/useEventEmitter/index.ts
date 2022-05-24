@@ -1,10 +1,15 @@
-import { ref, watch, onUnmounted } from 'vue-demi';
-import { isFunction } from '@vueposu/utils';
+import { ref, watch, onUnmounted } from "vue-demi";
+import { isFunction } from "@vueposu/utils";
 
 type Listener = (...stream: any[]) => void;
 
+type UseEventEmitterReturnType = {
+  emit: (...args: any[]) => void;
+  on: (listener: Listener) => void;
+};
+
 // TODO: COMMENT NEED
-export function useEventEmitter() {
+export function useEventEmitter(): UseEventEmitterReturnType {
   const emitID = ref(0);
   const stream = ref<any[]>([]);
 
@@ -29,8 +34,8 @@ export function useEventEmitter() {
       }
     },
     {
-      flush: 'post',
-    },
+      flush: "post",
+    }
   );
 
   onUnmounted(() => {
