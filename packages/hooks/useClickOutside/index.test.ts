@@ -1,8 +1,8 @@
 import { mount } from '@vue/test-utils';
-import { useClickAway } from ".";
+import { useClickOutside } from ".";
 import { defineComponent, ref } from 'vue-demi';
 
-describe('hooks/useClickAway', () => {
+describe('hooks/useClickOutside', () => {
   it('test single', async () => {
     const component = mount(
       defineComponent({
@@ -10,7 +10,7 @@ describe('hooks/useClickAway', () => {
           const count = ref(0);
           const buttonRef = ref();
 
-          useClickAway(buttonRef, () => {
+          useClickOutside(buttonRef, () => {
             count.value += 1;
           });
 
@@ -52,7 +52,7 @@ describe('hooks/useClickAway', () => {
           const buttonRef2 = ref();
           const buttonRef3 = ref();
 
-          useClickAway([buttonRef, buttonRef2, buttonRef3], () => {
+          useClickOutside([buttonRef, buttonRef2, buttonRef3], () => {
             count.value += 1;
           });
 
@@ -99,14 +99,14 @@ describe('hooks/useClickAway', () => {
     component.unmount();
   });
 
-  it('test otherEvt', async () => {
+  it('test other event', async () => {
     const component = mount(
       defineComponent({
         setup() {
           const count = ref(0);
           const buttonRef = ref();
 
-          useClickAway(
+          useClickOutside(
             buttonRef,
             () => {
               count.value += 1;
@@ -151,7 +151,7 @@ describe('hooks/useClickAway', () => {
           const count = ref(0);
           const buttonRef = ref();
 
-          useClickAway(
+          useClickOutside(
             buttonRef,
             () => {
               count.value += 1;
@@ -188,4 +188,41 @@ describe('hooks/useClickAway', () => {
 
     component.unmount();
   });
+
+  it('test remove handler', async () => {
+    const component = mount(
+      defineComponent({
+        setup() {
+          const count = ref(0);
+          const buttonRef = ref();
+
+          const remove = useClickOutside(buttonRef, () => {
+            count.value += 1;
+          });
+
+          return {
+            count,
+            buttonRef,
+            remove
+          };
+        },
+        template: `
+          <div>
+            <button ref="buttonRef">click me outside</button>
+            <span>{{ count }}</span>
+          </div>
+      `,
+      }),
+      { attachTo: document.body },
+    );
+
+    expect(component.vm.count).toBe(0);
+
+    await component.find('span').trigger('click');
+    expect(component.vm.count).toBe(1);
+
+    component.vm.remove();
+    await component.find('span').trigger('click');
+    expect(component.vm.count).toBe(1);
+  })
 });

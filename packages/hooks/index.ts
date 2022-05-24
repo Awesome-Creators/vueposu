@@ -1,6 +1,6 @@
 //  DOM
 // export * from './useAudio';
-export * from "./useClickAway";
+export * from "./useClickOutside";
 export * from "./useClipboard";
 export * from "./useEventListener";
 export * from "./useFavicon";
