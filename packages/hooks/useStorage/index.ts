@@ -1,5 +1,4 @@
 import { ref, computed, watch } from "vue-demi";
-import { noop } from "lodash-es";
 import { read, write } from "./serializer";
 import { localStorageMap, sessionStorageMap } from "./map";
 import { isServer } from "@vueposu/utils";
@@ -7,8 +6,8 @@ import { isServer } from "@vueposu/utils";
 import type { Ref } from "vue-demi";
 import type { StorageMap } from "./map";
 
-let originalLocalSetItem = noop;
-let originalSessionSetItem = noop;
+let originalLocalSetItem: Function = () => {};
+let originalSessionSetItem: Function = () => {};
 
 if (!isServer) {
   window.addEventListener(
@@ -23,7 +22,7 @@ if (!isServer) {
       }
     }
   );
-  
+
   originalLocalSetItem = window.localStorage.setItem.bind(localStorage);
   originalSessionSetItem = window.sessionStorage.setItem.bind(sessionStorage);
 

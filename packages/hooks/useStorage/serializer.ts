@@ -38,7 +38,7 @@ export const Serializers = {
   },
   null: {
     read: () => null,
-    write: () => 'null',
+    write: () => "null",
   },
 };
 
