@@ -1,9 +1,8 @@
-import { ref, computed, watch } from "vue-demi";
+import { ref, computed, watch, Ref } from "vue-demi";
 import { read, write } from "./serializer";
 import { localStorageMap, sessionStorageMap } from "./map";
 import { isServer } from "@vueposu/utils";
 
-import type { Ref } from "vue-demi";
 import type { StorageMap } from "./map";
 
 let originalLocalSetItem: Function = () => {};
