@@ -1,13 +1,14 @@
-import { shallowRef, unref } from 'vue-demi';
-import { isDocumentVisible } from '@vueposu/utils';
+import { shallowRef, unref } from "vue-demi";
+import { isDocumentVisible } from "@vueposu/utils";
 
-import type { SWRConfig } from './types';
+import type { SWRConfig } from "./types";
 
 // slow connection (<= 70Kbps)
 const slowConnection =
-  typeof window !== 'undefined' &&
-  navigator['connection'] &&
-  ['slow-2g', '2g'].indexOf((navigator['connection'] as any)?.["effectiveType"]) !== -1;
+  (window?.navigator as any)?.connection &&
+  ["slow-2g", "2g"].indexOf(
+    (window?.navigator as any)?.connection?.["effectiveType"]
+  ) !== -1;
 
 const errorRetryInterval = (slowConnection ? 10 : 5) * 1000;
 
@@ -23,10 +24,7 @@ const config = shallowRef<SWRConfig>({
 
     const errorRetryCount = unref(config.errorRetryCount) || 0;
     const retryCount = unref(options.retryCount) || 0;
-    if (
-      typeof errorRetryCount === 'number' &&
-      retryCount > errorRetryCount
-    ) {
+    if (typeof errorRetryCount === "number" && retryCount > errorRetryCount) {
       return;
     }
 
@@ -49,7 +47,7 @@ const config = shallowRef<SWRConfig>({
   shouldRetryOnError: true,
   suspense: false,
   fetcher: (url: string, init?: RequestInit) =>
-    fetch(url, init).then(res => res.json()),
+    fetch(url, init).then((res) => res.json()),
 });
 
 // config provider
