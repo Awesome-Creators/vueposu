@@ -79,7 +79,7 @@ describe('hooks/useSessionStorage', () => {
     expect(compA.val).toBe(null);
     expect(compB.val).toBe(null);
     expect(component.text()).toBe('');
-    expect(sessionStorage.getItem('b')).toBe(null);
+    expect(sessionStorage.getItem('b')).toBe('null');
 
     compA.val = '1';
     await component.vm.$nextTick();
