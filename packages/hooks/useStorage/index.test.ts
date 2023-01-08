@@ -3,7 +3,7 @@ import { defineComponent } from 'vue-demi';
 import { useStorage } from ".";
 import { Serializers } from './serializer';
 
-// TODO: remvoe value
+// TODO: set value & remove value
 describe('hooks/useStorage', () => {
   beforeEach(() => {
     localStorage.clear();
@@ -77,7 +77,7 @@ describe('hooks/useStorage', () => {
     const CompA = defineComponent({
       template: `{{ val }}`,
       setup() {
-        const val = useStorage('a', '233');
+        const val = useStorage('a', 233);
         return { val };
       },
     });
@@ -85,7 +85,7 @@ describe('hooks/useStorage', () => {
     const CompB = defineComponent({
       template: `{{ val }}`,
       setup() {
-        const val = useStorage('a', '666');
+        const val = useStorage('a', 666);
         return { val };
       },
     });
@@ -104,9 +104,9 @@ describe('hooks/useStorage', () => {
     expect(component.text()).toBe('1, 1');
     expect(localStorage.getItem('a')).toBe('1');
 
-    compA.val = '2';
+    compA.val = 2;
     await component.vm.$nextTick();
-    expect(compB.val).toBe('2');
+    expect(compB.val).toBe(2);
     expect(component.text()).toBe('2, 2');
     expect(localStorage.getItem('a')).toBe('2');
 
@@ -114,18 +114,18 @@ describe('hooks/useStorage', () => {
     await component.vm.$nextTick();
     expect(compB.val).toBe(null);
     expect(component.text()).toBe(',');
-    expect(localStorage.getItem('a')).toBe(null);
+    expect(localStorage.getItem('a')).toBe('null');
 
     // localStorage.setItem('a', '2');
     // await component.vm.$nextTick();
-    // expect(compA.val).toBe('2');
-    // expect(compB.val).toBe('2');
+    // expect(compA.val).toBe(2);
+    // expect(compB.val).toBe(2);
     // expect(component.text()).toBe('2, 2');
 
     // localStorage.removeItem('a');
     // await component.vm.$nextTick();
-    // expect(compA.val).toBe(null);
-    // expect(compB.val).toBe(null);
+    // expect(compA.val).toBe(2);
+    // expect(compB.val).toBe(2);
     // expect(component.text()).toBe(',');
 
     component.unmount();
@@ -159,13 +159,13 @@ describe('hooks/useStorage', () => {
     expect(compA.val).toBe(null);
     expect(compB.val).toBe(null);
     expect(component.text()).toBe('');
-    expect(localStorage.getItem('b')).toBe(null);
+    expect(localStorage.getItem('b')).toBe('null');
 
-    compA.val = '1';
+    compA.val = 1;
     await component.vm.$nextTick();
     expect(component.text()).toBe('1 1');
-    expect(compA.val).toBe('1');
-    expect(compB.val).toBe('1');
+    expect(compA.val).toBe(1);
+    expect(compB.val).toBe(1);
     expect(localStorage.getItem('b')).toBe('1');
   });
 
@@ -173,7 +173,7 @@ describe('hooks/useStorage', () => {
     const CompA = defineComponent({
       template: `{{ val }}`,
       setup() {
-        const val = useStorage('a', '1', sessionStorage);
+        const val = useStorage('a', 1, sessionStorage);
         return { val };
       },
     });
@@ -181,7 +181,7 @@ describe('hooks/useStorage', () => {
     const CompB = defineComponent({
       template: `{{ val }}`,
       setup() {
-        const val = useStorage('a', '1', sessionStorage);
+        const val = useStorage('a', 1, sessionStorage);
         return { val };
       },
     });
@@ -197,16 +197,16 @@ describe('hooks/useStorage', () => {
     const compB: any = component.vm.$refs.b;
 
     await component.vm.$nextTick();
-    expect(compA.val).toBe('1');
-    expect(compB.val).toBe('1');
+    expect(compA.val).toBe(1);
+    expect(compB.val).toBe(1);
     expect(component.text()).toBe('1 1');
     expect(sessionStorage.getItem('a')).toBe('1');
 
-    compA.val = '2';
+    compA.val = 2;
     await component.vm.$nextTick();
     expect(component.text()).toBe('2 2');
-    expect(compA.val).toBe('2');
-    expect(compB.val).toBe('2');
+    expect(compA.val).toBe(2);
+    expect(compB.val).toBe(2);
     expect(sessionStorage.getItem('a')).toBe('2');
 
     component.unmount();
@@ -240,13 +240,13 @@ describe('hooks/useStorage', () => {
     expect(compA.val).toBe(null);
     expect(compB.val).toBe(null);
     expect(component.text()).toBe('');
-    expect(sessionStorage.getItem('b')).toBe(null);
+    expect(sessionStorage.getItem('b')).toBe('null');
 
-    compA.val = '1';
+    compA.val = 1;
     await component.vm.$nextTick();
     expect(component.text()).toBe('1 1');
-    expect(compA.val).toBe('1');
-    expect(compB.val).toBe('1');
+    expect(compA.val).toBe(1);
+    expect(compB.val).toBe(1);
     expect(sessionStorage.getItem('b')).toBe('1');
     component.unmount();
   });
