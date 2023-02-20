@@ -77,11 +77,12 @@ export function useStorage<T>(
     return value;
   };
 
-  const item =
-    reactive(storageMap[key] ??
+  const item = reactive(
+    storageMap[key] ??
       (storageMap[key] = ref(
         update(read(storage.getItem(key), defaultValue))
-      ) as Ref<T | null>));
+      ) as Ref<T | null>)
+  );
 
   watch(item, () => update(item.value), {
     flush: "post",
