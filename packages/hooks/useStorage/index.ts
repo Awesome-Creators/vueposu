@@ -1,4 +1,4 @@
-import { ref, computed, watch, Ref } from "vue-demi";
+import { ref, reactive, watch, Ref } from "vue-demi";
 import { read, write } from "./serializer";
 import { localStorageMap, sessionStorageMap } from "./map";
 import { isServer } from "@vueposu/utils";
@@ -78,18 +78,15 @@ export function useStorage<T>(
   };
 
   const item =
-    storageMap[key] ??
-    (storageMap[key] = ref(
-      update(read(storage.getItem(key), defaultValue))
-    ) as Ref<T | null>);
+    reactive(storageMap[key] ??
+      (storageMap[key] = ref(
+        update(read(storage.getItem(key), defaultValue))
+      ) as Ref<T | null>));
 
   watch(item, () => update(item.value), {
     flush: "post",
     deep: true,
   });
 
-  return computed({
-    get: () => item.value,
-    set: (value) => (item.value = update(value)),
-  });
+  return item;
 }

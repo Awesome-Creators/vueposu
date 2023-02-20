@@ -169,6 +169,35 @@ describe('hooks/useStorage', () => {
     expect(localStorage.getItem('b')).toBe('1');
   });
 
+  it('should modified when changing object', async () => {
+    const CompA = defineComponent({
+      template: `{{ val }}`,
+      setup() {
+        const val = useStorage('useStorage-test-object', [[], []]);
+        return { val };
+      },
+    });
+    const component = mount(
+      defineComponent({
+        components: { CompA },
+        template: `<CompA ref="a" />`,
+      }),
+    );
+    const compA: any = component.vm.$refs.a;
+
+    await component.vm.$nextTick();
+    expect(JSON.stringify(compA.val)).toBe('[[],[]]');
+    compA.val[0] = [1,2,3];
+    await component.vm.$nextTick();
+    expect(JSON.stringify(compA.val)).toBe('[[1,2,3],[]]');
+    compA.val[1] = [4,5,6];
+    await component.vm.$nextTick();
+    expect(JSON.stringify(compA.val)).toBe('[[1,2,3],[4,5,6]]');
+    compA.val = [];
+    await component.vm.$nextTick();
+    expect(JSON.stringify(compA.val)).toBe('[]');
+  })
+
   it('[sessionStorage]: basic test', async () => {
     const CompA = defineComponent({
       template: `{{ val }}`,
